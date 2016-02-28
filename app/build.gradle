@@ -1,0 +1,152 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+def cfg = rootProject.ext.configuration
+def libs = rootProject.ext.libraries;
+def test = rootProject.ext.testingLibraries;
+
+android {
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
+
+    defaultConfig {
+        applicationId cfg.package
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode cfg.version_code
+        versionName cfg.version_name
+
+        //baidu config
+        buildConfigField "String", "BAIDU_SCREAT_KEY", '"5jlBZtaMuo6Xlx5LOIVC"'
+        buildConfigField "String", "BAIDU_APP_ID", '"20151224000008231"'
+
+        //iciba config
+        buildConfigField "String", "ICIBA_KEY", '"8B660C51C6D4A410DE9D406667729BC4"'
+
+        //youdao config
+        buildConfigField "String", "YOUDAO_USERNAME", '"gudong"'
+        buildConfigField "String", "YOUDAO_KEY", '"1235023502"'
+        buildConfigField "String", "YOUDAO_TYPE", '"data"'
+        buildConfigField "String", "YOUDAO_DOC_TYPE", '"json"'
+        buildConfigField "String", "YOUDAO_VERSION", '"1.1"'
+
+        //common value
+        buildConfigField "String", "RESULT_JSON", '"json"'
+        buildConfigField "String", "LANGUAGE_AUTO", '"auto"'
+
+    }
+
+    signingConfigs {
+        //指定名叫release的一个签名对象，下面会动态根据配置文件设置属性
+        release
+    }
+
+    buildTypes {
+        release {
+            //设置是否混淆
+            minifyEnabled false
+            //设置压缩对齐
+            zipAlignEnabled false
+            //移除无用的资源文件
+            shrinkResources false
+            //设置混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //如果签名配置不为空 则设置签名信息
+            if (signingConfigs.release != null) {
+                signingConfig signingConfigs.release
+            }
+            //指定签名包得输入文件名称
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "GdTranslate_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_release.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+
+        productFlavors {
+            beta{
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
+            }
+            xiaomi {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
+            }
+            m360 {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"m360"]
+            }
+            wandoujia {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+            }
+            fir {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "fir"]
+            }
+            umeng {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
+            }
+            play {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+//set release sign info synchronously
+def Properties props = new Properties()
+def propFile = file('../gradle.properties')
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+    if (props != null &&
+            props.containsKey('SIGN_FILE') && props.containsKey('SIGN_KEYSTORE_PASS') &&
+            props.containsKey('SIGN_KEYSTORE_ALIAS') && props.containsKey('SIGN_KEYSTORE_ALIAS_PASS')) {
+        println 'release build signing'
+        android.signingConfigs.release.storeFile = file(props['SIGN_FILE'])
+        android.signingConfigs.release.storePassword = props['SIGN_KEYSTORE_PASS']
+        android.signingConfigs.release.keyAlias = props['SIGN_KEYSTORE_ALIAS']
+        android.signingConfigs.release.keyPassword = props['SIGN_KEYSTORE_ALIAS_PASS']
+    } else {
+        println 'release build not found signing properties'
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'release build not found signing file'
+    android.buildTypes.release.signingConfig = null
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/Bughd_android_sdk_v1.3.7.jar')
+    // Test
+    testCompile "junit:junit:${test.junit}"
+    // Android
+    compile "com.android.support:recyclerview-v7:${libs.supportVersion}"
+    compile "com.android.support:appcompat-v7:${libs.supportVersion}"
+    // Google
+    compile "com.google.dagger:dagger:${libs.dagger}"
+    apt "com.google.dagger:dagger-compiler:${libs.dagger}"
+    provided "org.glassfish:javax.annotation:${libs.javax_annotation}"
+    // Square
+    compile "com.jakewharton:butterknife:${libs.butterknife}"
+    compile "com.squareup.retrofit:retrofit:${libs.retrofit}"
+    compile "com.squareup.retrofit:converter-gson:${libs.retrofit}"
+    compile "com.squareup.retrofit:adapter-rxjava:${libs.retrofit}"
+    // Reactive
+    compile "io.reactivex:rxandroid:${libs.rxandroid}"
+    // Other
+    compile "com.orhanobut:logger:${libs.logger}"
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:${libs.retrolambda}"
+
+}

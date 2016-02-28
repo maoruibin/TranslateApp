@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright (C) 2015 GuDong <gudong.name@gmail.com>
+  ~
+  ~  This file is part of GdTranslate
+  ~
+  ~  GdTranslate is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU General Public License as published by
+  ~  the Free Software Foundation, either version 3 of the License, or
+  ~  (at your option) any later version.
+  ~
+  ~  GdTranslate is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License
+  ~  along with GdTranslate.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:id="@+id/menu_book"
+        android:showAsAction="ifRoom"
+        android:title="@string/favorite_list"/>
+
+    <item
+        android:id="@+id/menu_translate"
+        android:showAsAction="ifRoom"
+        android:title="@string/translate_from">
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/translate_baidu"
+                    android:title="@string/translate_from_baidu"/>
+                <item
+                    android:id="@+id/translate_youdao"
+                    android:title="@string/translate_from_youdao"/>
+                <item
+                    android:id="@+id/translate_jinshan"
+                    android:title="@string/translate_from_jinshan"/>
+
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_use_recite_or_not"
+        android:showAsAction="ifRoom"
+        android:title="@string/use_recite_or_nor"
+        android:checked="false"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/menu_interval_tip_time"
+        android:showAsAction="ifRoom"
+        android:visible="false"
+        android:title="@string/tip_time_interval">
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/interval_one_minute"
+                    android:title="@string/interval_one_minute"/>
+                <item
+                    android:id="@+id/interval_three_minute"
+                    android:title="@string/interval_three_minute"/>
+                <item
+                    android:id="@+id/interval_five_minute"
+                    android:title="@string/interval_five_minute"/>
+                <item
+                    android:id="@+id/interval_ten_minute"
+                    android:title="@string/interval_ten_minute"/>
+                <item
+                    android:id="@+id/interval_thirty_minute"
+                    android:title="@string/interval_thirty_minute"/>
+
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_duration_tip_time"
+        android:showAsAction="ifRoom"
+        android:visible="false"
+        android:title="@string/tip_time_duration">
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/duration_one_second"
+                    android:title="@string/duration_one_second"/>
+                <item
+                    android:id="@+id/duration_four_second"
+                    android:title="@string/duration_four_second"/>
+                <item
+                    android:id="@+id/duration_six_second"
+                    android:title="@string/duration_six_second"/>
+                <item
+                    android:id="@+id/duration_ten_second"
+                    android:title="@string/duration_ten_second"/>
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_about"
+        android:showAsAction="always"
+        android:title="@string/menu_about"/>
+
+</menu>

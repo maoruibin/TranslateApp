@@ -1,0 +1,50 @@
+ext {
+    configuration = [
+            package             : "name.gudong.translate",
+            buildToolsVersion   : "23.0.2",
+            compileVersion      : 23,
+            minSdk              : 19,
+            targetSdk           : 23,
+            version_code        : 06,
+            version_name        : "0.6"
+    ]
+
+    libraries = [
+            supportVersion      : "23.2.0",
+            dagger              : "2.0",
+            rxandroid           : "1.0.1",
+            retrofit            : "2.0.0-beta2",
+            butterknife         : "7.0.1",
+            recycler_animators  : "2.0.0",
+            javax_annotation    : "10.0-b28",
+            logger              : "1.4",
+            retrolambda         : "2.0.6"
+    ]
+
+    testingLibraries = [
+            junit               : "4.12"
+    ]
+}
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.0.0-beta5'
+
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+
+        classpath 'me.tatarka:gradle-retrolambda:3.2.4'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

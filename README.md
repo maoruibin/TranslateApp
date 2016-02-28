@@ -12,6 +12,20 @@
 
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/marketing1.pic_hd.jpg)
 
+## 已知 Bug 
+* 查词时，输入框下面应该会显示"查词中...",目前不能显示出来
+* 在本应用外收藏成功单词后，没有成功提示
+
+## 待优化
+* 生词本为空时的提示信息
+
+## 更新日志
+
+### V0.6
+
+* 加入了 BugHd 作为 bug 统计工具
+* 使用 MVP 对项目进行重构
+* 使用 Dagger2 进行依赖管理
 
 ## 关于作者
 
@@ -22,3 +36,4 @@
 [github](https://github.com/maoruibin)
 
 [微博](http://weibo.com/u/1874136301)
+

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">咕咚翻译Beta版</string>
+    <string name="action_favorite">收藏</string>
+    <string name="action_delete">删除</string>
+
+    <string name="favorite_list">单词本</string>
+    <string name="menu_about">关于</string>
+
+    <string name="translate_from">翻译引擎</string>
+    <string name="use_recite_or_nor">开启定时单词提醒</string>
+    <string name="tip_time_interval">提示间隔时间</string>
+    <string name="tip_time_duration">提示显示时间</string>
+
+    <string name="translate_from_baidu">百度</string>
+    <string name="translate_from_youdao">有道</string>
+    <string name="translate_from_jinshan">金山</string>
+
+    <string name="interval_one_minute">1分钟</string>
+    <string name="interval_three_minute">3分钟</string>
+    <string name="interval_five_minute">5分钟</string>
+    <string name="interval_ten_minute">10分钟</string>
+    <string name="interval_thirty_minute">半小时</string>
+
+    <string name="duration_one_second">1秒钟</string>
+    <string name="duration_four_second">4秒钟</string>
+    <string name="duration_six_second">6秒钟</string>
+    <string name="duration_ten_second">10秒钟</string>
+
+</resources>
