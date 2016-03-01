@@ -19,6 +19,19 @@
 ## 待优化
 * 生词本为空时的提示信息
 * 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
+* 没有使用测试，所以项目中可能还潜在的存在一些 bug,关于测试，也是自己今年需要补齐的一块知识。
+
+## 技术点
+
+* 1、全程使用 [Dagger2](https://github.com/google/dagger) 对项目进行类依赖管理。
+* 2、项目使用标准的 MVP 架构。
+* 3、实现对粘贴板的监听以及访问
+* 4、无需权限显示悬浮窗
+* 5、RxJava 的使用
+* 6、使用 Retrofit2 进行网络请求
+* 7、开机自启动
+
+`Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)而来，感谢廖祜秋的工作。
 
 ## 更新日志
 
