@@ -11,6 +11,8 @@
 
 更多[关于咕咚翻译](http://gudong.name/product/2016/02/26/gudong_translate.html)
 
+V2EX 上对 App 的讨论 [咕咚翻译](https://www.v2ex.com/t/259288#reply69)
+
 ## 截图
 
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/marketing1.pic_hd.jpg)
