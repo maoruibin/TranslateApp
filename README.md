@@ -1,4 +1,7 @@
 #咕咚翻译
+![icon](/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png "")
+
+##介绍
 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。
 
 ##缘起
@@ -23,15 +26,15 @@
 
 ## 技术点
 
-* 1、全程使用 [Dagger2](https://github.com/google/dagger) 对项目进行类依赖管理。
-* 2、项目使用标准的 MVP 架构。
+* 1、全程使用 [Dagger2](https://github.com/google/dagger) 对项目进行类依赖管理
+* 2、项目使用标准的 MVP 架构
 * 3、实现对粘贴板的监听以及访问
 * 4、无需权限显示悬浮窗
 * 5、RxJava 的使用
 * 6、使用 Retrofit2 进行网络请求
 * 7、开机自启动
 
-`Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)而来，感谢廖祜秋的工作。
+`Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)，感谢~
 
 ## 更新日志
 
@@ -51,4 +54,23 @@
 [github](https://github.com/maoruibin)
 
 [微博](http://weibo.com/u/1874136301)
+
+##License
+ 
+     Copyright (C) 2015 GuDong <gudong.name@gmail.com>
+   
+     This file is part of GdTranslate
+   
+     GdTranslate is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+   
+     GdTranslate is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+   
+     You should have received a copy of the GNU General Public License
+     along with GdTranslate.  If not, see <http://www.gnu.org/licenses/>.
 
