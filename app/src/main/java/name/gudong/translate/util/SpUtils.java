@@ -53,8 +53,6 @@ public class SpUtils {
 
     private static final String KEY_RECITE_OPEN = "RECITE_OPEN_OR_NOT";
 
-    private static final String KEY_FIRST_CLECK_RECITE = "FIRST_CLECK_RECITE";
-
     public static void setTranslateEngine(Context context, String version) {
         putStringPreference(context, KEY_TRANSLATE_FROM, version);
     }
@@ -104,15 +102,6 @@ public class SpUtils {
     public static boolean getReciteOpenOrNot(Context context){
         return getBooleanPreference(context,KEY_RECITE_OPEN,false);
     }
-
-    public static void setFirstClickRecite(Context context){
-        putBooleanPreference(context,KEY_FIRST_CLECK_RECITE,true);
-    }
-
-    public static boolean isFirstClickRecite(Context context){
-        return getBooleanPreference(context,KEY_FIRST_CLECK_RECITE,false);
-    }
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

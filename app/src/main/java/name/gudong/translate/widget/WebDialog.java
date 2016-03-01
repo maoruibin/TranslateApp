@@ -40,13 +40,13 @@ import java.io.InputStreamReader;
 
 import me.gudong.translate.R;
 
-public class AboutDialog extends DialogFragment {
+public class WebDialog extends DialogFragment {
     private static final String KEY_DIALOG_TITLE = "DIALOG_TITLE";
     private static final String KEY_HTML_FILE_NAME = "html_file_name";
     private static final String KEY_ACCENT_COLOR = "accentColor";
 
     public static void show(Context context, FragmentManager fragmentManager, String dialogTitle, String htmlFileName, String tag,@ColorRes int accentColor) {
-        AboutDialog.create(dialogTitle, htmlFileName, accentColor)
+        WebDialog.create(dialogTitle, htmlFileName, accentColor)
                 .show(fragmentManager, "");
     }
 
@@ -58,8 +58,8 @@ public class AboutDialog extends DialogFragment {
      * @param accentColor  accent color
      * @return a instance of CustomWebViewDialog
      */
-    public static AboutDialog create(String dialogTitle, String htmlFileName, int accentColor) {
-        AboutDialog dialog = new AboutDialog();
+    public static WebDialog create(String dialogTitle, String htmlFileName, int accentColor) {
+        WebDialog dialog = new WebDialog();
         Bundle args = new Bundle();
         args.putString(KEY_DIALOG_TITLE, dialogTitle);
         args.putString(KEY_HTML_FILE_NAME, htmlFileName);

@@ -51,6 +51,8 @@ public class BasePresenter<V extends IBaseView> {
         mService = service;
     }
 
+    public void onCreate(){}
+
     /**
      * attach IBaseView to Presenter
      * @param view view

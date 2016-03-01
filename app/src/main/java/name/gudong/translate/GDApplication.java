@@ -23,9 +23,11 @@ package name.gudong.translate;
 import android.app.Application;
 import android.content.Context;
 
+import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
 import im.fir.sdk.FIR;
+import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
 import name.gudong.translate.reject.components.AppComponent;
 import name.gudong.translate.reject.components.DaggerAppComponent;
@@ -46,6 +48,7 @@ public class GDApplication extends Application {
         mContext = this;
         setUpLog();
         FIR.init(this);
+        Once.initialise(this);
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .apiServiceModel(new ApiServiceModel())
@@ -55,6 +58,8 @@ public class GDApplication extends Application {
     private void setUpLog() {
         if(BuildConfig.DEBUG){
             Logger.init("gdt").hideThreadInfo().setMethodCount(0);
+        }else{
+            Logger.init("gdt").hideThreadInfo().setMethodCount(0).setLogLevel(LogLevel.FULL);
         }
     }
 

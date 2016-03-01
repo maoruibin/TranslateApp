@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jonathanfinerty.once.Once;
 import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
@@ -45,11 +46,15 @@ import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.reject.components.AppComponent;
 import name.gudong.translate.reject.components.DaggerActivityComponent;
 import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.util.DialogUtil;
+import name.gudong.translate.util.InputMethodUtils;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.ViewUtil;
-import name.gudong.translate.widget.AboutDialog;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements IMainView {
+
+    private static final String KEY_TIP_OF_RECITE = "TIP_OF_RECITE";
+
     @Bind(android.R.id.input)
     AppCompatEditText mInput;
     @Bind(R.id.list_result)
@@ -60,6 +65,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     TextView mTvResultEngineInfo;
     ImageView mIvFavorite;
 
+    Menu mMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +75,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         addListener();
         startListenService();
         checkSomething();
+        checkVersion();
+        initConfig();
+    }
+
+    private void initConfig() {
+        // 第一次点击单词本开关需要给用户一个功能提示框
+        Once.toDo(KEY_TIP_OF_RECITE);
+    }
+
+    private void checkVersion() {
+        mPresenter.checkVersionAndShowChangeLog();
     }
 
     private void startListenService() {
@@ -76,7 +94,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void checkSomething(){
         //检查粘贴板有没有英文单词 如果有就查询一次 并且显示给用户
-        mPresenter.checkClipboard(this);
+        mPresenter.checkClipboard();
     }
 
     @Override
@@ -93,7 +111,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         getMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    private Menu mMenu;
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -109,7 +127,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 WordsBookActivity.gotoWordsBook(this);
                 break;
             case R.id.menu_about:
-                AboutDialog.show(this, getSupportFragmentManager(), "关于", "about.html", "about", R.color.colorAccent);
+                DialogUtil.showAbout(this);
+                InputMethodUtils.closeSoftKeyboard(this);
                 break;
             case R.id.translate_baidu:
                 selectEngine(item, ETranslateFrom.BAI_DU);
@@ -122,11 +141,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 break;
 
             case R.id.menu_use_recite_or_not:
-                if(!SpUtils.isFirstClickRecite(this)){
+                if (Once.needToDo(KEY_TIP_OF_RECITE)) {
                     new AlertDialog.Builder(this)
                             .setTitle("提示")
-                            .setMessage("定时提示生词，是咕咚翻译做的一个帮助用户记住生词的功能。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，你不一定那次就记住了，当然如果这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学")
-                            .setPositiveButton("知道了", ((dialog, which) ->  SpUtils.setFirstClickRecite(MainActivity.this)))
+                            .setMessage("定时提示生词，是咕咚翻译做的一个帮助用户记住生词的功能。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，你不一定那次就记住了，当然如果这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
+                            .setPositiveButton("知道了", ((dialog, which) ->  Once.markDone(KEY_TIP_OF_RECITE)))
                             .show();
                 }
                 boolean isCheck = item.isChecked();
@@ -267,7 +286,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onInitSearchText(String text){
         mInput.setText(text);
-        mInput.setSelection(text.length());
+        ViewUtil.setEditTextSelectionToEnd(mInput);
     }
 
     @Override

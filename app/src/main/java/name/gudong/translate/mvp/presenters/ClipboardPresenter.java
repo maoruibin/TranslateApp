@@ -21,7 +21,6 @@
 package name.gudong.translate.mvp.presenters;
 
 import android.app.Service;
-import android.os.CountDownTimer;
 import android.text.TextUtils;
 
 import com.litesuits.orm.LiteOrm;
@@ -30,6 +29,7 @@ import com.orhanobut.logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -42,9 +42,11 @@ import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.util.SpUtils;
+import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -56,46 +58,64 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
     ClipboardManagerCompat mClipboardWatcher;
     @Inject
     TipViewController mTipViewController;
-    CountDownTimer countDownTimer;
+
+    /**
+     * 定时显示 Tip 事件源
+     */
+    Subscription mSubscription;
+    /**
+     * 显示 Tip 的动作
+     */
+    Action1 mActionShowTip;
+    
     @Inject
     public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, Service service) {
         super(liteOrm, apiService, service);
 
     }
 
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        initCountdownSetting();
+    }
+    
+    private void initCountdownSetting(){
+        mActionShowTip = (t)->{
+            Result result = getResult();
+            if(result == null)return;
+            prepareShow(getResult());
+            show(false);
+        };
+    }
+
     /**
-     * 循环显示生词本中的内容
+     * 根据用户设置 循环显示生词本中的内容 逻辑写的稍负责
      */
     public void controlShowTipCyclic(){
-        boolean reciteFlag = SpUtils.getReciteOpenOrNot(mService);
         EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
         int time = tipTime.getIntervalTime();
-        countDownTimer = new CountDownTimer(Integer.MAX_VALUE,time*60*1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                Result result = getResult();
-                if(result != null){
-                    prepareShow(getResult());
-                    show(false);
-                }
+        Logger.i("time is "+time +" minute");
+
+        boolean reciteFlag = SpUtils.getReciteOpenOrNot(mService);
+        //用户设置了开启背单词 或者 时间隔时间变化了 下面的判断代码写的有点复杂
+        //但是这是错了好多次，试出来可以成功运行的代码，尼玛，多条件动态配置选项死去活来啊 ~
+        if((mSubscription == null && reciteFlag) || (mSubscription != null && reciteFlag && !mSubscription.isUnsubscribed())){
+            if(mSubscription != null && !mSubscription.isUnsubscribed()){
+                mSubscription.unsubscribe();
             }
-            @Override
-            public void onFinish() {}
-        };
-        if(reciteFlag){
-            countDownTimer.start();
-            Logger.i("启动");
-        }else{
-            countDownTimer.cancel();
-            Logger.i("取消");
+            Logger.i("用户设置了开启背单词 此时实例化 mSubscription 也可能是时间间隔值变化了 time is "+time);
+            mSubscription = Observable.interval(time, TimeUnit.MINUTES)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(mActionShowTip);
         }
 
-//        if(reciteFlag){
-//            Observable.interval(time, TimeUnit.MINUTES)
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(observerShowTipCyclic);
-//        }
-
+        //外界关闭 背单词 功能 并设置 mSubscription null
+        if(mSubscription != null && !reciteFlag && !mSubscription.isUnsubscribed()){
+            mSubscription.unsubscribe();
+            mSubscription = null;
+            Logger.i("用户关闭背单词");
+        }
     }
 
     private Result getResult(){
@@ -111,12 +131,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         mWarpApiService.translate(SpUtils.getTranslateEngineWay(mService), content)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(new Func1<AbsResult, Boolean>() {
-                    @Override
-                    public Boolean call(AbsResult youDaoResult) {
-                        return youDaoResult.wrapErrorCode() == 0;
-                    }
-                })
+                .filter((result)->{return result.wrapErrorCode() == 0;})
                 .subscribe(new Subscriber<AbsResult>() {
                     @Override
                     public void onCompleted() {

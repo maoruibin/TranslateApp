@@ -23,8 +23,12 @@ package name.gudong.translate.util;
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -32,6 +36,15 @@ import android.widget.TextView;
  * Contact with gudong.name@gmail.com.
  */
 public class ViewUtil {
+    /**
+     * 设置输入框的光标到末尾
+     */
+    public static final void setEditTextSelectionToEnd(EditText editText) {
+        Editable editable = editText.getEditableText();
+        Selection.setSelection((Spannable) editable,
+                editable.toString().length());
+    }
+
     public static View getWordsView(Context context,String word,@ColorRes int color) {
         TextView tv = new TextView(context);
         tv.setTextColor(ContextCompat.getColor(context, color));

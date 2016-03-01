@@ -18,7 +18,8 @@ ext {
             recycler_animators  : "2.0.0",
             javax_annotation    : "10.0-b28",
             logger              : "1.4",
-            retrolambda         : "2.0.6"
+            retrolambda         : "2.0.6",
+            once                : "0.5.0"
     ]
 
     testingLibraries = [
@@ -31,7 +32,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-beta5'
+        classpath 'com.android.tools.build:gradle:2.0.0-beta6'
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 

@@ -45,6 +45,7 @@ public final class ListenClipboardService extends Service implements IClipboardS
         setUpInject();
         addListener();
         attachView();
+        mPresenter.onCreate();
     }
 
     private void attachView() {

@@ -21,6 +21,7 @@
 package name.gudong.translate.mvp.presenters;
 
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 
@@ -34,6 +35,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import jonathanfinerty.once.Once;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.WarpAipService;
@@ -43,6 +45,8 @@ import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
+import name.gudong.translate.util.DialogUtil;
+import name.gudong.translate.util.InputMethodUtils;
 import name.gudong.translate.util.SpUtils;
 import rx.Observable;
 import rx.Subscriber;
@@ -61,30 +65,38 @@ public class MainPresenter extends BasePresenter<IMainView>{
 
     private AbsResult mCurrentResult;
 
+    // 可以看到在使用@Inject进行注入时，构造注入和成员变量注入两种方式可以共存
     @Inject
     public MainPresenter(LiteOrm liteOrm, WarpAipService apiService,Activity activity) {
         super(liteOrm, apiService,activity);
     }
-    // 以上证明了在使用注解时，通过构造函数注解和直接注解成员变量是可以共存的
-    public void checkClipboard(Activity activity){
-            CharSequence sequence = mClipboardWatcher.getText();
-            // 感谢 V友提供的bug反馈
-            if(sequence == null)return;
-            String text = sequence.toString();
-            if(TextUtils.isEmpty(text))return;
-            //正则有点问题 对 单词的判断有时
-            String patternWords = "[a-zA-Z1-9 ]{1,}";
-            Pattern r = Pattern.compile(patternWords);
-            // 现在创建 matcher 对象
-            Matcher m = r.matcher(text);
-            if(m.matches()){
-                mView.onInitSearchText(text);
-                executeSearch(text);
-            }
+
+    public void checkClipboard(){
+        CharSequence sequence = mClipboardWatcher.getText();
+        // 感谢 V 友提供的bug反馈
+        if(sequence == null)return;
+        String text = sequence.toString();
+        if(TextUtils.isEmpty(text))return;
+        // 使用正则判断粘贴板中的字符是不是单词
+        String patternWords = "[a-zA-Z1-9 ]{1,}";
+        Pattern r = Pattern.compile(patternWords);
+        Matcher m = r.matcher(text);
+        if(m.matches()){
+            mView.onInitSearchText(text);
+            executeSearch(text);
+            InputMethodUtils.closeSoftKeyboard(mActivity);
+        }
+    }
+
+    public void checkVersionAndShowChangeLog(){
+        String showWhatsNew = "showWhatsNewTag";
+        if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
+            DialogUtil.showChangelog((AppCompatActivity) mActivity);
+            Once.markDone(showWhatsNew);
+        }
     }
 
     public void executeSearch(String keywords) {
-
         mView.onPrepareTranslate();
         Observable<AbsResult> observable = mWarpApiService.translate(SpUtils.getTranslateEngineWay(mActivity), keywords);
         if (observable == null) {

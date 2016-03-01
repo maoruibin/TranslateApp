@@ -146,7 +146,7 @@ dependencies {
     compile "io.reactivex:rxandroid:${libs.rxandroid}"
     // Other
     compile "com.orhanobut:logger:${libs.logger}"
-    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile "com.umeng.analytics:analytics:latest.integration"
     retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:${libs.retrolambda}"
-
+    compile "com.jonathanfinerty.once:once:${libs.once}"
 }

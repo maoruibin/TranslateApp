@@ -198,7 +198,7 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(w, h, type, flags, PixelFormat.TRANSLUCENT);
         layoutParams.gravity = Gravity.TOP;
         layoutParams.format = PixelFormat.RGBA_8888;
-        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE ;
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
         layoutParams.gravity = Gravity.CENTER | Gravity.TOP;
         layoutParams.x = 0;
