@@ -4,7 +4,7 @@
 ##介绍
 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。
 
-![shot](http://7xr9gx.com1.z0.glb.clouddn.com/shot_gd.gif)
+![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
 
 ##缘起
 自己经常在手机上会阅读一些英文的技术 blog 或者文档，经常会遇到陌生的单词，想必大家都有类似的经历，一般的，如果是上班期间，我可能会打开谷歌翻译，然后查词，但是当你不在电脑旁，就只能通过手机上的翻译软件来翻译生词，所以这时我们通常遇到生词会这样操作，长按生词、选择复制、点击 Home 键、找到翻译 App,有道翻译或者谷歌翻译之类的，然后长按输入框，选择粘贴，此时你才可以看到那个生词的意思。其实这是一个非常考验用户耐性的事，连续操作几次，不烦才怪呢。
@@ -37,6 +37,7 @@ V2EX 上对 App 的讨论 [咕咚翻译](https://www.v2ex.com/t/259288#reply69)
 * 5、RxJava 的使用
 * 6、使用 Retrofit2 进行网络请求
 * 7、开机自启动
+* 8、泛型
 
 `Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)，感谢~
 
