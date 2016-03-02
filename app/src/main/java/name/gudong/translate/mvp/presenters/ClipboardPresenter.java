@@ -67,7 +67,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
      * 显示 Tip 的动作
      */
     Action1 mActionShowTip;
-    
+
     @Inject
     public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, Service service) {
         super(liteOrm, apiService, service);
@@ -79,7 +79,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         super.onCreate();
         initCountdownSetting();
     }
-    
+
     private void initCountdownSetting(){
         mActionShowTip = (t)->{
             Result result = getResult();

@@ -240,4 +240,3 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
                 });
     }
 }
-

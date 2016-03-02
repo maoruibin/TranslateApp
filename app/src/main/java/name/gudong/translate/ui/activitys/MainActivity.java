@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 if (Once.needToDo(KEY_TIP_OF_RECITE)) {
                     new AlertDialog.Builder(this)
                             .setTitle("提示")
-                            .setMessage("定时提示生词，是咕咚翻译做的一个帮助用户记住生词的功能。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，你不一定那次就记住了，当然如果这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
+                            .setMessage("定时提示生词，是咕咚翻译做的一个帮助用户记住生词的功能。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，不一定那一次就记住了，当然这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
                             .setPositiveButton("知道了", ((dialog, which) ->  Once.markDone(KEY_TIP_OF_RECITE)))
                             .show();
                 }
