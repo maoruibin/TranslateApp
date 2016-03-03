@@ -30,9 +30,6 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-//        maven {
-//            url "http://maven.bughd.com/public"
-//        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.0.0-beta6'
@@ -40,8 +37,6 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
         classpath 'me.tatarka:gradle-retrolambda:3.2.4'
-
-//        classpath 'im.fir:gradle-fir-publisher:1.0.2'
     }
 }
 
