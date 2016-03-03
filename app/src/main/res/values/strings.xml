@@ -5,6 +5,7 @@
 
     <string name="favorite_list">单词本</string>
     <string name="menu_about">关于</string>
+    <string name="menu_score">赏个好评</string>
 
     <string name="translate_from">翻译引擎</string>
     <string name="use_recite_or_nor">开启定时单词提醒</string>

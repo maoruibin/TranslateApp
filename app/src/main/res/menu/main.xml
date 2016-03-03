@@ -103,9 +103,13 @@
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/menu_score"
+        android:showAsAction="always"
+        android:title="@string/menu_score"/>
     <item
         android:id="@+id/menu_about"
         android:showAsAction="always"
         android:title="@string/menu_about"/>
-
 </menu>

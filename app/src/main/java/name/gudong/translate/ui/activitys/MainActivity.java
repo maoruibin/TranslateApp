@@ -130,6 +130,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 DialogUtil.showAbout(this);
                 InputMethodUtils.closeSoftKeyboard(this);
                 break;
+            case R.id.menu_score:
+                mPresenter.gotoMarket();
+                break;
             case R.id.translate_baidu:
                 selectEngine(item, ETranslateFrom.BAI_DU);
                 break;

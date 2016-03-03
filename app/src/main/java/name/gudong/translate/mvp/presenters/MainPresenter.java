@@ -21,6 +21,8 @@
 package name.gudong.translate.mvp.presenters;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -177,6 +179,16 @@ public class MainPresenter extends BasePresenter<IMainView>{
 
     public void startListenClipboardService(){
         ListenClipboardService.start(mActivity);
+    }
+
+    /**
+     * 去评分
+     */
+    public void gotoMarket(){
+        Uri uri = Uri.parse("market://details?id="+mActivity.getPackageName());
+        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mActivity.startActivity(intent);
     }
 
     public void prepareOptionSettings(Menu menu) {

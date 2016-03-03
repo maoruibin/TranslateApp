@@ -1,7 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+//apply plugin: 'im.fir.plugin.gradle'
+//
+//fir{
+//    apiToken '15e5206706b555384608e449d6def6d3'
+//    changeLog '新增：评价入口(03-03)'
+//}
 
+//格式化打完完成后APK名称中的时间
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
@@ -51,7 +58,7 @@ android {
             //设置是否混淆
             minifyEnabled false
             //设置压缩对齐
-            zipAlignEnabled false
+            zipAlignEnabled true
             //移除无用的资源文件
             shrinkResources false
             //设置混淆配置文件
@@ -70,6 +77,10 @@ android {
                     }
                 }
             }
+        }
+
+        lintOptions {
+          abortOnError false
         }
 
         productFlavors {
