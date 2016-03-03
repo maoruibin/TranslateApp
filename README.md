@@ -7,17 +7,27 @@
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
 
 ##下载
-[链接地址]( http://fir.im/gdTranslater)
+
+<a href="https://play.google.com/store/apps/details?id=name.gudong.translate" target="_blank" alt="Google Paly"><img src="http://7xr9gx.com1.z0.glb.clouddn.com/icon_google_play_brand.png"/></a>
+
+[Fir](http://fir.im/gdTranslater)
+
+[酷安市场](http://www.coolapk.com/apk/name.gudong.translate)
 
 ##缘起
 自己经常在手机上会阅读一些英文的技术 blog 或者文档，经常会遇到陌生的单词，想必大家都有类似的经历，一般的，如果是上班期间，我可能会打开谷歌翻译，然后查词，但是当你不在电脑旁，就只能通过手机上的翻译软件来翻译生词，所以这时我们通常遇到生词会这样操作，长按生词、选择复制、点击 Home 键、找到翻译 App,有道翻译或者谷歌翻译之类的，然后长按输入框，选择粘贴，此时你才可以看到那个生词的意思。其实这是一个非常考验用户耐性的事，连续操作几次，不烦才怪呢。
 
 我也是，自己以前在 Medium 上阅读文章时经常做这样的事，后来我想能不能简单点呢，所以就有了咕咚翻译这个 App,咕咚是我的网名呢~
 
-更多[关于咕咚翻译](http://gudong.name/product/2016/02/26/gudong_translate.html)
+## 讨论/发声
+
+个人博客上[关于咕咚翻译的介绍](http://gudong.name/product/2016/02/26/gudong_translate.html)
 
 V2EX 上对 App 的讨论 [咕咚翻译](https://www.v2ex.com/t/259288#reply69)
 
+简书上关于咕咚翻译的[介绍文章](http://www.jianshu.com/p/e77b251c46aa)
+
+微博上[关于咕咚翻译的讨论](http://weibo.com/1874136301/Dkrpm8sWn?type=comment#_rnd1456976705834)
 
 ## 已知 Bug 
 * 查词时，输入框下面应该会显示"查词中...",目前不能显示出来
