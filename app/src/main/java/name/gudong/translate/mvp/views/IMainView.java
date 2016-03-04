@@ -42,8 +42,6 @@ public interface IMainView extends IBaseView {
      */
     void onClearResultViews();
 
-    void appendBottomView(AbsResult result);
-
     void onError(Throwable e);
 
     void addExplainItem(String explain);
@@ -60,4 +58,6 @@ public interface IMainView extends IBaseView {
      * @param isOpen
      */
     void initReciteSetting(Menu menu, boolean isOpen);
+
+    void onTranslateSuccess(AbsResult result);
 }

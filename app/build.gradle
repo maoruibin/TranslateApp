@@ -22,6 +22,9 @@ android {
         versionCode cfg.version_code
         versionName cfg.version_name
 
+        //for use support vectorDrawables
+        vectorDrawables.useSupportLibrary = true
+
         //baidu config
         buildConfigField "String", "BAIDU_SCREAT_KEY", '"5jlBZtaMuo6Xlx5LOIVC"'
         buildConfigField "String", "BAIDU_APP_ID", '"20151224000008231"'

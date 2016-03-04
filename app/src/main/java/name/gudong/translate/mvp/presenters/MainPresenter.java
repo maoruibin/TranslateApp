@@ -117,6 +117,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
                     @Override
                     public List<String> call(AbsResult absResult) {
                         mCurrentResult = absResult;
+                        mView.onTranslateSuccess(absResult);
                         List<String> temp = absResult.wrapExplains();
                         if (!temp.isEmpty()) {
                             return temp;
@@ -137,7 +138,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        mView.appendBottomView(mCurrentResult);
+
                     }
 
                     @Override

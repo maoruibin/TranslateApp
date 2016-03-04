@@ -48,6 +48,7 @@ public class ViewUtil {
     public static View getWordsView(Context context,String word,@ColorRes int color) {
         TextView tv = new TextView(context);
         tv.setTextColor(ContextCompat.getColor(context, color));
+        tv.setPadding(0,6,0,6);
         tv.setTextSize(16);
         tv.setGravity(Gravity.LEFT);
         tv.setText(word);

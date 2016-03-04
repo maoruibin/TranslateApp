@@ -7,5 +7,11 @@
     <color name="gray">#c4c4c4</color>
     <color name="gray_deep">#707070</color>
 
+    <color name="bg_app">#e2e2e2</color>
+
+    <color name="bg_input">#fafafa</color>
+
+    <color name="color_explain">#a2a2a2</color>
+
 
 </resources>

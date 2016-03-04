@@ -22,20 +22,21 @@ package name.gudong.translate.ui.activitys;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jonathanfinerty.once.Once;
+import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
@@ -56,13 +57,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     private static final String KEY_TIP_OF_RECITE = "TIP_OF_RECITE";
 
     @Bind(android.R.id.input)
-    AppCompatEditText mInput;
+    EditText mInput;
     @Bind(R.id.list_result)
     LinearLayout mList;
-    @Bind(R.id.tv)
-    TextView mTv;
 
-    TextView mTvResultEngineInfo;
+    @Bind(R.id.iv_favorite)
     ImageView mIvFavorite;
 
     Menu mMenu;
@@ -85,6 +84,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void checkVersion() {
+        if(BuildConfig.DEBUG)return;
         mPresenter.checkVersionAndShowChangeLog();
     }
 
@@ -225,61 +225,38 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void addListener() {
-        mInput.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == 6) {
-                final String input = mInput.getText().toString().trim();
-                if (!TextUtils.isEmpty(input)) {
-                    mPresenter.executeSearch(input);
-                    return false;
-                } else {
-                    Toast.makeText(MainActivity.this, "please input words !", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+        mInput.setOnKeyListener((v,keyCode,event)->{
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                translate();
+                return true;
             }
             return false;
         });
     }
 
+    private void translate() {
+        InputMethodUtils.closeSoftKeyboard(this);
+        final String input = mInput.getText().toString().trim();
+        if (!TextUtils.isEmpty(input)) {
+            mPresenter.executeSearch(input);
+        } else {
+            Toast.makeText(MainActivity.this, "please input words !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private boolean isFavorite;
 
-    /**
-     * 生成翻译结果最下面的 view , 用于显示当前翻译结果对应的翻译引擎以及收藏按钮
-     * @param result 翻译结果
-     * @return 对应的 view
-     */
-    private View getResultBottomView(AbsResult result) {
-        if (result == null) return null;
-        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.translate_result_bottom, null);
-        mIvFavorite = ButterKnife.findById(view, R.id.iv_favorite);
-        mTvResultEngineInfo = ButterKnife.findById(view, R.id.tv_result_engine_info);
-
+    @Override
+    public void onTranslateSuccess(AbsResult result) {
+        if (result == null) return;
         mIvFavorite.setTag(result);
-        mIvFavorite.setOnClickListener(v -> onClickFavorite(v));
-        mTvResultEngineInfo.setText("结果来自 " + SpUtils.getTranslateEngineWay(MainActivity.this).getName() + "翻译");
-
         if (mPresenter.isFavorite(result.wrapQuery())) {
             mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
             isFavorite = true;
         } else {
             mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             isFavorite = false;
-        }
-        return view;
-    }
-
-    public void onClickFavorite(View v) {
-        AbsResult entity = (AbsResult) v.getTag();
-        if (isFavorite) {
-            mPresenter.unFavoriteWord(entity.getResult());
-            Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            isFavorite = false;
-        } else {
-            mPresenter.favoriteWord(entity.getResult());
-            Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
-            isFavorite = true;
         }
     }
     /**
@@ -303,13 +280,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mList.removeAllViews();
     }
 
-    @Override
-    public void appendBottomView(AbsResult result) {
-        View resultBottomView = getResultBottomView(result);
-        if (resultBottomView != null) {
-            mList.addView(resultBottomView);
-        }
-    }
 
     @Override
     public void onError(Throwable e) {
@@ -318,7 +288,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Override
     public void addExplainItem(String explain) {
-        mList.addView(ViewUtil.getWordsView(MainActivity.this, explain, android.R.color.black));
+        mList.addView(ViewUtil.getWordsView(MainActivity.this, explain, R.color.color_explain));
     }
 
     @Override
@@ -372,6 +342,39 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             case THIRTY_MINUTE:
                 menu.findItem(R.id.interval_thirty_minute).setChecked(true);
                 break;
+        }
+    }
+
+    @OnClick(R.id.bt_translate)
+    public void onClickTranslate(View view){
+        translate();
+    }
+
+    @OnClick(R.id.tv_clear)
+    public void onClickClear(View view){
+        resetView();
+    }
+
+    private void resetView(){
+        mInput.setText("");
+        isFavorite = false;
+        mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        mList.removeAllViews();
+    }
+
+    @OnClick(R.id.iv_favorite)
+    public void onClickFavorite(View view){
+        AbsResult entity = (AbsResult) view.getTag();
+        if (isFavorite) {
+            mPresenter.unFavoriteWord(entity.getResult());
+            Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            isFavorite = false;
+        } else {
+            mPresenter.favoriteWord(entity.getResult());
+            Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
+            isFavorite = true;
         }
     }
 
