@@ -48,6 +48,14 @@
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/menu_open_jit_or_nor"
+        app:showAsAction="never"
+        android:title="@string/open_jit_or_nor"
+        android:checked="true"
+        android:checkable="true"/>
+
     <item
         android:id="@+id/menu_use_recite_or_not"
         app:showAsAction="never"

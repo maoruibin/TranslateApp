@@ -191,10 +191,12 @@ public class MainPresenter extends BasePresenter<IMainView>{
         EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(mActivity);
         EDurationTipTime durationTime = SpUtils.getDurationTimeWay(mActivity);
         boolean reciteFlag = SpUtils.getReciteOpenOrNot(mActivity);
+        boolean openJIT = SpUtils.getOpenJITOrNot(mActivity);
 
         mView.initTranslateEngineSetting(menu,from);
         mView.initIntervalTimeSetting(menu,intervalTime);
         mView.initDurationTimeSetting(menu,durationTime);
         mView.initReciteSetting(menu,reciteFlag);
+        mView.initJITSetting(menu,openJIT);
     }
 }
