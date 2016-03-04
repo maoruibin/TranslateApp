@@ -53,7 +53,6 @@ import name.gudong.translate.util.SpUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -107,12 +106,6 @@ public class MainPresenter extends BasePresenter<IMainView>{
         }
 
         observable.subscribeOn(Schedulers.io())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-
-                    }
-                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AbsResult, Boolean>() {
                     @Override
