@@ -29,6 +29,8 @@ V2EX 上对 App 的讨论 [咕咚翻译](https://www.v2ex.com/t/259288#reply69)
 
 微博上[关于咕咚翻译的讨论](http://weibo.com/1874136301/Dkrpm8sWn?type=comment#_rnd1456976705834)
 
+Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/111919086388322816251)
+
 ## 已知 Bug 
 * 查词时，输入框下面应该会显示"查词中...",目前不能显示出来
 * 在本应用外收藏成功单词后，没有成功提示
