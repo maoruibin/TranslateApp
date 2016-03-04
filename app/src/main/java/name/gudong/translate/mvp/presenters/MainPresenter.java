@@ -110,7 +110,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mView.onClearResultViews();
+
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -134,6 +134,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .flatMap(new Func1<List<String>, Observable<String>>() {
                     @Override
                     public Observable<String> call(List<String> strings) {
+                        mView.onClearResultViews();
                         if(strings == null){
                             return Observable.error(new Exception(("啥也没有翻译出来!")));
                         }
