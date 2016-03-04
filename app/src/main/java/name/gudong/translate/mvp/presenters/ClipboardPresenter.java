@@ -187,7 +187,8 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
     private void performClipboardCheck() {
         CharSequence content = mClipboardWatcher.getText();
         if (TextUtils.isEmpty(content)) return;
-
+        //if JIT translate is closed by user ,now when clipboard is change ,but we do nothing,
+        if(!SpUtils.getOpenJITOrNot(mService))return;
         //处理缓存
         String query = content.toString();
         if (listQuery.contains(query)) return;

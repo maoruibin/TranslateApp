@@ -143,6 +143,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 selectEngine(item,ETranslateFrom.YOU_DAO);
                 break;
 
+            case R.id.menu_open_jit_or_nor:
+                boolean isOpenJit = item.isChecked();
+                SpUtils.setOpenJITOrNot(this,!isOpenJit);
+                break;
+
             case R.id.menu_use_recite_or_not:
                 if (Once.needToDo(KEY_TIP_OF_RECITE)) {
                     new AlertDialog.Builder(this)
@@ -380,5 +385,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(isOpen);
         menu.findItem(R.id.menu_duration_tip_time).setVisible(isOpen);
+
+        menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
+        menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
+        menu.findItem(R.id.menu_duration_tip_time).setVisible(false);
+        SpUtils.setReciteOpenOrNot(this,false);
+    }
+
+    @Override
+    public void initJITSetting(Menu menu, boolean isOpen) {
+        menu.findItem(R.id.menu_open_jit_or_nor).setChecked(isOpen);
     }
 }

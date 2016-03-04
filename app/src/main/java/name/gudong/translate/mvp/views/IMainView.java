@@ -60,4 +60,11 @@ public interface IMainView extends IBaseView {
      * @param isOpen
      */
     void initReciteSetting(Menu menu, boolean isOpen);
+
+    /**
+     * 初始化是否开启划词翻译
+     * @param menu
+     * @param isOpen
+     */
+    void initJITSetting(Menu menu, boolean isOpen);
 }

@@ -18,18 +18,19 @@
   ~  along with GdTranslate.  If not, see <http://www.gnu.org/licenses/>.
   ~
   -->
+
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
     <item
         android:id="@+id/menu_book"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/favorite_list"/>
 
     <item
         android:id="@+id/menu_translate"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:title="@string/translate_from">
         <menu>
             <group
@@ -47,15 +48,23 @@
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/menu_open_jit_or_nor"
+        app:showAsAction="never"
+        android:title="@string/open_jit_or_nor"
+        android:checked="true"
+        android:checkable="true"/>
+
     <item
         android:id="@+id/menu_use_recite_or_not"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:title="@string/use_recite_or_nor"
         android:checked="false"
         android:checkable="true"/>
     <item
         android:id="@+id/menu_interval_tip_time"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:visible="false"
         android:title="@string/tip_time_interval">
         <menu>
@@ -82,7 +91,7 @@
     </item>
     <item
         android:id="@+id/menu_duration_tip_time"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:visible="false"
         android:title="@string/tip_time_duration">
         <menu>
@@ -106,10 +115,10 @@
 
     <item
         android:id="@+id/menu_score"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/menu_score"/>
     <item
         android:id="@+id/menu_about"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/menu_about"/>
 </menu>

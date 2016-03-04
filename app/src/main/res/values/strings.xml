@@ -9,6 +9,7 @@
 
     <string name="translate_from">翻译引擎</string>
     <string name="use_recite_or_nor">开启定时单词提醒</string>
+    <string name="open_jit_or_nor">开启划词翻译</string>
     <string name="tip_time_interval">提示间隔时间</string>
     <string name="tip_time_duration">提示显示时间</string>
 
