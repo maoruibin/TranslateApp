@@ -18,18 +18,18 @@
   ~  along with GdTranslate.  If not, see <http://www.gnu.org/licenses/>.
   ~
   -->
-
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/apk/res-auto"
     >
     <item
         android:id="@+id/menu_book"
-        android:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/favorite_list"/>
 
     <item
         android:id="@+id/menu_translate"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/translate_from">
         <menu>
             <group
@@ -49,13 +49,13 @@
     </item>
     <item
         android:id="@+id/menu_use_recite_or_not"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/use_recite_or_nor"
         android:checked="false"
         android:checkable="true"/>
     <item
         android:id="@+id/menu_interval_tip_time"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:visible="false"
         android:title="@string/tip_time_interval">
         <menu>
@@ -82,7 +82,7 @@
     </item>
     <item
         android:id="@+id/menu_duration_tip_time"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:visible="false"
         android:title="@string/tip_time_duration">
         <menu>
@@ -106,10 +106,10 @@
 
     <item
         android:id="@+id/menu_score"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="@string/menu_score"/>
     <item
         android:id="@+id/menu_about"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="@string/menu_about"/>
 </menu>
