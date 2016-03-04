@@ -53,6 +53,9 @@ public class SpUtils {
 
     private static final String KEY_RECITE_OPEN = "RECITE_OPEN_OR_NOT";
 
+    //is open JIT translate or not
+    private static final String KEY_OPEN_JIT = "RECITE_OPEN_JIT";
+
     public static void setTranslateEngine(Context context, String version) {
         putStringPreference(context, KEY_TRANSLATE_FROM, version);
     }
@@ -101,6 +104,15 @@ public class SpUtils {
 
     public static boolean getReciteOpenOrNot(Context context){
         return getBooleanPreference(context,KEY_RECITE_OPEN,false);
+    }
+
+    //是否开启划词翻译
+    public static void setOpenJITOrNot(Context context,boolean isOpen){
+        putBooleanPreference(context,KEY_OPEN_JIT,isOpen);
+    }
+
+    public static boolean getOpenJITOrNot(Context context){
+        return getBooleanPreference(context,KEY_OPEN_JIT,true);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
