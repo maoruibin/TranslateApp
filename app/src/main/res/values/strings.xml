@@ -28,5 +28,8 @@
     <string name="duration_six_second">6秒钟</string>
     <string name="duration_ten_second">10秒钟</string>
     <string name="empty_tip">没有收藏的单词</string>
+    <string name="action_clear">清除</string>
+    <string name="action_translate">翻译</string>
+    <string name="point_input_key">输入关键字</string>
 
 </resources>

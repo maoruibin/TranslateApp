@@ -361,25 +361,37 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void resetView(){
-        mInput.setText("");
+        clearInputContent();
+        mPresenter.clearClipboard();
         isFavorite = false;
         mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        mIvFavorite.setTag(null);
         mList.removeAllViews();
+    }
+
+    private void clearInputContent(){
+        String content = mInput.getText().toString();
+        if(!TextUtils.isEmpty(content)){
+            mInput.setText("");
+        }
     }
 
     @OnClick(R.id.iv_favorite)
     public void onClickFavorite(View view){
-        AbsResult entity = (AbsResult) view.getTag();
-        if (isFavorite) {
-            mPresenter.unFavoriteWord(entity.getResult());
-            Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            isFavorite = false;
-        } else {
-            mPresenter.favoriteWord(entity.getResult());
-            Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
-            isFavorite = true;
+        Object obj = view.getTag();
+        if(obj!=null && obj instanceof AbsResult){
+            AbsResult entity = (AbsResult) obj;
+            if (isFavorite) {
+                mPresenter.unFavoriteWord(entity.getResult());
+                Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+                mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                isFavorite = false;
+            } else {
+                mPresenter.favoriteWord(entity.getResult());
+                Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+                mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
+                isFavorite = true;
+            }
         }
     }
 
@@ -388,11 +400,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(isOpen);
         menu.findItem(R.id.menu_duration_tip_time).setVisible(isOpen);
-
-        menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
-        menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
-        menu.findItem(R.id.menu_duration_tip_time).setVisible(false);
-        SpUtils.setReciteOpenOrNot(this,false);
     }
 
     @Override

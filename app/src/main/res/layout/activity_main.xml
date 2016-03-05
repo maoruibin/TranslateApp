@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="输入关键字"/>
+                android:text="@string/point_input_key"/>
 
             <TextView
                 android:id="@+id/tv_clear"
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
-                android:text="清除"/>
+                android:text="@string/action_clear"/>
         </RelativeLayout>
 
         <EditText
@@ -55,12 +55,12 @@
 
             <Button
                 android:id="@+id/bt_translate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:background="@color/colorPrimary"
+                android:layout_width="@dimen/activity_main_button_translate_width"
+                android:layout_height="@dimen/activity_main_button_translate_height"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/selector_action_search"
                 android:textColor="@android:color/white"
-                android:text="翻译"/>
+                android:text="@string/action_translate"/>
         </RelativeLayout>
     </LinearLayout>
 

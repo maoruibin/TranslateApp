@@ -21,6 +21,9 @@
 package name.gudong.translate.mvp.presenters;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -87,6 +90,12 @@ public class MainPresenter extends BasePresenter<IMainView>{
             executeSearch(text);
             InputMethodUtils.closeSoftKeyboard(mActivity);
         }
+    }
+
+    public void clearClipboard(){
+        ClipboardManager clipService = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText("", "");
+        clipService.setPrimaryClip(clipData);
     }
 
     public void checkVersionAndShowChangeLog(){
