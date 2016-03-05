@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -41,10 +42,13 @@ import name.gudong.translate.reject.components.DaggerActivityComponent;
 import name.gudong.translate.reject.modules.ActivityModule;
 import name.gudong.translate.ui.adapter.WordsListAdapter;
 
-public class WordsBookActivity extends BaseActivity<BookPresenter> implements WordsListAdapter.OnClick,IBookView {
+public class WordsBookActivity extends BaseActivity<BookPresenter> implements WordsListAdapter.OnClick, IBookView {
 
     @Bind(R.id.rv_words_list)
     RecyclerView mRvWordsList;
+
+    @Bind(R.id.empty_tip_text)
+    TextView emptyTipText;
 
     WordsListAdapter mAdapter;
 
@@ -58,7 +62,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_words_book);
         ButterKnife.bind(this);
-        initActionBar(true,"单词本");
+        initActionBar(true, "单词本");
         initListView();
         initData();
     }
@@ -91,12 +95,21 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
 
     @Override
     public void fillData(List<Result> transResultEntities) {
-        mAdapter.update(transResultEntities);
+        //如果查出来的结果为空,那么提示用户没有收藏的单词
+        if (transResultEntities == null || transResultEntities.size() == 0) {
+            emptyTipText.setVisibility(View.VISIBLE);
+        } else {
+            emptyTipText.setVisibility(View.GONE);
+            mAdapter.update(transResultEntities);
+        }
     }
 
     @Override
     public void deleteWordSuccess(Result entity) {
         mAdapter.removeItem(entity);
+        if (mAdapter.getItemCount() == 0) {
+            emptyTipText.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
