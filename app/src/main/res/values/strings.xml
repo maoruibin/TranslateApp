@@ -27,5 +27,6 @@
     <string name="duration_four_second">4秒钟</string>
     <string name="duration_six_second">6秒钟</string>
     <string name="duration_ten_second">10秒钟</string>
+    <string name="empty_tip">没有收藏的单词</string>
 
 </resources>

@@ -3,7 +3,7 @@ ext {
             package             : "name.gudong.translate",
             buildToolsVersion   : "23.0.2",
             compileVersion      : 23,
-            minSdk              : 19,
+            minSdk              : 16,
             targetSdk           : 23,
             version_code        : 065,
             version_name        : "0.6.5-alaph"
