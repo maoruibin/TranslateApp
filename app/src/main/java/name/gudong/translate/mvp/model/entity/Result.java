@@ -53,6 +53,10 @@ public class Result {
     protected String amMp3;
     @Column("translate_from")
     protected String translateFrom;
+    @Column("ph_en")
+    protected String phEn;
+    @Column("ph_am")
+    protected String phAm;
 
     public Result() {
     }
@@ -66,6 +70,8 @@ public class Result {
         enMp3 = mIResult.wrapEnMp3();
         amMp3 = mIResult.wrapAmMp3();
         translateFrom = mIResult.translateFrom();
+        phAm = mIResult.wrapPhAm();
+        phEn = mIResult.wrapPhEn();
     }
 
     public String getAmMp3() {
@@ -130,5 +136,21 @@ public class Result {
 
     public void setUsPhonetic(String usPhonetic) {
         this.usPhonetic = usPhonetic;
+    }
+
+    public String getPhAm() {
+        return phAm;
+    }
+
+    public void setPhAm(String phAm) {
+        this.phAm = phAm;
+    }
+
+    public String getPhEn() {
+        return phEn;
+    }
+
+    public void setPhEn(String phEn) {
+        this.phEn = phEn;
     }
 }

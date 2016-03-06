@@ -382,4 +382,32 @@ public class JinShanResult  extends AbsResult{
     public String translateFrom() {
         return ETranslateFrom.JIN_SHAN.name();
     }
+
+    @Override
+    public String wrapPhEn() {
+        final String[] phEn = {""};
+        Observable.from(getSymbols())
+                .first()
+                .subscribe(new Action1<SymbolsEntity>() {
+                    @Override
+                    public void call(SymbolsEntity symbolEntity) {
+                        phEn[0] = symbolEntity.ph_en;
+                    }
+                });
+        return phEn[0];
+    }
+
+    @Override
+    public String wrapPhAm() {
+        final String[] phAm = {""};
+        Observable.from(getSymbols())
+                .first()
+                .subscribe(new Action1<SymbolsEntity>() {
+                    @Override
+                    public void call(SymbolsEntity symbolEntity) {
+                        phAm[0] = symbolEntity.ph_am;
+                    }
+                });
+        return phAm[0];
+    }
 }

@@ -125,6 +125,16 @@ public class BaiDuResult extends AbsResult{
         return ETranslateFrom.BAI_DU.name();
     }
 
+    @Override
+    public String wrapPhEn() {
+        return null;
+    }
+
+    @Override
+    public String wrapPhAm() {
+        return null;
+    }
+
     public void setFrom(String from) {
         this.from = from;
     }
