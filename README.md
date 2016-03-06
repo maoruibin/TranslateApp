@@ -6,6 +6,17 @@
 
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
 
+## 待完成功能
+
+* 使用Snackbar 替换 Toast,如收藏提示
+* 显示单词信息时增加音标
+* 使用 Github 做自动更新
+* 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
+* 没有使用测试，所以项目中可能还潜在的存在一些 bug,关于测试，也是自己今年需要补齐的一块知识。
+* ~~生词本为空时的提示信息~~
+
+`Note:`想要参与贡献代码的同学，请在 develop 分支上操作，欢迎参与，欢迎来[Google+社区](https://plus.google.com/u/1/communities/111919086388322816251)一起讨论 咕咚翻译。
+
 ##下载
 
 <a href="https://play.google.com/store/apps/details?id=name.gudong.translate" target="_blank" alt="Google Paly"><img src="http://7xr9gx.com1.z0.glb.clouddn.com/icon_google_play_brand.png"/></a>
@@ -13,6 +24,8 @@
 [Fir](http://fir.im/gdTranslater)
 
 [酷安市场](http://www.coolapk.com/apk/name.gudong.translate)
+
+如果想要帮助做内部测试，[欢迎来Google+社区](https://plus.google.com/u/1/communities/111919086388322816251)我会把最新的版本放在 Google+社区。
 
 ##缘起
 自己经常在手机上会阅读一些英文的技术 blog 或者文档，经常会遇到陌生的单词，想必大家都有类似的经历，一般的，如果是上班期间，我可能会打开谷歌翻译，然后查词，但是当你不在电脑旁，就只能通过手机上的翻译软件来翻译生词，所以这时我们通常遇到生词会这样操作，长按生词、选择复制、点击 Home 键、找到翻译 App,有道翻译或者谷歌翻译之类的，然后长按输入框，选择粘贴，此时你才可以看到那个生词的意思。其实这是一个非常考验用户耐性的事，连续操作几次，不烦才怪呢。
@@ -27,18 +40,11 @@ V2EX 上对 App 的讨论 [咕咚翻译](https://www.v2ex.com/t/259288#reply69)
 
 微博上[关于咕咚翻译的讨论](http://weibo.com/1874136301/Dkrpm8sWn?type=comment#_rnd1456976705834)
 
-Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/111919086388322816251)（在这里，你可能会获取到最新的测试包，欢迎来这里讨论。）
+Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/111919086388322816251)
 
 ## 已知 Bug 
 * ~~查词时，输入框下面应该会显示"查词中...",目前不能显示出来~~
 * 在本应用外收藏成功单词后，没有成功提示
-
-## 待优化
-* ~~生词本为空时的提示信息~~
-* 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
-* 没有使用测试，所以项目中可能还潜在的存在一些 bug,关于测试，也是自己今年需要补齐的一块知识。
-
-`Note:`想要参与贡献代码的同学，请在 develop 分支上操作，不要向 master 分支发起任何操作，非常感谢~
 
 ## 技术点
 
