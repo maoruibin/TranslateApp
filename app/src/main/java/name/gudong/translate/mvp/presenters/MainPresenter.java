@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import jonathanfinerty.once.Once;
+import me.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.WarpAipService;
@@ -152,6 +153,10 @@ public class MainPresenter extends BasePresenter<IMainView>{
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.onClearResultViews();
+                        if(BuildConfig.DEBUG){
+                            e.printStackTrace();
+                        }
                         mView.onError(e);
                     }
 
@@ -195,14 +200,17 @@ public class MainPresenter extends BasePresenter<IMainView>{
         mActivity.startActivity(intent);
     }
 
-    public void prepareOptionSettings(Menu menu) {
+    public void prepareTranslateWay(){
         ETranslateFrom from = SpUtils.getTranslateEngineWay(mActivity);
+        mView.initTranslateEngineSetting(from);
+    }
+
+    public void prepareOptionSettings(Menu menu) {
         EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(mActivity);
         EDurationTipTime durationTime = SpUtils.getDurationTimeWay(mActivity);
         boolean reciteFlag = SpUtils.getReciteOpenOrNot(mActivity);
         boolean openJIT = SpUtils.getOpenJITOrNot(mActivity);
 
-        mView.initTranslateEngineSetting(menu,from);
         mView.initIntervalTimeSetting(menu,intervalTime);
         mView.initDurationTimeSetting(menu,durationTime);
         mView.initReciteSetting(menu,reciteFlag);

@@ -46,7 +46,7 @@ public interface IMainView extends IBaseView {
 
     void addExplainItem(String explain);
 
-    void initTranslateEngineSetting(Menu menu, ETranslateFrom way);
+    void initTranslateEngineSetting(ETranslateFrom way);
 
     void initDurationTimeSetting(Menu menu, EDurationTipTime way);
 

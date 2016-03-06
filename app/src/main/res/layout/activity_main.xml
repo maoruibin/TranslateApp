@@ -53,6 +53,13 @@
                 android:layout_centerVertical="true"
                 android:text="翻译引擎："/>
 
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/sp_translate_way"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_point_engine"
+                android:layout_centerVertical="true" />
+
             <Button
                 android:id="@+id/bt_translate"
                 android:layout_width="@dimen/activity_main_button_translate_width"

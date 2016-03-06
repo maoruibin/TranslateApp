@@ -81,4 +81,16 @@ public interface IResult {
      */
     String translateFrom();
 
+    /**
+     * 英式音标
+     * @return
+     */
+    String wrapPhEn();
+
+    /**
+     * 美式音标
+     * @return
+     */
+    String wrapPhAm();
+
 }

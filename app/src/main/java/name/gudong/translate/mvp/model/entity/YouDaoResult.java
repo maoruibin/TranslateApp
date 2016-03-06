@@ -88,6 +88,16 @@ public class YouDaoResult extends AbsResult{
         return ETranslateFrom.YOU_DAO.name();
     }
 
+    @Override
+    public String wrapPhEn() {
+        return getBasic().getUkPhonetic();
+    }
+
+    @Override
+    public String wrapPhAm() {
+        return getBasic().getUsPhonetic();
+    }
+
     public class BasicEntity {
         @SerializedName("us-phonetic")
         private String usPhonetic;

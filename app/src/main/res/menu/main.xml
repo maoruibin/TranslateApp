@@ -29,27 +29,6 @@
         android:title="@string/favorite_list"/>
 
     <item
-        android:id="@+id/menu_translate"
-        app:showAsAction="never"
-        android:title="@string/translate_from">
-        <menu>
-            <group
-                android:checkableBehavior="single">
-                <item
-                    android:id="@+id/translate_baidu"
-                    android:title="@string/translate_from_baidu"/>
-                <item
-                    android:id="@+id/translate_youdao"
-                    android:title="@string/translate_from_youdao"/>
-                <item
-                    android:id="@+id/translate_jinshan"
-                    android:title="@string/translate_from_jinshan"/>
-
-            </group>
-        </menu>
-    </item>
-
-    <item
         android:id="@+id/menu_open_jit_or_nor"
         app:showAsAction="never"
         android:title="@string/open_jit_or_nor"
@@ -92,7 +71,6 @@
     <item
         android:id="@+id/menu_duration_tip_time"
         app:showAsAction="never"
-        android:visible="false"
         android:title="@string/tip_time_duration">
         <menu>
             <group

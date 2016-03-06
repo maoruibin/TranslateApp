@@ -26,16 +26,22 @@ package name.gudong.translate.mvp.model.type;
  */
 public enum  ETranslateFrom {
 
-    BAI_DU("百度","http://api.fanyi.baidu.com/api/trans/vip/translate"),
-    YOU_DAO("有道","http://fanyi.youdao.com/openapi.do"),
-    JIN_SHAN("金山","http://dict-co.iciba.com/api/dictionary.php");
+    BAI_DU(0,"百度","http://api.fanyi.baidu.com/api/trans/vip/translate"),
+    YOU_DAO(1,"有道","http://fanyi.youdao.com/openapi.do"),
+    JIN_SHAN(2,"金山","http://dict-co.iciba.com/api/dictionary.php");
 
+    private int index;
     private String name;
     private String url;
 
-    ETranslateFrom(String name,String url) {
+    ETranslateFrom(int index,String name,String url) {
+        this.index = index;
         this.name = name;
         this.url = url;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public String getName() {

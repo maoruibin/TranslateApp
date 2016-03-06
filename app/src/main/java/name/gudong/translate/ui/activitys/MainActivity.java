@@ -22,15 +22,20 @@ package name.gudong.translate.ui.activitys;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.google.gson.JsonSyntaxException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,11 +65,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     EditText mInput;
     @Bind(R.id.list_result)
     LinearLayout mList;
+    @Bind(R.id.sp_translate_way)
+    AppCompatSpinner mSpTranslateWay;
 
     @Bind(R.id.iv_favorite)
     ImageView mIvFavorite;
 
     Menu mMenu;
+
+    private boolean isFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +82,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         ButterKnife.bind(this);
         addListener();
         startListenService();
+        initSpinner();
+        checkTranslateWay();
         checkSomething();
         checkVersion();
         initConfig();
+    }
+
+    private void checkTranslateWay() {
+        mPresenter.prepareTranslateWay();
     }
 
     private void initConfig() {
@@ -133,15 +148,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             case R.id.menu_score:
                 mPresenter.gotoMarket();
                 break;
-            case R.id.translate_baidu:
-                selectEngine(item, ETranslateFrom.BAI_DU);
-                break;
-            case R.id.translate_jinshan:
-                selectEngine(item, ETranslateFrom.JIN_SHAN);
-                break;
-            case R.id.translate_youdao:
-                selectEngine(item,ETranslateFrom.YOU_DAO);
-                break;
 
             case R.id.menu_open_jit_or_nor:
                 boolean isOpenJit = item.isChecked();
@@ -159,7 +165,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 boolean isCheck = item.isChecked();
                 SpUtils.setReciteOpenOrNot(this,!isCheck);
                 mMenu.findItem(R.id.menu_interval_tip_time).setVisible(!isCheck);
-                mMenu.findItem(R.id.menu_duration_tip_time).setVisible(!isCheck);
                 startListenService();
                 break;
 
@@ -206,10 +211,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         startListenService();
     }
 
-    private void selectEngine(MenuItem item, ETranslateFrom way) {
+    private void selectEngine( ETranslateFrom way) {
         SpUtils.setTranslateEngine(this, way.name());
-        item.setChecked(true);
-        shiftEnginePoint(way);
         checkInputAndResearch();
     }
 
@@ -224,11 +227,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         }
     }
 
-    private void shiftEnginePoint(ETranslateFrom eTranslateFrom) {
-        String msg = "已切换至 " + eTranslateFrom.getName() + " 翻译引擎";
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-    }
-
     private void addListener() {
         mInput.setOnKeyListener((v,keyCode,event)->{
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
@@ -236,6 +234,28 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 return true;
             }
             return false;
+        });
+
+        mSpTranslateWay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        selectEngine( ETranslateFrom.BAI_DU);
+                        break;
+                    case 1:
+                        selectEngine(ETranslateFrom.YOU_DAO);
+                        break;
+                    case 2:
+                        selectEngine( ETranslateFrom.JIN_SHAN);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
     }
 
@@ -249,21 +269,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         }
     }
 
-
-    private boolean isFavorite;
-
-    @Override
-    public void onTranslateSuccess(AbsResult result) {
-        if (result == null) return;
-        mIvFavorite.setTag(result);
-        if (mPresenter.isFavorite(result.wrapQuery())) {
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
-            isFavorite = true;
-        } else {
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            isFavorite = false;
-        }
-    }
     /**
      * set text to EditText view and move curse to last
      * @param text which need to translate
@@ -288,7 +293,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Override
     public void onError(Throwable e) {
-        mList.addView(ViewUtil.getWordsView(MainActivity.this, e.getMessage(), android.R.color.holo_red_light));
+        String msg =e.getMessage();
+        if(e instanceof JsonSyntaxException){
+            msg = "不支持的查询操作，你可以切换到别的翻译方式碰碰运气,Good luck~";
+        }
+        mList.addView(ViewUtil.getWordsView(MainActivity.this, msg, android.R.color.holo_red_light));
     }
 
     @Override
@@ -297,18 +306,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @Override
-    public void initTranslateEngineSetting(Menu menu,ETranslateFrom from) {
-        switch (from) {
-            case BAI_DU:
-                menu.findItem(R.id.translate_baidu).setChecked(true);
-                break;
-            case JIN_SHAN:
-                menu.findItem(R.id.translate_jinshan).setChecked(true);
-                break;
-            case YOU_DAO:
-                menu.findItem(R.id.translate_youdao).setChecked(true);
-                break;
-        }
+    public void initTranslateEngineSetting(ETranslateFrom from) {
+        mSpTranslateWay.setSelection(from.getIndex());
     }
 
     @Override
@@ -399,11 +398,35 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void initReciteSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(isOpen);
-        menu.findItem(R.id.menu_duration_tip_time).setVisible(isOpen);
+
+
+        menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
+        menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
+        SpUtils.setReciteOpenOrNot(this,false);
     }
 
     @Override
     public void initJITSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_open_jit_or_nor).setChecked(isOpen);
+    }
+
+    @Override
+    public void onTranslateSuccess(AbsResult result) {
+        if (result == null) return;
+        mIvFavorite.setTag(result);
+        if (mPresenter.isFavorite(result.wrapQuery())) {
+            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
+            isFavorite = true;
+        } else {
+            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            isFavorite = false;
+        }
+    }
+
+    private void initSpinner(){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.translate_way, R.layout.spinner_drop_list_title);
+        adapter.setDropDownViewResource(R.layout.spinner_drop_list_item);
+        mSpTranslateWay.setAdapter(adapter);
     }
 }

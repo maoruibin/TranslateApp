@@ -45,7 +45,7 @@ public class JinShanResult  extends AbsResult{
      */
 
     private String word_name;
-    private int is_CRI;
+
     /**
      * word_pl : ["goes"]
      * word_past : ["went"]
@@ -74,9 +74,6 @@ public class JinShanResult  extends AbsResult{
         this.word_name = word_name;
     }
 
-    public void setIs_CRI(int is_CRI) {
-        this.is_CRI = is_CRI;
-    }
 
 //    public void setExchange(ExchangeEntity exchange) {
 //        this.exchange = exchange;
@@ -94,9 +91,6 @@ public class JinShanResult  extends AbsResult{
         return word_name;
     }
 
-    public int getIs_CRI() {
-        return is_CRI;
-    }
 
 //    public ExchangeEntity getExchange() {
 //        return exchange;
@@ -381,5 +375,33 @@ public class JinShanResult  extends AbsResult{
     @Override
     public String translateFrom() {
         return ETranslateFrom.JIN_SHAN.name();
+    }
+
+    @Override
+    public String wrapPhEn() {
+        final String[] phEn = {""};
+        Observable.from(getSymbols())
+                .first()
+                .subscribe(new Action1<SymbolsEntity>() {
+                    @Override
+                    public void call(SymbolsEntity symbolEntity) {
+                        phEn[0] = symbolEntity.ph_en;
+                    }
+                });
+        return phEn[0];
+    }
+
+    @Override
+    public String wrapPhAm() {
+        final String[] phAm = {""};
+        Observable.from(getSymbols())
+                .first()
+                .subscribe(new Action1<SymbolsEntity>() {
+                    @Override
+                    public void call(SymbolsEntity symbolEntity) {
+                        phAm[0] = symbolEntity.ph_am;
+                    }
+                });
+        return phAm[0];
     }
 }

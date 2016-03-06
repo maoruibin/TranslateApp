@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array  name="translate_way">
+        <item>百度</item>
+        <item>有道</item>
+        <item>金山</item>
+    </string-array>
+</resources>

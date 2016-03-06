@@ -33,8 +33,7 @@ import rx.Observable;
  */
 public interface ApiService {
 
-    //http://api.fanyi.baidu.com/api/trans/vip/translate?
-    // &q=wa&from=en&to=zh&appid=20151224000008231&salt=6419211269&sign=ad39d99e36f28da173804fb02cf11f3a
+    //http://api.fanyi.baidu.com/api/trans/vip/translate?q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4
     @GET("?")
     Observable<BaiDuResult> translateBaiDu(
             @Query("q") String q,
