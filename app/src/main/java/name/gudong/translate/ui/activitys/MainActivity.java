@@ -159,7 +159,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 boolean isCheck = item.isChecked();
                 SpUtils.setReciteOpenOrNot(this,!isCheck);
                 mMenu.findItem(R.id.menu_interval_tip_time).setVisible(!isCheck);
-                mMenu.findItem(R.id.menu_duration_tip_time).setVisible(!isCheck);
                 startListenService();
                 break;
 
@@ -384,11 +383,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void initReciteSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(isOpen);
-        menu.findItem(R.id.menu_duration_tip_time).setVisible(isOpen);
+
 
         menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
-        menu.findItem(R.id.menu_duration_tip_time).setVisible(false);
         SpUtils.setReciteOpenOrNot(this,false);
     }
 
