@@ -66,6 +66,7 @@
                 android:id="@+id/bt_translate"
                 android:layout_width="@dimen/activity_main_button_translate_width"
                 android:layout_height="@dimen/activity_main_button_translate_height"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/selector_action_search"
                 android:textColor="@android:color/white"

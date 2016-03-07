@@ -5,7 +5,10 @@
 
     <string name="favorite_list">单词本</string>
     <string name="menu_about">关于</string>
-    <string name="menu_score">赏个好评</string>
+    <string name="menu_score">去评分</string>
+    <string name="menu_support">支持作者</string>
+    <string name="copy_success">支付宝账号已复制到粘贴板</string>
+    <string name="support_fail">你可能没有安装支付宝或者出现了别的问题，不能进行打赏，但还是谢谢你的好意 ^_^</string>
 
     <string name="translate_from">翻译引擎</string>
     <string name="use_recite_or_nor">开启定时单词提醒</string>

@@ -21,14 +21,13 @@
 package name.gudong.translate.widget;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,15 +40,8 @@ import java.io.InputStreamReader;
 import me.gudong.translate.R;
 
 public class WebDialog extends DialogFragment {
-    private static final String KEY_DIALOG_TITLE = "DIALOG_TITLE";
-    private static final String KEY_HTML_FILE_NAME = "html_file_name";
-    private static final String KEY_ACCENT_COLOR = "accentColor";
-
-    public static void show(Context context, FragmentManager fragmentManager, String dialogTitle, String htmlFileName, String tag,@ColorRes int accentColor) {
-        WebDialog.create(dialogTitle, htmlFileName, accentColor)
-                .show(fragmentManager, "");
-    }
-
+    private DialogInterface.OnClickListener mNeutralClickCallback;
+    private DialogInterface.OnClickListener mPositiveClickCallback;
     /**
      * create a custom dialog use web view load layout by html file
      *
@@ -61,9 +53,35 @@ public class WebDialog extends DialogFragment {
     public static WebDialog create(String dialogTitle, String htmlFileName, int accentColor) {
         WebDialog dialog = new WebDialog();
         Bundle args = new Bundle();
-        args.putString(KEY_DIALOG_TITLE, dialogTitle);
-        args.putString(KEY_HTML_FILE_NAME, htmlFileName);
-        args.putInt(KEY_ACCENT_COLOR, accentColor);
+        args.putString("dialogTitle", dialogTitle);
+        args.putString("htmlFileName", htmlFileName);
+        args.putInt("accentColor", accentColor);
+        dialog.setArguments(args);
+        return dialog;
+    }
+
+    /**
+     * create a CustomWebViewDialog with a neutral button
+     * @param dialogTitle
+     * @param htmlFileName
+     * @param accentColor
+     * @param neutralText neutral button text
+     * @param neutralListener click listener
+     * @return
+     */
+    public static WebDialog create(String dialogTitle, String htmlFileName, int accentColor, String positiveText, DialogInterface.OnClickListener positiveListener, String neutralText, DialogInterface.OnClickListener neutralListener) {
+        WebDialog dialog = new WebDialog();
+        Bundle args = new Bundle();
+        args.putString("dialogTitle", dialogTitle);
+        args.putString("htmlFileName", htmlFileName);
+        args.putInt("accentColor", accentColor);
+
+        args.putString("positiveText", positiveText);
+        dialog.setPositiveClickCallback(positiveListener);
+
+        args.putString("neutralText", neutralText);
+        dialog.setNeutralClickCallback(neutralListener);
+
         dialog.setArguments(args);
         return dialog;
     }
@@ -78,17 +96,22 @@ public class WebDialog extends DialogFragment {
             throw new IllegalStateException("This device does not support Web Views.");
         }
 
-        String dialogTitle = getArguments().getString(KEY_DIALOG_TITLE);
+        String dialogTitle = getArguments().getString("dialogTitle");
+        String neutralText = getArguments().getString("neutralText");
+        String positiveText = getArguments().getString("positiveText");
+        neutralText = TextUtils.isEmpty(neutralText)?"":neutralText;
+        positiveText = TextUtils.isEmpty(neutralText)?getString(android.R.string.ok):positiveText;
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(dialogTitle)
                 .setView(customView)
-                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton(neutralText, mNeutralClickCallback)
+                .setPositiveButton(positiveText, mPositiveClickCallback)
                 .show();
 
         final WebView webView = (WebView) customView.findViewById(R.id.webview);
         webView.getSettings().setDefaultTextEncodingName("utf-8");
         try {
-            String htmlFileName = getArguments().getString(KEY_HTML_FILE_NAME);
+            String htmlFileName = getArguments().getString("htmlFileName");
             StringBuilder buf = new StringBuilder();
             InputStream json = getActivity().getAssets().open(htmlFileName);
             BufferedReader in = new BufferedReader(new InputStreamReader(json, "UTF-8"));
@@ -97,7 +120,7 @@ public class WebDialog extends DialogFragment {
                 buf.append(str);
             in.close();
 
-            final int accentColor = getResources().getColor(getArguments().getInt(KEY_ACCENT_COLOR));
+            final int accentColor = getArguments().getInt("accentColor");
             String formatLodString = buf.toString()
                     .replace("{style-placeholder}", "body { background-color: #ffffff; color: #000; }")
                     .replace("{link-color}", colorToHex(shiftColor(accentColor, true)))
@@ -118,5 +141,13 @@ public class WebDialog extends DialogFragment {
         Color.colorToHSV(color, hsv);
         hsv[2] *= (up ? 1.1f : 0.9f); // value component
         return Color.HSVToColor(hsv);
+    }
+
+    public void setNeutralClickCallback(DialogInterface.OnClickListener neutralClickCallback) {
+        mNeutralClickCallback = neutralClickCallback;
+    }
+
+    public void setPositiveClickCallback(DialogInterface.OnClickListener positiveClickCallback) {
+        mPositiveClickCallback = positiveClickCallback;
     }
 }

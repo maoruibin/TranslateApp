@@ -26,6 +26,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,6 +65,7 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
     private LinearLayout mHeadsUpView;
     private RelativeLayout mContentView;
     private TextView mTvSrc;
+    private TextView mTvPhonetic;
     private LinearLayout mLlDst;
     private Button mButtonFavorite;
 
@@ -75,6 +77,7 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
 
         // display content
         mTvSrc = (TextView) view.findViewById(R.id.tv_pop_src);
+        mTvPhonetic = (TextView) view.findViewById(R.id.tv_pop_phonetic);
         mLlDst = (LinearLayout) view.findViewById(R.id.ll_pop_dst);
         mButtonFavorite = (Button) view.findViewById(R.id.bt_action);
 
@@ -92,6 +95,7 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
 
     public void setResultContent(Result result) {
         setQuery(result.getQuery());
+        setPhonetic(result.getPhAm());
         mButtonFavorite.setTag(result);
         List<String> temp = result.getExplains();
         if (temp.isEmpty()) {
@@ -116,6 +120,15 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
 
     private void setQuery(String title) {
         mTvSrc.setText(title);
+    }
+
+    private void setPhonetic(String phonetic) {
+        if(!TextUtils.isEmpty(phonetic)){
+            mTvPhonetic.setVisibility(View.VISIBLE);
+            mTvPhonetic.setText("["+phonetic+"]");
+        }else{
+            mTvPhonetic.setVisibility(View.GONE);
+        }
     }
 
     public void show(boolean isShowFavoriteButton) {

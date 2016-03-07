@@ -170,6 +170,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             case R.id.menu_score:
                 mPresenter.gotoMarket();
                 break;
+            case R.id.menu_support:
+                DialogUtil.showSupport(this);
+                break;
 
             case R.id.menu_open_jit_or_nor:
                 boolean isOpenJit = item.isChecked();

@@ -1,7 +1,14 @@
 package name.gudong.translate.util;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import me.gudong.translate.R;
 import name.gudong.translate.widget.WebDialog;
@@ -13,11 +20,43 @@ import name.gudong.translate.widget.WebDialog;
  */
 public class DialogUtil {
     public static void showAbout(AppCompatActivity activity){
-        WebDialog.show(activity, activity.getSupportFragmentManager(), "关于", "about.html", "about", R.color.colorAccent);
+        WebDialog.create( "关于", "about.html", R.color.colorAccent)
+        .show(activity.getSupportFragmentManager(),  "about");
     }
 
     public static void showChangelog(AppCompatActivity activity){
-        WebDialog.show(activity, activity.getSupportFragmentManager(), "更新日志", "changelog.html", "changelog", R.color.colorAccent);
+        WebDialog.create("更新日志", "changelog.html", R.color.colorAccent)
+        .show(activity.getSupportFragmentManager(),  "changelog");;
+    }
+
+    public static void showSupport(AppCompatActivity activity){
+        showCustomDialogWithTwoAction(activity, activity.getSupportFragmentManager(),
+                "支持开发者", "donate_ch.html", "donate",
+                "关闭", null,
+                "复制账号并打开支付宝",(dialog,which)->{
+                    String alipay = "com.eg.android.AlipayGphone";
+                    //复制到粘贴板
+                    ClipboardManager cmb = (ClipboardManager)activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    cmb.setPrimaryClip(ClipData.newPlainText(null, "gudong.name@gmail.com"));
+                    Toast.makeText(activity, activity.getString(R.string.copy_success), Toast.LENGTH_LONG).show();
+                    //打开支付宝
+                    try {
+                        Intent intent = activity.getPackageManager().getLaunchIntentForPackage(alipay);
+                        activity.startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(activity, activity.getString(R.string.support_fail), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    public static void showCustomDialogWithTwoAction(
+            Context context, FragmentManager fragmentManager,
+            String dialogTitle, String htmlFileName, String tag,
+            String positiveText, DialogInterface.OnClickListener positiveListener,
+            String neutralText, DialogInterface.OnClickListener neutralListener) {
+        int accentColor = context.getResources().getColor(R.color.colorAccent);
+        WebDialog.create(dialogTitle, htmlFileName, accentColor,positiveText,positiveListener,neutralText,neutralListener)
+                .show(fragmentManager, tag);
     }
 
     public static void showSingleMessage(AppCompatActivity activity,String message,String positive){
