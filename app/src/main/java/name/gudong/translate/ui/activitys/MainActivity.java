@@ -35,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +77,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     ImageView mIvFavorite;
     @Bind(R.id.tv_clear)
     TextView mTvClear;
+    @Bind(R.id.rl_action)
+    RelativeLayout mRlAction;
 
     Menu mMenu;
 
@@ -346,6 +349,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void onPrepareTranslate() {
         mList.removeAllViews();
         mList.addView(ViewUtil.getWordsView(MainActivity.this, "正在翻译...", R.color.gray));
+        mRlAction.setVisibility(View.GONE);
     }
 
     @Override
@@ -429,6 +433,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         mIvFavorite.setTag(null);
         mList.removeAllViews();
+        mRlAction.setVisibility(View.GONE);
     }
 
     private void clearInputContent() {
@@ -459,7 +464,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @OnClick(R.id.iv_paste)
     public void onClickPaste(View view){
-        Toast.makeText(MainActivity.this, "长按翻译结果", Toast.LENGTH_SHORT).show();
+        InputMethodUtils.closeSoftKeyboard(this);
+        Toast.makeText(MainActivity.this, "长按翻译结果可复制", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -481,6 +487,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onTranslateSuccess(AbsResult result) {
         if (result == null) return;
+        mRlAction.setVisibility(View.VISIBLE);
         mIvFavorite.setTag(result);
         if (mPresenter.isFavorite(result.wrapQuery())) {
             mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
