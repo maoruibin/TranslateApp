@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void checkVersion() {
-        if(BuildConfig.DEBUG)return;
+        if (BuildConfig.DEBUG) return;
         mPresenter.checkVersionAndShowChangeLog();
     }
 
@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mPresenter.startListenClipboardService();
     }
 
-    private void checkSomething(){
+    private void checkSomething() {
         //检查粘贴板有没有英文单词 如果有就查询一次 并且显示给用户
         mPresenter.checkClipboard();
     }
@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
             case R.id.menu_open_jit_or_nor:
                 boolean isOpenJit = item.isChecked();
-                SpUtils.setOpenJITOrNot(this,!isOpenJit);
+                SpUtils.setOpenJITOrNot(this, !isOpenJit);
                 break;
 
             case R.id.menu_use_recite_or_not:
@@ -159,11 +159,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                     new AlertDialog.Builder(this)
                             .setTitle("提示")
                             .setMessage("定时提示生词，是咕咚翻译做的一个帮助用户记住生词的功能。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，不一定那一次就记住了，当然这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
-                            .setPositiveButton("知道了", ((dialog, which) ->  Once.markDone(KEY_TIP_OF_RECITE)))
+                            .setPositiveButton("知道了", ((dialog, which) -> Once.markDone(KEY_TIP_OF_RECITE)))
                             .show();
                 }
                 boolean isCheck = item.isChecked();
-                SpUtils.setReciteOpenOrNot(this,!isCheck);
+                SpUtils.setReciteOpenOrNot(this, !isCheck);
                 mMenu.findItem(R.id.menu_interval_tip_time).setVisible(!isCheck);
                 startListenService();
                 break;
@@ -211,7 +211,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         startListenService();
     }
 
-    private void selectEngine( ETranslateFrom way) {
+    private void selectEngine(ETranslateFrom way) {
         SpUtils.setTranslateEngine(this, way.name());
         checkInputAndResearch();
     }
@@ -220,15 +220,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
      * 检查输入框是不是已经有输入的内容 如果有自动搜索，
      * 主要是切换搜索引擎时会用到
      */
-    private void checkInputAndResearch(){
+    private void checkInputAndResearch() {
         String inputString = mInput.getText().toString();
-        if(!inputString.isEmpty()){
+        if (!inputString.isEmpty()) {
             mPresenter.executeSearch(inputString);
         }
     }
 
     private void addListener() {
-        mInput.setOnKeyListener((v,keyCode,event)->{
+        mInput.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 translate();
                 return true;
@@ -239,15 +239,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mSpTranslateWay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
+                switch (position) {
                     case 0:
-                        selectEngine( ETranslateFrom.BAI_DU);
+                        selectEngine(ETranslateFrom.BAI_DU);
                         break;
                     case 1:
                         selectEngine(ETranslateFrom.YOU_DAO);
                         break;
                     case 2:
-                        selectEngine( ETranslateFrom.JIN_SHAN);
+                        selectEngine(ETranslateFrom.JIN_SHAN);
                         break;
                 }
             }
@@ -259,22 +259,46 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         });
     }
 
+    private boolean checkInput(String input){
+        if (TextUtils.isEmpty(input)) {
+            Toast.makeText(MainActivity.this, R.string.tip_input_words, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        String[] result1 = input.split(" ");
+        String[] result2 = input.split(",");
+        String[] result3 = input.split(".");
+        String[] result4 = input.split("，");
+        String[] result5 = input.split("。");
+        String[] result6 = input.split("？");
+        if (isMoreThanOne(result1) || isMoreThanOne(result2) || isMoreThanOne(result3) ||
+                isMoreThanOne(result4) || isMoreThanOne(result5) || isMoreThanOne(result6) ) {
+            String msg = getString(R.string.msg_not_support_sentence);
+            DialogUtil.showSingleMessage(this, msg, getString(R.string.action_know));
+            return false;
+        }
+        return true;
+    }
+
     private void translate() {
         InputMethodUtils.closeSoftKeyboard(this);
         final String input = mInput.getText().toString().trim();
-        if (!TextUtils.isEmpty(input)) {
+        if(checkInput(input)){
             mPresenter.executeSearch(input);
-        } else {
-            Toast.makeText(MainActivity.this, "please input words !", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private boolean isMoreThanOne(String[] result) {
+        return result.length > 1;
+    }
+
+
     /**
      * set text to EditText view and move curse to last
+     *
      * @param text which need to translate
      */
     @Override
-    public void onInitSearchText(String text){
+    public void onInitSearchText(String text) {
         mInput.setText(text);
         ViewUtil.setEditTextSelectionToEnd(mInput);
     }
@@ -293,8 +317,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Override
     public void onError(Throwable e) {
-        String msg =e.getMessage();
-        if(e instanceof JsonSyntaxException){
+        String msg = e.getMessage();
+        if (e instanceof JsonSyntaxException) {
             msg = "不支持的查询操作，你可以切换到别的翻译方式碰碰运气,Good luck~";
         }
         mList.addView(ViewUtil.getWordsView(MainActivity.this, msg, android.R.color.holo_red_light));
@@ -311,7 +335,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @Override
-    public void initDurationTimeSetting(Menu menu,EDurationTipTime durationTime) {
+    public void initDurationTimeSetting(Menu menu, EDurationTipTime durationTime) {
         switch (durationTime) {
             case ONE_SECOND:
                 menu.findItem(R.id.duration_one_second).setChecked(true);
@@ -329,7 +353,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @Override
-    public void initIntervalTimeSetting(Menu menu,EIntervalTipTime intervalTime) {
+    public void initIntervalTimeSetting(Menu menu, EIntervalTipTime intervalTime) {
         switch (intervalTime) {
             case ONE_MINUTE:
                 menu.findItem(R.id.interval_one_minute).setChecked(true);
@@ -350,16 +374,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @OnClick(R.id.bt_translate)
-    public void onClickTranslate(View view){
+    public void onClickTranslate(View view) {
         translate();
     }
 
     @OnClick(R.id.tv_clear)
-    public void onClickClear(View view){
+    public void onClickClear(View view) {
         resetView();
     }
 
-    private void resetView(){
+    private void resetView() {
         clearInputContent();
         mPresenter.clearClipboard();
         isFavorite = false;
@@ -368,17 +392,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mList.removeAllViews();
     }
 
-    private void clearInputContent(){
+    private void clearInputContent() {
         String content = mInput.getText().toString();
-        if(!TextUtils.isEmpty(content)){
+        if (!TextUtils.isEmpty(content)) {
             mInput.setText("");
         }
     }
 
     @OnClick(R.id.iv_favorite)
-    public void onClickFavorite(View view){
+    public void onClickFavorite(View view) {
         Object obj = view.getTag();
-        if(obj!=null && obj instanceof AbsResult){
+        if (obj != null && obj instanceof AbsResult) {
             AbsResult entity = (AbsResult) obj;
             if (isFavorite) {
                 mPresenter.unFavoriteWord(entity.getResult());
@@ -402,7 +426,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
         menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
-        SpUtils.setReciteOpenOrNot(this,false);
+        SpUtils.setReciteOpenOrNot(this, false);
     }
 
     @Override
@@ -423,7 +447,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         }
     }
 
-    private void initSpinner(){
+    private void initSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.translate_way, R.layout.spinner_drop_list_title);
         adapter.setDropDownViewResource(R.layout.spinner_drop_list_item);

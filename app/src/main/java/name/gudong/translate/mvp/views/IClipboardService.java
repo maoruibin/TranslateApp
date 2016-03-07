@@ -25,5 +25,5 @@ package name.gudong.translate.mvp.views;
  * Contact with gudong.name@gmail.com.
  */
 public interface IClipboardService extends IBaseView {
-
+    void showTipToast(String msg);
 }

@@ -1,5 +1,6 @@
 package name.gudong.translate.util;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import me.gudong.translate.R;
@@ -17,5 +18,13 @@ public class DialogUtil {
 
     public static void showChangelog(AppCompatActivity activity){
         WebDialog.show(activity, activity.getSupportFragmentManager(), "更新日志", "changelog.html", "changelog", R.color.colorAccent);
+    }
+
+    public static void showSingleMessage(AppCompatActivity activity,String message,String positive){
+        new AlertDialog.Builder(activity)
+                .setTitle("提示")
+                .setMessage(message)
+                .setPositiveButton(positive,null)
+                .show();
     }
 }

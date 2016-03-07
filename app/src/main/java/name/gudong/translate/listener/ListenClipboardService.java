@@ -23,8 +23,10 @@ package name.gudong.translate.listener;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -46,6 +48,7 @@ public final class ListenClipboardService extends Service implements IClipboardS
         addListener();
         attachView();
         mPresenter.onCreate();
+
     }
 
     private void attachView() {
@@ -103,5 +106,16 @@ public final class ListenClipboardService extends Service implements IClipboardS
 
         // using wake lock to start service
         WakefulBroadcastReceiver.startWakefulService(context, myIntent);
+    }
+
+    @Override
+    public void showTipToast(String msg) {
+        Handler h = new Handler(getApplicationContext().getMainLooper());
+        h.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
