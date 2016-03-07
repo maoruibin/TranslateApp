@@ -94,9 +94,12 @@ public class MainPresenter extends BasePresenter<IMainView>{
     }
 
     public void clearClipboard(){
-        ClipboardManager clipService = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText("", "");
-        clipService.setPrimaryClip(clipData);
+        CharSequence sequence = mClipboardWatcher.getText();
+        if(!TextUtils.isEmpty(sequence)){
+            ClipboardManager clipService = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("", "");
+            clipService.setPrimaryClip(clipData);
+        }
     }
 
     public void checkVersionAndShowChangeLog(){

@@ -23,7 +23,9 @@ package name.gudong.translate.ui.activitys;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,9 +35,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
+import com.orhanobut.logger.Logger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,6 +74,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Bind(R.id.iv_favorite)
     ImageView mIvFavorite;
+    @Bind(R.id.tv_clear)
+    TextView mTvClear;
 
     Menu mMenu;
 
@@ -87,6 +93,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkSomething();
         checkVersion();
         initConfig();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SpUtils.setAppFront(this,true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SpUtils.setAppFront(this,false);
+        Logger.i("已经不是 Main View 了");
     }
 
     private void checkTranslateWay() {
@@ -236,6 +255,25 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             return false;
         });
 
+        mInput.addTextChangedListener(new TextWatcher() {
+            private String mTemp;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mTemp = s.toString();
+                mTvClear.setVisibility(mTemp.isEmpty()?View.INVISIBLE:View.VISIBLE);
+            }
+        });
+
         mSpTranslateWay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -301,6 +339,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void onInitSearchText(String text) {
         mInput.setText(text);
         ViewUtil.setEditTextSelectionToEnd(mInput);
+        mTvClear.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -416,6 +455,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 isFavorite = true;
             }
         }
+    }
+
+    @OnClick(R.id.iv_paste)
+    public void onClickPaste(View view){
+        Toast.makeText(MainActivity.this, "长按翻译结果", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -56,6 +56,9 @@ public class SpUtils {
     //is open JIT translate or not
     private static final String KEY_OPEN_JIT = "RECITE_OPEN_JIT";
 
+    //App 是否在前台
+    private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";
+
     public static void setTranslateEngine(Context context, String version) {
         putStringPreference(context, KEY_TRANSLATE_FROM, version);
     }
@@ -113,6 +116,15 @@ public class SpUtils {
 
     public static boolean getOpenJITOrNot(Context context){
         return getBooleanPreference(context,KEY_OPEN_JIT,true);
+    }
+
+    //最前台是不是本应用 这个标志用来做判断 在当前应用的主界面长按是不做响应的
+    public static void setAppFront(Context context,boolean isOpen){
+        putBooleanPreference(context, KEY_FLAG_APP_FRONT,isOpen);
+    }
+
+    public static boolean getAppFront(Context context){
+        return getBooleanPreference(context, KEY_FLAG_APP_FRONT,false);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -50,6 +50,7 @@ public class ViewUtil {
         tv.setTextColor(ContextCompat.getColor(context, color));
         tv.setPadding(0,6,0,6);
         tv.setTextSize(16);
+        tv.setTextIsSelectable(true);
         tv.setGravity(Gravity.LEFT);
         tv.setText(word);
         return tv;

@@ -191,6 +191,8 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         if(!checkInput(content.toString()))return;
         //if JIT translate is closed by user ,now when clipboard is change ,but we do nothing,
         if(!SpUtils.getOpenJITOrNot(mService))return;
+        //如果当前界面是 咕咚翻译的主界面 那么也不对粘贴板做监听
+        if(SpUtils.getAppFront(mService))return;
         //处理缓存
         String query = content.toString();
         if (listQuery.contains(query)) return;
@@ -203,7 +205,6 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
     private boolean checkInput(String input){
         // empty check
         if (TextUtils.isEmpty(input)) {
-            mView.showTipToast(mService.getString(R.string.tip_input_words));
             return false;
         }
 
