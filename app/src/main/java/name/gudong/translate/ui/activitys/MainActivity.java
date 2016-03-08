@@ -21,6 +21,8 @@
 package name.gudong.translate.ui.activitys;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
@@ -61,6 +63,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     LinearLayout mList;
     @Bind(R.id.tv)
     TextView mTv;
+
+    @Bind(R.id.snackbar_container)
+    CoordinatorLayout snackbarContainer;
 
     TextView mTvResultEngineInfo;
     ImageView mIvFavorite;
@@ -225,7 +230,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void shiftEnginePoint(ETranslateFrom eTranslateFrom) {
         String msg = "已切换至 " + eTranslateFrom.getName() + " 翻译引擎";
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+        showOperationTip(msg);
     }
 
     private void addListener() {
@@ -236,7 +241,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                     mPresenter.executeSearch(input);
                     return false;
                 } else {
-                    Toast.makeText(MainActivity.this, "please input words !", Toast.LENGTH_SHORT).show();
+                    showOperationTip("please input words !");
                     return true;
                 }
             }
@@ -276,12 +281,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         AbsResult entity = (AbsResult) v.getTag();
         if (isFavorite) {
             mPresenter.unFavoriteWord(entity.getResult());
-            Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+            showOperationTip("取消收藏");
             mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             isFavorite = false;
         } else {
             mPresenter.favoriteWord(entity.getResult());
-            Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+            showOperationTip("收藏成功");
             mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
             isFavorite = true;
         }
@@ -393,5 +398,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void initJITSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_open_jit_or_nor).setChecked(isOpen);
+    }
+
+    /***
+     * show ui operation tip
+     *
+     * @param showText
+     */
+    private void showOperationTip(String showText) {
+        Snackbar snackBar = Snackbar.make(snackbarContainer, showText, Snackbar.LENGTH_SHORT);
+        //set style of snackbar
+        /* View snackBarView = snackBar.getView();
+        snackBarView.setBackgroundColor(colorId);*/
+        snackBar.show();
     }
 }
