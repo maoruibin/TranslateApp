@@ -23,11 +23,12 @@ package name.gudong.translate.ui.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -49,6 +50,9 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
 
     @Bind(R.id.empty_tip_text)
     TextView emptyTipText;
+
+    @Bind(R.id.snackbar_container)
+    CoordinatorLayout snackbarContainer;
 
     WordsListAdapter mAdapter;
 
@@ -107,6 +111,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
     @Override
     public void deleteWordSuccess(Result entity) {
         mAdapter.removeItem(entity);
+        showDeleteTip("删除成功");
         if (mAdapter.getItemCount() == 0) {
             emptyTipText.setVisibility(View.VISIBLE);
         }
@@ -114,11 +119,24 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
 
     @Override
     public void deleteWordFail() {
-        Toast.makeText(WordsBookActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+        showDeleteTip("删除失败");
     }
 
     @Override
     public void onError(Throwable error) {
-        Toast.makeText(WordsBookActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+        showDeleteTip(error.getMessage());
+    }
+
+    /***
+     * show delete operation text
+     *
+     * @param showText
+     */
+    private void showDeleteTip(String showText) {
+        Snackbar snackBar = Snackbar.make(snackbarContainer, showText, Snackbar.LENGTH_SHORT);
+        //set style of snackbar
+        /* View snackBarView = snackBar.getView();
+        snackBarView.setBackgroundColor(colorId);*/
+        snackBar.show();
     }
 }
