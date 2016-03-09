@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 android:text="翻译引擎："/>
 
             <android.support.v7.widget.AppCompatSpinner
@@ -69,7 +70,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/selector_action_search"
-                android:textColor="@android:color/white"
+                android:textColor="@color/color_translate"
                 android:text="@string/action_translate"/>
         </RelativeLayout>
     </LinearLayout>

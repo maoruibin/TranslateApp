@@ -20,12 +20,14 @@ import name.gudong.translate.widget.WebDialog;
  */
 public class DialogUtil {
     public static void showAbout(AppCompatActivity activity){
-        WebDialog.create( "关于", "about.html", R.color.colorAccent)
+        int accentColor = activity.getResources().getColor(R.color.colorAccent);
+        WebDialog.create( "关于", "about.html",accentColor)
         .show(activity.getSupportFragmentManager(),  "about");
     }
 
     public static void showChangelog(AppCompatActivity activity){
-        WebDialog.create("更新日志", "changelog.html", R.color.colorAccent)
+        int accentColor = activity.getResources().getColor(R.color.colorAccent);
+        WebDialog.create("更新日志", "changelog.html",accentColor)
         .show(activity.getSupportFragmentManager(),  "changelog");;
     }
 

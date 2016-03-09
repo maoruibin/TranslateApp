@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/empty_tip"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_words_list"

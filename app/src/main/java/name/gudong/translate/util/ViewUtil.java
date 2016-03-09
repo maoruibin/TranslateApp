@@ -45,12 +45,12 @@ public class ViewUtil {
                 editable.toString().length());
     }
 
-    public static View getWordsView(Context context,String word,@ColorRes int color) {
+    public static View getWordsView(Context context,String word,@ColorRes int color,boolean isTextSelectable){
         TextView tv = new TextView(context);
         tv.setTextColor(ContextCompat.getColor(context, color));
         tv.setPadding(0,6,0,6);
         tv.setTextSize(16);
-        tv.setTextIsSelectable(true);
+        tv.setTextIsSelectable(isTextSelectable);
         tv.setGravity(Gravity.LEFT);
         tv.setText(word);
         return tv;

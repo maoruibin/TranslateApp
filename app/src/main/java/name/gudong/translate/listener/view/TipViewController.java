@@ -111,7 +111,7 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
     }
 
     private void addExplain(String explains) {
-        mLlDst.addView(ViewUtil.getWordsView(mContext, explains, android.R.color.white));
+        mLlDst.addView(ViewUtil.getWordsView(mContext, explains, android.R.color.white,false));
     }
 
     private void resetViewContent() {

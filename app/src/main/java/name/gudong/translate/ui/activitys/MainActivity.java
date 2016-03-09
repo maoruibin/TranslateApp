@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.reject.components.AppComponent;
 import name.gudong.translate.reject.components.DaggerActivityComponent;
 import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.ui.NavigationManager;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.InputMethodUtils;
 import name.gudong.translate.util.SpUtils;
@@ -79,6 +81,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     TextView mTvClear;
     @Bind(R.id.rl_action)
     RelativeLayout mRlAction;
+    @Bind(R.id.bt_translate)
+    Button mBtTranslate;
 
     Menu mMenu;
 
@@ -160,6 +164,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_opinion:
+                NavigationManager.gotoSendEmail(this);
+                break;
             case R.id.menu_book:
                 WordsBookActivity.gotoWordsBook(this);
                 break;
@@ -246,10 +253,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
      * 主要是切换搜索引擎时会用到
      */
     private void checkInputAndResearch() {
-        String inputString = mInput.getText().toString();
-        if (!inputString.isEmpty()) {
-            mPresenter.executeSearch(inputString);
-        }
+        String input = mInput.getText().toString().trim();
+        if(isEmptyWord(input,false))return;
+        if(isMoreThanOneWord(input))return;
+        translate();
     }
 
     private void addListener() {
@@ -304,10 +311,26 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private boolean checkInput(String input){
-        if (TextUtils.isEmpty(input)) {
-            Toast.makeText(MainActivity.this, R.string.tip_input_words, Toast.LENGTH_SHORT).show();
+        if (isEmptyWord(input, true)) return false;
+        if (isMoreThanOneWord(input)){
+            String msg = getString(R.string.msg_not_support_sentence);
+            DialogUtil.showSingleMessage(this, msg, getString(R.string.action_know));
             return false;
         }
+        return true;
+    }
+
+    private boolean isEmptyWord(String input, boolean withEmptyPoint) {
+        if (TextUtils.isEmpty(input)) {
+            if(withEmptyPoint){
+                Toast.makeText(MainActivity.this, R.string.tip_input_words, Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isMoreThanOneWord(String input) {
         String[] result1 = input.split(" ");
         String[] result2 = input.split(",");
         String[] result3 = input.split(".");
@@ -316,11 +339,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         String[] result6 = input.split("？");
         if (isMoreThanOne(result1) || isMoreThanOne(result2) || isMoreThanOne(result3) ||
                 isMoreThanOne(result4) || isMoreThanOne(result5) || isMoreThanOne(result6) ) {
-            String msg = getString(R.string.msg_not_support_sentence);
-            DialogUtil.showSingleMessage(this, msg, getString(R.string.action_know));
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void translate() {
@@ -351,8 +372,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onPrepareTranslate() {
         mList.removeAllViews();
-        mList.addView(ViewUtil.getWordsView(MainActivity.this, "正在翻译...", R.color.gray));
+        mList.addView(ViewUtil.getWordsView(MainActivity.this, "正在翻译...", R.color.gray,false));
         mRlAction.setVisibility(View.GONE);
+        mBtTranslate.setEnabled(false);
     }
 
     @Override
@@ -367,12 +389,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         if (e instanceof JsonSyntaxException) {
             msg = "不支持的查询操作，你可以切换到别的翻译方式碰碰运气,Good luck~";
         }
-        mList.addView(ViewUtil.getWordsView(MainActivity.this, msg, android.R.color.holo_red_light));
+        mList.addView(ViewUtil.getWordsView(MainActivity.this, msg, android.R.color.holo_red_light,false));
+        mBtTranslate.setEnabled(true);
     }
 
     @Override
     public void addExplainItem(String explain) {
-        mList.addView(ViewUtil.getWordsView(MainActivity.this, explain, R.color.color_explain));
+        mList.addView(ViewUtil.getWordsView(MainActivity.this, explain, R.color.color_explain,true));
     }
 
     @Override
@@ -490,6 +513,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onTranslateSuccess(AbsResult result) {
         if (result == null) return;
+        mBtTranslate.setEnabled(true);
         mRlAction.setVisibility(View.VISIBLE);
         mIvFavorite.setTag(result);
         if (mPresenter.isFavorite(result.wrapQuery())) {

@@ -90,7 +90,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        holder.llDst.addView(ViewUtil.getWordsView(mContext,s,R.color.gray_deep));
+                        holder.llDst.addView(ViewUtil.getWordsView(mContext,s,R.color.gray_deep,false));
                     }
                 });
         holder.btAction.setText("删除");
