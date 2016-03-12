@@ -171,7 +171,7 @@ public class TipViewController implements View.OnClickListener, View.OnTouchList
     }
 
     private void removeHeadsUpView() {
-        if (mWindowManager != null && mHeadsUpView.isAttachedToWindow()) {
+        if (mWindowManager != null && mHeadsUpView!= null) {
             mWindowManager.removeView(mHeadsUpView);
         }
     }

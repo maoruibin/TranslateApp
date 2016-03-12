@@ -41,7 +41,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
-import com.orhanobut.logger.Logger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -112,7 +111,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     protected void onStop() {
         super.onStop();
         SpUtils.setAppFront(this,false);
-        Logger.i("已经不是 Main View 了");
     }
 
     private void checkTranslateWay() {
@@ -172,7 +170,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 break;
             case R.id.menu_about:
                 DialogUtil.showAbout(this);
-                InputMethodUtils.closeSoftKeyboard(this);
+                closeKeyboard();
                 break;
             case R.id.menu_score:
                 mPresenter.gotoMarket();
@@ -255,7 +253,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     private void checkInputAndResearch() {
         String input = mInput.getText().toString().trim();
         if(isEmptyWord(input,false))return;
-        if(isMoreThanOneWord(input))return;
+        //if(StringUtils.isMoreThanOneWord(input))return;
         translate();
     }
 
@@ -312,11 +310,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private boolean checkInput(String input){
         if (isEmptyWord(input, true)) return false;
-        if (isMoreThanOneWord(input)){
-            String msg = getString(R.string.msg_not_support_sentence);
-            DialogUtil.showSingleMessage(this, msg, getString(R.string.action_know));
-            return false;
-        }
+        //不检查输入的字符串是不是超过两个
+//        if (StringUtils.isMoreThanOneWord(input)){
+//            String msg = getString(R.string.msg_not_support_sentence);
+//            DialogUtil.showSingleMessage(this, msg, getString(R.string.action_know));
+//            return false;
+//        }
         return true;
     }
 
@@ -330,30 +329,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         return false;
     }
 
-    private boolean isMoreThanOneWord(String input) {
-        String[] result1 = input.split(" ");
-        String[] result2 = input.split(",");
-        String[] result3 = input.split(".");
-        String[] result4 = input.split("，");
-        String[] result5 = input.split("。");
-        String[] result6 = input.split("？");
-        if (isMoreThanOne(result1) || isMoreThanOne(result2) || isMoreThanOne(result3) ||
-                isMoreThanOne(result4) || isMoreThanOne(result5) || isMoreThanOne(result6) ) {
-            return true;
-        }
-        return false;
-    }
-
     private void translate() {
-        InputMethodUtils.closeSoftKeyboard(this);
+        closeKeyboard();
         final String input = mInput.getText().toString().trim();
         if(checkInput(input)){
             mPresenter.executeSearch(input);
         }
-    }
-
-    private boolean isMoreThanOne(String[] result) {
-        return result.length > 1;
     }
 
 
@@ -490,7 +471,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @OnClick(R.id.iv_paste)
     public void onClickPaste(View view){
-        InputMethodUtils.closeSoftKeyboard(this);
+        closeKeyboard();
         Toast.makeText(MainActivity.this, "长按翻译结果可复制", Toast.LENGTH_SHORT).show();
     }
 
@@ -508,6 +489,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void initJITSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_open_jit_or_nor).setChecked(isOpen);
+    }
+
+    @Override
+    public void closeKeyboard() {
+        InputMethodUtils.closeSoftKeyboard(mInput);
     }
 
     @Override

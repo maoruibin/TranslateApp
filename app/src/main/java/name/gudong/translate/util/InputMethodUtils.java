@@ -1,7 +1,7 @@
 package name.gudong.translate.util;
 
-import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -24,14 +24,14 @@ public class InputMethodUtils {
 	
 	/**
 	 * 关闭软键盘
-	 * @param activity
+	 * @param view
 	 */
-	public static void closeSoftKeyboard(Activity activity){
-		InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(
+	public static void closeSoftKeyboard(View view){
+		InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(
 				Context.INPUT_METHOD_SERVICE);
 		//如果软键盘已经开启
 		if(inputMethodManager.isActive()){
-			inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 	}
 	

@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import me.gudong.translate.R;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.listener.view.TipViewController;
@@ -43,6 +42,7 @@ import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.util.SpUtils;
+import name.gudong.translate.util.StringUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -72,7 +72,6 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
     @Inject
     public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, Service service) {
         super(liteOrm, apiService, service);
-
     }
 
     @Override
@@ -209,26 +208,12 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         }
 
         // length check
-        String[] result1 = input.split(" ");
-        String[] result2 = input.split(",");
-        String[] result3 = input.split(".");
-        String[] result4 = input.split("，");
-        String[] result5 = input.split("。");
-        String[] result6 = input.split("？");
-        if (isMoreThanOne(result1) || isMoreThanOne(result2) || isMoreThanOne(result3) ||
-                isMoreThanOne(result4) || isMoreThanOne(result5) || isMoreThanOne(result6) ) {
-            String msg = mService.getString(R.string.msg_not_support_sentence_in_service);
-            mView.showTipToast(msg);
+        if(StringUtils.isMoreThanOneWord(input)){
             return false;
         }
+
         return true;
     }
-
-    private boolean isMoreThanOne(String[] result) {
-        return result.length > 1;
-    }
-
-
 
     public void onDestroy() {
         super.onDestroy();

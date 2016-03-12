@@ -38,6 +38,6 @@
     <string name="msg_not_support_sentence">检测到你输入的单词超过了一个，咕咚翻译目前不支持段落、句子或短语翻译。\n\n 因为翻译接口调用的是第三方接口，三方对每月的翻译字符数有数量限制，所以咕咚翻译现在只支持单词翻译。谢谢你的理解。</string>
     <string name="msg_not_support_sentence_in_service">咕咚翻译现在只支持单词翻译。谢谢理解。</string>
     <string name="action_know">知道了</string>
-    <string name="tip_input_words">请输入要查询的关键字。</string>
+    <string name="tip_input_words">请输入要查询的关键字</string>
 
 </resources>

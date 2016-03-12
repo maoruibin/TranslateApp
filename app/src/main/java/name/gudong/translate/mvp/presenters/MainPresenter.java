@@ -52,7 +52,6 @@ import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.util.DialogUtil;
-import name.gudong.translate.util.InputMethodUtils;
 import name.gudong.translate.util.SpUtils;
 import rx.Observable;
 import rx.Subscriber;
@@ -89,7 +88,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
         if(m.matches()){
             mView.onInitSearchText(text);
             executeSearch(text);
-            InputMethodUtils.closeSoftKeyboard(mActivity);
+            mView.closeKeyboard();
         }
     }
 

@@ -7,12 +7,12 @@
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
 
 ## 待完成功能
-
-* 使用Snackbar 替换 Toast,如收藏提示
-* 显示单词信息时增加音标
+* 单词显示框支持沉浸式，覆盖状态栏显示。
+* 使用 Snackbar 替换 Toast,如收藏提示
 * 使用 Github 做自动更新
 * 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
 * 没有使用测试，所以项目中可能还潜在的存在一些 bug,关于测试，也是自己今年需要补齐的一块知识。
+* ~~显示单词信息时增加音标~~
 * ~~生词本为空时的提示信息~~
 
 `Note:`想要参与贡献代码的同学，请在 develop 分支上操作，欢迎参与，欢迎来[Google+社区](https://plus.google.com/u/1/communities/111919086388322816251)一起讨论 咕咚翻译。
@@ -49,11 +49,11 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 ## 技术点
 
 * 1、全程使用 [Dagger2](https://github.com/google/dagger) 对项目进行类依赖管理
-* 2、项目使用标准的 MVP 架构
+* 2、项目使用标准的 MVP 架构，[关于 MVP 的一篇博客](http://gudong.name/advanced/2015/11/23/gank_mvp_introduce.html)
 * 3、实现对粘贴板的监听以及访问
 * 4、无需权限显示悬浮窗
-* 5、RxJava 的使用
-* 6、使用 Retrofit2 进行网络请求
+* 5、[RxJava](https://github.com/ReactiveX/RxJava) 的使用
+* 6、使用 [Retrofit2](https://github.com/square/retrofit) 进行网络请求
 * 7、开机自启动
 * 8、泛型
 
@@ -61,12 +61,26 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 
 ## 更新日志
 
+### V1.0.0
+
+* 设计: 首页大改版，使用 MaterialDesign 样式重新设计了首页。Thanks @TonyLOfficial(03-05)
+* 新增: 划词翻译开关，你可以关闭划词翻译功能了。(03-04)
+* 新增: 首页支持灵活的翻译引擎切换(03-07)
+* 新增: 长按翻译结果区域，可以选择复制(03-07)
+* 更新: 关闭长按句子可以翻译长句的功能。但是主界面支持句子翻译，仅限百度翻译。(03-07)
+* 优化: 点击翻译按钮后，让翻译按钮不可用(03-09)
+* 优化: 在咕咚翻译主界面，长按复制文本，不再会弹出顶部提示框(03-07)
+* 优化: 单词本被移动到了 Toolbar 上面展示。(03-05)
+* 更新: 支持 Android 4.1及以上的版本 (03-05)
+* 修复: 翻译时不显示 "翻译中" 的提示问题，Thanks @leizhiyuan。(03-04)
+* 优化: 单词本为空时显示一个为空提示语，Thanks @leizhiyuan。(03-04)
+* 修复: 点击清除按钮后，还可以点击收藏 (03-05)
+
 ### V0.6.3
 
 * 新增: 划词翻译开关，你可以关闭划词翻译功能了。(03-04)
 * 优化: 单词本被移动到了 Toolbar 上面展示。(03-05)
 * 修复: 翻译时不显示 "翻译中" 的提示问题，Thanks @leizhiyuan。(03-04)
-
 
 ### V0.6
 

@@ -42,6 +42,7 @@
             android:gravity="top"
             tools:text="Make"
             android:minHeight="100dp"
+            android:maxHeight="100dp"
             android:background="@null"/>
 
         <RelativeLayout

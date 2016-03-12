@@ -81,9 +81,9 @@ android {
         }
 
         productFlavors {
-            beta{
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
-            }
+//            beta{
+//                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
+//            }
             xiaomi {
                 manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
             }

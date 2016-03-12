@@ -67,4 +67,9 @@ public interface IMainView extends IBaseView {
      * @param isOpen
      */
     void initJITSetting(Menu menu, boolean isOpen);
+
+    /**
+     * 关闭软键盘
+     */
+    void closeKeyboard();
 }
