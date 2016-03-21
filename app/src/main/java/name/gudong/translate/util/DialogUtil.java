@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import me.gudong.translate.R;
 import name.gudong.translate.widget.WebDialog;
 
@@ -25,6 +27,12 @@ public class DialogUtil {
         .show(activity.getSupportFragmentManager(),  "about");
     }
 
+    public static void showAboutDonate(AppCompatActivity activity){
+        int accentColor = activity.getResources().getColor(R.color.colorAccent);
+        WebDialog.create( "关于捐赠", "about_donate.html",accentColor)
+        .show(activity.getSupportFragmentManager(),  "about");
+    }
+
     public static void showChangelog(AppCompatActivity activity){
         int accentColor = activity.getResources().getColor(R.color.colorAccent);
         WebDialog.create("更新日志", "changelog.html",accentColor)
@@ -36,6 +44,7 @@ public class DialogUtil {
                 "支持开发者", "donate_ch.html", "donate",
                 "关闭", null,
                 "复制账号并打开支付宝",(dialog,which)->{
+                    MobclickAgent.onEvent(activity,"menu_support_click");
                     String alipay = "com.eg.android.AlipayGphone";
                     //复制到粘贴板
                     ClipboardManager cmb = (ClipboardManager)activity.getSystemService(Context.CLIPBOARD_SERVICE);

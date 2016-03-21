@@ -109,6 +109,14 @@ public class MainPresenter extends BasePresenter<IMainView>{
         }
     }
 
+    public void checkVersionAndShowAboutDonate(){
+        String showWhatsNew = "showAboutDonateTag";
+        if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
+            DialogUtil.showAboutDonate((AppCompatActivity) mActivity);
+            Once.markDone(showWhatsNew);
+        }
+    }
+
     public void executeSearch(String keywords) {
         mView.onPrepareTranslate();
         Observable<AbsResult> observable = mWarpApiService.translate(SpUtils.getTranslateEngineWay(mActivity), keywords);
@@ -129,7 +137,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
                     @Override
                     public List<String> call(AbsResult absResult) {
                         mCurrentResult = absResult;
-                        mView.onTranslateSuccess(absResult);
+                        mView.onGetDataSuccess(absResult);
                         List<String> temp = absResult.wrapExplains();
                         if (!temp.isEmpty()) {
                             return temp;
@@ -140,7 +148,6 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .flatMap(new Func1<List<String>, Observable<String>>() {
                     @Override
                     public Observable<String> call(List<String> strings) {
-                        mView.onClearResultViews();
                         if(strings == null){
                             return Observable.error(new Exception(("啥也没有翻译出来!")));
                         }
@@ -150,12 +157,11 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-
+                        mView.onTranslateComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.onClearResultViews();
                         if(BuildConfig.DEBUG){
                             e.printStackTrace();
                         }

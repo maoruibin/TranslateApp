@@ -37,11 +37,6 @@ public interface IMainView extends IBaseView {
 
     void onPrepareTranslate();
 
-    /**
-     * 清空翻译结果对应容器中所有的view
-     */
-    void onClearResultViews();
-
     void onError(Throwable e);
 
     void addExplainItem(String explain);
@@ -59,8 +54,10 @@ public interface IMainView extends IBaseView {
      */
     void initReciteSetting(Menu menu, boolean isOpen);
 
-    void onTranslateSuccess(AbsResult result);
-    
+    void onGetDataSuccess(AbsResult result);
+
+    void onTranslateComplete();
+
     /**
      * 初始化是否开启划词翻译
      * @param menu

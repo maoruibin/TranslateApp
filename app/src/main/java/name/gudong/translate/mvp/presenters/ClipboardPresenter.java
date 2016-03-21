@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import com.litesuits.orm.LiteOrm;
 import com.orhanobut.logger.Logger;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import me.gudong.translate.BuildConfig;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.listener.view.TipViewController;
@@ -54,11 +56,14 @@ import rx.schedulers.Schedulers;
  * Created by GuDong on 2/28/16 20:48.
  * Contact with gudong.name@gmail.com.
  */
-public class ClipboardPresenter extends BasePresenter<IClipboardService> implements TipViewController.ViewDismissHandler {
+public class ClipboardPresenter extends BasePresenter<IClipboardService> {
+    private static final String KEY_TAG = "clipboard";
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
     @Inject
     TipViewController mTipViewController;
+
+    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> performClipboardCheck();
 
     /**
      * 定时显示 Tip 事件源
@@ -84,8 +89,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         mActionShowTip = (t)->{
             Result result = getResult();
             if(result == null)return;
-            prepareShow(getResult());
-            show(false);
+            showResult(getResult(),false);
         };
     }
 
@@ -95,7 +99,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
     public void controlShowTipCyclic(){
         EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
         int time = tipTime.getIntervalTime();
-        Logger.i("time is "+time +" minute");
+        Logger.i(KEY_TAG,"time is "+time +" minute");
 
         boolean reciteFlag = SpUtils.getReciteOpenOrNot(mService);
         //用户设置了开启背单词 或者 时间隔时间变化了 下面的判断代码写的有点复杂
@@ -104,7 +108,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
             if(mSubscription != null && !mSubscription.isUnsubscribed()){
                 mSubscription.unsubscribe();
             }
-            Logger.i("用户设置了开启背单词 此时实例化 mSubscription 也可能是时间间隔值变化了 time is "+time);
+            Logger.i(KEY_TAG,"用户设置了开启背单词 此时实例化 mSubscription 也可能是时间间隔值变化了 time is "+time);
             mSubscription = Observable.interval(time, TimeUnit.MINUTES)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mActionShowTip);
@@ -114,7 +118,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         if(mSubscription != null && !reciteFlag && !mSubscription.isUnsubscribed()){
             mSubscription.unsubscribe();
             mSubscription = null;
-            Logger.i("用户关闭背单词");
+            Logger.i(KEY_TAG,"用户关闭背单词");
         }
     }
 
@@ -127,7 +131,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         return results.get(index);
     }
 
-    public void searchContent(final String content) {
+    public void search(final String content) {
         mWarpApiService.translate(SpUtils.getTranslateEngineWay(mService), content)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -135,41 +139,47 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
                 .subscribe(new Subscriber<AbsResult>() {
                     @Override
                     public void onCompleted() {
-                        //显示顶部悬浮框
-                        show(true);
                         //清空缓存
                         listQuery.clear();
+                        Logger.i("---------- onCompleted ");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        if(e instanceof SocketTimeoutException){
+                            errorPoint("网络请求超时，请稍后重试。");
+                        }else{
+                            if(BuildConfig.DEBUG){
+                                errorPoint("请求数据异常，您可以试试切换其他引擎。"+e.getMessage());
+                                e.printStackTrace();
+                            }else{
+                                errorPoint("请求数据异常，您可以试试切换其他引擎。");
+                            }
+                        }
                     }
 
                     @Override
                     public void onNext(AbsResult result) {
-                        prepareShow(result.getResult());
+                        //prepareShow(result.getResult());
+                        showResult(result.getResult(),true);
+                        Logger.i("---------- onNext ");
                     }
                 });
     }
 
-    public void prepareShow(Result result) {
-        mTipViewController.setResultContent(result);
+    private void errorPoint(String error){
+        mTipViewController.showErrorInfo(error);
     }
 
-    private void show(boolean isShowFavorite) {
-        mTipViewController.show(isShowFavorite);
+    private void showResult(Result result, boolean isShowFavorite) {
+        mTipViewController.show(result,isShowFavorite);
     }
-
-    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> performClipboardCheck();
     /**
      * 添加粘贴板变化监听方法
      */
     public void addListener() {
         //添加粘贴板变化监听方法
         mClipboardWatcher.addPrimaryClipChangedListener(mListener);
-        //添加顶部提示框监听方法
-        mTipViewController.setViewDismissHandler(this);
     }
 
     /**
@@ -186,29 +196,56 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
 
     private void performClipboardCheck() {
         CharSequence content = mClipboardWatcher.getText();
-        Logger.i("----","剪贴板内容 "+content);
-        if(!checkInput(content.toString()))return;
-        //if JIT translate is closed by user ,now when clipboard is change ,but we do nothing,
-        if(!SpUtils.getOpenJITOrNot(mService))return;
-        //如果当前界面是 咕咚翻译的主界面 那么也不对粘贴板做监听
-        if(SpUtils.getAppFront(mService))return;
-        //处理缓存
+
+        //处理缓存 因为粘贴板的回调操作可能触发多次
         String query = content.toString();
+        Logger.i("粘贴板的单词为 "+query);
         if (listQuery.contains(query)) return;
         listQuery.add(query);
 
+        //只有用户在打开了 划词翻译的情况下 划词翻译才能正常工作
+        if(!SpUtils.getOpenJITOrNot(mService))return;
+
+        //如果当前界面是 咕咚翻译的主界面 那么也不对粘贴板做监听
+        if(SpUtils.getAppFront(mService))return;
+
+        // 检查粘贴板的内容是不是单词 以及是不是为空
+        if(!checkInput(content.toString()))return;
+
         //查询数据
-        searchContent(query);
+        search(query);
     }
 
     private boolean checkInput(String input){
         // empty check
         if (TextUtils.isEmpty(input)) {
+            Logger.e("剪贴板为空了");
+            return false;
+        }
+
+        if(StringUtils.isChinese(input)){
+            Logger.e(input+" 中包含中文字符");
+            return false;
+        }
+
+        if(StringUtils.isValidEmailAddress(input)){
+            Logger.e(input+" 是一个邮箱");
+            return false;
+        }
+
+        if(StringUtils.isValidUrl(input)){
+            Logger.e(input+" 是一个网址");
+            return false;
+        }
+
+        if(StringUtils.isValidNumeric(input)){
+            Logger.e(input+" 是一串数字");
             return false;
         }
 
         // length check
         if(StringUtils.isMoreThanOneWord(input)){
+            errorPoint("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
             return false;
         }
 
@@ -219,13 +256,8 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> impleme
         super.onDestroy();
         mClipboardWatcher.removePrimaryClipChangedListener(mListener);
         if (mTipViewController != null) {
-            mTipViewController.setViewDismissHandler(null);
             mTipViewController = null;
         }
     }
 
-    @Override
-    public void onViewDismiss() {
-
-    }
 }
