@@ -23,13 +23,17 @@ package name.gudong.translate.ui.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -51,8 +55,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
     @Bind(R.id.empty_tip_text)
     TextView emptyTipText;
 
-    @Bind(R.id.snackbar_container)
-    CoordinatorLayout snackbarContainer;
+    private  List<Result> mResult = new ArrayList<>();
 
     WordsListAdapter mAdapter;
 
@@ -69,6 +72,39 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
         initActionBar(true, "单词本");
         initListView();
         initData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.book,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.sort_index_asc:
+                item.setChecked(true);
+                Collections.sort(mResult, new Comparator<Result>() {
+                    @Override
+                    public int compare(Result lhs, Result rhs) {
+                        return lhs.getQuery().compareToIgnoreCase(rhs.getQuery());
+                    }
+                });
+                mAdapter.update(mResult);
+                break;
+            case R.id.sort_index_desc:
+                item.setChecked(true);
+                Collections.sort(mResult, new Comparator<Result>() {
+                    @Override
+                    public int compare(Result lhs, Result rhs) {
+                        return -lhs.getQuery().compareToIgnoreCase(rhs.getQuery());
+                    }
+                });
+                mAdapter.update(mResult);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initData() {
@@ -105,6 +141,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
         } else {
             emptyTipText.setVisibility(View.GONE);
             mAdapter.update(transResultEntities);
+            mResult = transResultEntities;
         }
     }
 
@@ -133,10 +170,6 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
      * @param showText
      */
     private void showDeleteTip(String showText) {
-        Snackbar snackBar = Snackbar.make(snackbarContainer, showText, Snackbar.LENGTH_SHORT);
-        //set style of snackbar
-        /* View snackBarView = snackBar.getView();
-        snackBarView.setBackgroundColor(colorId);*/
-        snackBar.show();
+        Toast.makeText(WordsBookActivity.this, showText, Toast.LENGTH_SHORT).show();
     }
 }

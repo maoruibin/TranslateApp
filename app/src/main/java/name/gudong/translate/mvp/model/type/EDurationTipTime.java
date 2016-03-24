@@ -25,10 +25,9 @@ package name.gudong.translate.mvp.model.type;
  * Contact with gudong.name@gmail.com.
  */
 public enum EDurationTipTime {
-    ONE_SECOND(1),
+    ONE_SECOND(2),
     FOUR_SECOND(4),
-    SIX_SECOND(6),
-    TEN_SECOND(10);
+    SIX_SECOND(6);
 
     private int mDurationTime;
 

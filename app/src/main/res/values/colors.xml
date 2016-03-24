@@ -15,7 +15,12 @@
     <color name="color_explain">#a2a2a2</color>
 
     <color name="bg_pop">#607D8B</color>
+    <color name="bg_pop_deep">#455A64</color>
+    <color name="bg_pop_shadow">#90A4AE</color>
+    <color name="bg_pop_white">#b8bec1</color>
     <color name="pop_phonetic">#ECEFF1</color>
+
+    <color name="error">#ECEFF1</color>
 
 
 </resources>

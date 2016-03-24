@@ -65,11 +65,13 @@ public class YouDaoResult extends AbsResult{
 
     @Override
     public String wrapEnPhonetic() {
+        if(getBasic() == null)return "";
         return getBasic().getUkPhonetic();
     }
 
     @Override
     public String wrapAmPhonetic() {
+        if(getBasic() == null)return "";
         return getBasic().getUsPhonetic();
     }
 
@@ -90,11 +92,13 @@ public class YouDaoResult extends AbsResult{
 
     @Override
     public String wrapPhEn() {
+        if(getBasic() == null)return "";
         return getBasic().getUkPhonetic();
     }
 
     @Override
     public String wrapPhAm() {
+        if(getBasic() == null)return "";
         return getBasic().getUsPhonetic();
     }
 

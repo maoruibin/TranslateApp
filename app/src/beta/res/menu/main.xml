@@ -81,17 +81,14 @@
             <group
                 android:checkableBehavior="single">
                 <item
-                    android:id="@+id/duration_one_second"
-                    android:title="@string/duration_one_second"/>
+                    android:id="@+id/duration_two_second"
+                    android:title="@string/duration_two_second"/>
                 <item
                     android:id="@+id/duration_four_second"
                     android:title="@string/duration_four_second"/>
                 <item
                     android:id="@+id/duration_six_second"
                     android:title="@string/duration_six_second"/>
-                <item
-                    android:id="@+id/duration_ten_second"
-                    android:title="@string/duration_ten_second"/>
             </group>
         </menu>
     </item>

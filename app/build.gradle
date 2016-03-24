@@ -81,9 +81,9 @@ android {
         }
 
         productFlavors {
-//            beta{
-//                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
-//            }
+            beta{
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
+            }
             xiaomi {
                 manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
             }
@@ -138,7 +138,7 @@ dependencies {
     // Android
     compile "com.android.support:recyclerview-v7:${libs.supportVersion}"
     compile "com.android.support:appcompat-v7:${libs.supportVersion}"
-    compile "com.android.support:design:${libs.supportVersion}"
+
     // Google
     compile "com.google.dagger:dagger:${libs.dagger}"
     apt "com.google.dagger:dagger-compiler:${libs.dagger}"

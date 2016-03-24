@@ -132,7 +132,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void checkVersion() {
-        mPresenter.checkVersionAndShowAboutDonate();
         if (BuildConfig.DEBUG) return;
         mPresenter.checkVersionAndShowChangeLog();
 
@@ -230,9 +229,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 selectIntervalTime(item, EIntervalTipTime.THIRTY_MINUTE.name());
                 break;
 
-            case R.id.duration_one_second:
+            case R.id.duration_two_second:
                 selectDurationTime(item, EDurationTipTime.ONE_SECOND.name());
-                MobclickAgent.onEvent(this,"menu_duration_time_1");
+                MobclickAgent.onEvent(this,"menu_duration_time_2");
                 break;
             case R.id.duration_four_second:
                 selectDurationTime(item, EDurationTipTime.FOUR_SECOND.name());
@@ -241,10 +240,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             case R.id.duration_six_second:
                 selectDurationTime(item, EDurationTipTime.SIX_SECOND.name());
                 MobclickAgent.onEvent(this,"menu_duration_time_6");
-                break;
-            case R.id.duration_ten_second:
-                selectDurationTime(item, EDurationTipTime.TEN_SECOND.name());
-                MobclickAgent.onEvent(this,"menu_duration_time_10");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -377,7 +372,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onPrepareTranslate() {
         mList.removeAllViews();
-//        mList.addView(ViewUtil.getWordsView(MainActivity.this, "正在翻译...", R.color.gray,false));
         mRlAction.setVisibility(View.GONE);
         mBtTranslate.setText(R.string.action_translating);
         mBtTranslate.setEnabled(false);
@@ -414,16 +408,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void initDurationTimeSetting(Menu menu, EDurationTipTime durationTime) {
         switch (durationTime) {
             case ONE_SECOND:
-                menu.findItem(R.id.duration_one_second).setChecked(true);
+                menu.findItem(R.id.duration_two_second).setChecked(true);
                 break;
             case FOUR_SECOND:
                 menu.findItem(R.id.duration_four_second).setChecked(true);
                 break;
             case SIX_SECOND:
                 menu.findItem(R.id.duration_six_second).setChecked(true);
-                break;
-            case TEN_SECOND:
-                menu.findItem(R.id.duration_ten_second).setChecked(true);
                 break;
         }
     }

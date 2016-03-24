@@ -21,25 +21,33 @@
 package name.gudong.translate.widget;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import me.gudong.translate.R;
+import name.gudong.translate.util.DialogUtil;
 
 public class WebDialog extends DialogFragment {
+    private static final String KEY_UTF_8 = "UTF_8";
     private DialogInterface.OnClickListener mNeutralClickCallback;
     private DialogInterface.OnClickListener mPositiveClickCallback;
     /**
@@ -109,7 +117,7 @@ public class WebDialog extends DialogFragment {
                 .show();
 
         final WebView webView = (WebView) customView.findViewById(R.id.webview);
-        webView.getSettings().setDefaultTextEncodingName("utf-8");
+        setWebView(webView,customView.getContext());
         try {
             String htmlFileName = getArguments().getString("htmlFileName");
             StringBuilder buf = new StringBuilder();
@@ -132,6 +140,13 @@ public class WebDialog extends DialogFragment {
         return dialog;
     }
 
+    private void setWebView(WebView webView,Context context){
+        WebSettings settings = webView.getSettings();
+        settings.setDefaultTextEncodingName(KEY_UTF_8);
+        settings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new WebAppInterface(context),"Android");
+    }
+
     private String colorToHex(int color) {
         return Integer.toHexString(color).substring(2);
     }
@@ -149,5 +164,21 @@ public class WebDialog extends DialogFragment {
 
     public void setPositiveClickCallback(DialogInterface.OnClickListener positiveClickCallback) {
         mPositiveClickCallback = positiveClickCallback;
+    }
+
+    public class WebAppInterface {
+        Context mContext;
+
+        /** Instantiate the interface and set the context */
+        WebAppInterface(Context c) {
+            mContext = c;
+        }
+
+        /** Show a dialog about gank site **/
+        @JavascriptInterface
+        public void clickThanksWords(){
+            MobclickAgent.onEvent(getActivity(), "link_click_donate");
+            DialogUtil.showAboutDonate((AppCompatActivity) getActivity());
+        }
     }
 }

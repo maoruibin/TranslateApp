@@ -22,6 +22,7 @@ package name.gudong.translate.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,9 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Result entity = mList.get(position);
         holder.tvSrc.setText(entity.getQuery());
+        if(!TextUtils.isEmpty(entity.getPhAm())){
+            holder.tvPhonetic.setText("["+entity.getPhAm()+"]");
+        }
         Observable.from(entity.getExplains())
                 .doOnSubscribe(new Action0() {
                     @Override
@@ -116,6 +120,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
     class ViewHolder extends RecyclerView.ViewHolder{
         private RelativeLayout mRootView;
         private TextView tvSrc;
+        private TextView tvPhonetic;
         private LinearLayout llDst;
         private Button btAction;
 
@@ -123,6 +128,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
             super(itemView);
             mRootView = (RelativeLayout) itemView;
             llDst = ButterKnife.findById(itemView,R.id.ll_pop_dst);
+            tvPhonetic = ButterKnife.findById(itemView,R.id.tv_pop_phonetic);
             tvSrc = ButterKnife.findById(itemView,R.id.tv_pop_src);
             btAction = ButterKnife.findById(itemView,R.id.bt_action);
         }

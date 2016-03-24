@@ -46,11 +46,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left"
+        android:ellipsize="end"
+        android:maxLength="26"
+        android:singleLine="true"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/bt_action"
-        android:includeFontPadding="false"
-        tools:text="fuck"
+        tools:text="fuck dakjsasjaldjddddddssssssasasasasassasasasddddddalsdaldkaldjakdak"
         android:textAppearance="?attr/textAppearanceListItem"/>
+
+    <TextView
+        android:id="@+id/tv_pop_phonetic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_pop_src"
+        android:layout_marginLeft="6dp"
+        android:layout_toRightOf="@+id/tv_pop_src"
+        android:layout_toLeftOf="@+id/bt_action"
+        tools:text="[wɑ:t]" />
 
     <LinearLayout
         android:id="@+id/ll_pop_dst"

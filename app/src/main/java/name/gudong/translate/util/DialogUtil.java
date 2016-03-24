@@ -10,6 +10,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import me.gudong.translate.R;
 import name.gudong.translate.widget.WebDialog;
 
@@ -25,6 +27,12 @@ public class DialogUtil {
         .show(activity.getSupportFragmentManager(),  "about");
     }
 
+    public static void showAboutDonate(AppCompatActivity activity){
+        int accentColor = activity.getResources().getColor(R.color.colorAccent);
+        WebDialog.create( "关于捐赠", "about_donate.html",accentColor)
+        .show(activity.getSupportFragmentManager(),  "about");
+    }
+
     public static void showChangelog(AppCompatActivity activity){
         int accentColor = activity.getResources().getColor(R.color.colorAccent);
         WebDialog.create("更新日志", "changelog.html",accentColor)
@@ -34,11 +42,12 @@ public class DialogUtil {
     public static void showSupport(AppCompatActivity activity){
         showCustomDialogWithTwoAction(activity, activity.getSupportFragmentManager(),
                 "支持开发者", "donate_ch.html", "donate",
-                "关闭", null,
-                "复制账号并打开支付宝",(dialog,which)->{
+                "关闭", ((dialog1, which1) -> MobclickAgent.onEvent(activity, "menu_support_close")),
+                "复制账号并打开支付宝", (dialog, which) -> {
+                    MobclickAgent.onEvent(activity, "menu_support_click");
                     String alipay = "com.eg.android.AlipayGphone";
                     //复制到粘贴板
-                    ClipboardManager cmb = (ClipboardManager)activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipboardManager cmb = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
                     cmb.setPrimaryClip(ClipData.newPlainText(null, "gudong.name@gmail.com"));
                     Toast.makeText(activity, activity.getString(R.string.copy_success), Toast.LENGTH_LONG).show();
                     //打开支付宝

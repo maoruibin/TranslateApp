@@ -27,17 +27,25 @@
     <string name="interval_ten_minute">10分钟</string>
     <string name="interval_thirty_minute">半小时</string>
 
-    <string name="duration_one_second">1秒钟</string>
+    <string name="duration_two_second">2秒钟</string>
     <string name="duration_four_second">4秒钟</string>
     <string name="duration_six_second">6秒钟</string>
-    <string name="duration_ten_second">10秒钟</string>
-    <string name="empty_tip">没有收藏的单词</string>
+    <string name="empty_tip">您还没有收藏过单词</string>
     <string name="action_clear">清除</string>
     <string name="action_translate">翻译</string>
+    <string name="action_translating">翻译中...</string>
     <string name="point_input_key">输入关键字</string>
     <string name="msg_not_support_sentence">检测到你输入的单词超过了一个，咕咚翻译目前不支持段落、句子或短语翻译。\n\n 因为翻译接口调用的是第三方接口，三方对每月的翻译字符数有数量限制，所以咕咚翻译现在只支持单词翻译。谢谢你的理解。</string>
     <string name="msg_not_support_sentence_in_service">咕咚翻译现在只支持单词翻译。谢谢理解。</string>
     <string name="action_know">知道了</string>
     <string name="tip_input_words">请输入要查询的关键字</string>
+    <string name="tip_clipboard_empty">复制的单词为空</string>
+    <string name="tip_explain_empty">没有查询到释义</string>
+    <string name="tip_fail_translate">不支持的查询操作，你可以切换到别的翻译方式碰碰运气，Good luck.</string>
+    <string name="tip_unknown_host">网络异常，请检查后重试。</string>
+    <string name="tip_unknown">未知的异常</string>
+
+    <string name="sort_index_asc">按首字母正序</string>
+    <string name="sort_index_desc">按首字母逆序</string>
 
 </resources>
