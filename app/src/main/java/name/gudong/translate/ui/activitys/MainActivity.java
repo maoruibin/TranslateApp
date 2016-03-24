@@ -459,6 +459,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void onClickClear(View view) {
         MobclickAgent.onEvent(getApplicationContext(),"action_clear");
         resetView();
+        InputMethodUtils.openSoftKeyboard(this,mInput);
     }
 
     private void resetView() {
