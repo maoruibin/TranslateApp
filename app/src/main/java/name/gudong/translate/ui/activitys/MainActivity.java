@@ -21,6 +21,8 @@
 package name.gudong.translate.ui.activitys;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
@@ -73,6 +75,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     LinearLayout mList;
     @Bind(R.id.sp_translate_way)
     AppCompatSpinner mSpTranslateWay;
+
+    @Bind(R.id.snackbar_container)
+    CoordinatorLayout snackbarContainer;
+
+    TextView mTvResultEngineInfo;
 
     @Bind(R.id.iv_favorite)
     ImageView mIvFavorite;
@@ -262,6 +269,26 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 translate();
                 return true;
+
+    private void checkInputAndResearch(){
+        String inputString = mInput.getText().toString();
+        if(!inputString.isEmpty()){
+            mPresenter.executeSearch(inputString);
+        }
+    }
+
+
+    private void addListener() {
+        mInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == 6) {
+                final String input = mInput.getText().toString().trim();
+                if (!TextUtils.isEmpty(input)) {
+                    mPresenter.executeSearch(input);
+                    return false;
+                } else {
+                    showOperationTip("please input words !");
+                    return true;
+                }
             }
             return false;
         });
@@ -329,11 +356,26 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         return false;
     }
 
+
     private void translate() {
-        closeKeyboard();
-        final String input = mInput.getText().toString().trim();
-        if(checkInput(input)){
-            mPresenter.executeSearch(input);
+                closeKeyboard();
+                final String input = mInput.getText().toString().trim();
+                if (checkInput(input)) {
+                    mPresenter.executeSearch(input);
+                }
+            }
+    public void onClickFavorite(View v) {
+        AbsResult entity = (AbsResult) v.getTag();
+        if (isFavorite) {
+            mPresenter.unFavoriteWord(entity.getResult());
+            showOperationTip("取消收藏");
+            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            isFavorite = false;
+        } else {
+            mPresenter.favoriteWord(entity.getResult());
+            showOperationTip("收藏成功");
+            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
+            isFavorite = true;
         }
     }
 
@@ -511,10 +553,20 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         }
     }
 
-    private void initSpinner() {
+    private void initSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.translate_way, R.layout.spinner_drop_list_title);
         adapter.setDropDownViewResource(R.layout.spinner_drop_list_item);
         mSpTranslateWay.setAdapter(adapter);
     }
+
+            /***
+             * show ui operation tip
+             *
+             * @param showText
+             */
+            private void showOperationTip(String showText) {
+                Snackbar snackBar = Snackbar.make(snackbarContainer, showText, Snackbar.LENGTH_SHORT);
+                snackBar.show();
+            }
 }
