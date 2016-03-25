@@ -4,7 +4,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 //格式化打完完成后APK名称中的时间
 def releaseTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC+8"))
 }
 
 def cfg = rootProject.ext.configuration
