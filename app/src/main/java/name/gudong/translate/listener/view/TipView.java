@@ -35,7 +35,7 @@ import rx.functions.Action1;
 public class TipView extends LinearLayout {
     private static final int DURATION_TIME = 300;
 
-    private RelativeLayout mContentView;
+    private View mContentView;
     private TextView mTvSrc;
     private TextView mTvPhonetic;
     private LinearLayout mLlDst;
@@ -60,7 +60,7 @@ public class TipView extends LinearLayout {
         mLlSrc = (LinearLayout) view.findViewById(R.id.ll_pop_src);
         mLlDst = (LinearLayout) view.findViewById(R.id.ll_pop_dst);
         mFavorite = (TextView) view.findViewById(R.id.bt_action);
-        mContentView = (RelativeLayout) view.findViewById(R.id.pop_view_content_view);
+        mContentView = view.findViewById(R.id.pop_view_content_view);
     }
 
     public void error(String error){

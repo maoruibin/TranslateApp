@@ -17,83 +17,93 @@
   ~  along with GdTranslate.  If not, see <http://www.gnu.org/licenses/>.
   ~
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pop_view_content_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bg_pop"
-    android:padding="15dp">
-
-    <TextView
-        android:id="@+id/bt_action"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:background="@drawable/selector_action_favorite"
-        android:clickable="true"
-        android:paddingBottom="10dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp"
-        android:text="@string/action_favorite"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        android:visibility="visible" />
-
-    <!-- 单词名称以及音标 -->
-    <LinearLayout
-        android:id="@+id/ll_pop_src"
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/bt_action"
-        android:orientation="horizontal"
-        android:visibility="visible">
+        android:background="@color/bg_pop"
+        android:padding="15dp">
 
         <TextView
-            android:id="@+id/tv_pop_src"
+            android:id="@+id/bt_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:includeFontPadding="false"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            tools:text="fuck face " />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/selector_action_favorite"
+            android:clickable="true"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="10dp"
+            android:text="@string/action_favorite"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <!-- 单词名称以及音标 -->
+        <LinearLayout
+            android:id="@+id/ll_pop_src"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/bt_action"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_pop_src"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:includeFontPadding="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                tools:text="fuck face " />
+
+            <TextView
+                android:id="@+id/tv_pop_phonetic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:textColor="@color/pop_phonetic"
+                tools:text="[wɑ:t]" />
+        </LinearLayout>
+
+        <!-- 单词解释 -->
+        <LinearLayout
+            android:id="@+id/ll_pop_dst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ll_pop_src"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@id/bt_action"
+            android:orientation="vertical"
+            android:visibility="visible" />
 
         <TextView
-            android:id="@+id/tv_pop_phonetic"
+            android:id="@+id/tv_point"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:textColor="@color/pop_phonetic"
-            tools:text="[wɑ:t]" />
-    </LinearLayout>
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:textColor="@color/bg_pop_white"
+            android:visibility="invisible"
+            tools:visibility="visible"
+            tools:text="查词中..." />
+    </RelativeLayout>
 
-    <!-- 单词解释 -->
-    <LinearLayout
-        android:id="@+id/ll_pop_dst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/ll_pop_src"
-        android:layout_marginTop="5dp"
-        android:layout_toLeftOf="@id/bt_action"
-        android:orientation="vertical"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/tv_point"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:textColor="@color/bg_pop_white"
-        android:visibility="invisible"
-        tools:visibility="visible"
-        tools:text="查词中..." />
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/shadow_below"/>
+</LinearLayout>
 
