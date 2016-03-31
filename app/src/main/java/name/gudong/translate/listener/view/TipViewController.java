@@ -41,7 +41,7 @@ public class TipViewController{
     private Context mContext;
 
     //顶部提示框
-    private TipView mTipView;
+//    private TipView mTipView;
 
     public TipViewController(Context application) {
         mContext = application;
@@ -49,23 +49,23 @@ public class TipViewController{
     }
 
     public void showErrorInfo(String error){
-        mTipView = new TipView(mContext);
-        mWindowManager.addView(mTipView, getPopViewParams());
-        mTipView.startWithAnim();
-        mTipView.error(error);
-        closeTipViewCountdown();
+        TipView tipView = new TipView(mContext);
+        mWindowManager.addView(tipView, getPopViewParams());
+        tipView.startWithAnim();
+        tipView.error(error);
+        closeTipViewCountdown(tipView);
     }
 
-    private void closeTipViewCountdown() {
+    private void closeTipViewCountdown(final TipView tipView) {
         int duration = SpUtils.getDurationTimeWay(GDApplication.mContext).getDurationTime();
         Observable.timer(duration, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .map(new Func1<Long, Object>() {
                     @Override
                     public Object call(Long aLong) {
-                        mTipView.closeWithAnim(new TipView.OnAnimListener() {
+                        tipView.closeWithAnim(new TipView.OnAnimListener() {
                             @Override
                             public void onCloseAnimEnd(Animator animation) {
-                                mWindowManager.removeView(mTipView);
+                                mWindowManager.removeView(tipView);
                             }
                         });
                         return null;
@@ -75,12 +75,12 @@ public class TipViewController{
     }
 
     public void show(Result result,boolean isShowFavoriteButton) {
-        mTipView = new TipView(mContext);
-        mWindowManager.addView(mTipView, getPopViewParams());
-        mTipView.startWithAnim();
-        mTipView.setContent(result,isShowFavoriteButton);
+        TipView tipView = new TipView(mContext);
+        mWindowManager.addView(tipView, getPopViewParams());
+        tipView.startWithAnim();
+        tipView.setContent(result, isShowFavoriteButton);
         //向 WindowManager 添加浮动窗
-        closeTipViewCountdown();
+        closeTipViewCountdown(tipView);
     }
 
 
