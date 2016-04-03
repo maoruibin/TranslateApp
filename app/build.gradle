@@ -52,18 +52,18 @@ android {
 
     buildTypes {
         release {
+            //如果签名配置不为空 则设置签名信息
+            if (signingConfigs.release != null) {
+                signingConfig signingConfigs.release
+            }
             //设置是否混淆
-            minifyEnabled false
+            minifyEnabled true
             //设置压缩对齐
             zipAlignEnabled true
             //移除无用的资源文件
             shrinkResources false
             //设置混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //如果签名配置不为空 则设置签名信息
-            if (signingConfigs.release != null) {
-                signingConfig signingConfigs.release
-            }
             //指定签名包得输入文件名称
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
@@ -79,6 +79,25 @@ android {
         debug{
             if (signingConfigs.release != null) {
                 signingConfig signingConfigs.release
+            }
+            //设置压缩对齐
+            zipAlignEnabled true
+            //移除无用的资源文件
+            shrinkResources true
+            //设置是否混淆
+            minifyEnabled false
+            //设置混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            //指定签名包得输入文件名称
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "GdTranslateDebug_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_debug.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
             }
         }
 
