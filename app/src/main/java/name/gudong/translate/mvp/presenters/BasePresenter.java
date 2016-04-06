@@ -25,6 +25,7 @@ import android.app.Service;
 
 import com.litesuits.orm.LiteOrm;
 
+import name.gudong.translate.mvp.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.views.IBaseView;
 
@@ -37,6 +38,7 @@ public class BasePresenter<V extends IBaseView> {
     protected Activity mActivity;
     protected Service mService;
     protected WarpAipService mWarpApiService;
+    protected DownloadService mDownloadService;
     protected LiteOrm mLiteOrm;
 
     public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,Activity activity) {
@@ -45,9 +47,17 @@ public class BasePresenter<V extends IBaseView> {
         mActivity = activity;
     }
 
-    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,Service service) {
+    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService,Activity activity) {
         mLiteOrm = liteOrm;
         mWarpApiService = apiService;
+        mDownloadService = downloadService;
+        mActivity = activity;
+    }
+
+    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,DownloadService downloadService,Service service) {
+        mLiteOrm = liteOrm;
+        mWarpApiService = apiService;
+        mDownloadService = downloadService;
         mService = service;
     }
 

@@ -79,6 +79,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Bind(R.id.iv_favorite)
     ImageView mIvFavorite;
+    @Bind(R.id.iv_sound)
+    ImageView mIvSound;
     @Bind(R.id.iv_paste)
     ImageView mIvPaste;
     @Bind(R.id.tv_clear)
@@ -376,6 +378,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mBtTranslate.setText(R.string.action_translating);
         mBtTranslate.setEnabled(false);
         mIvFavorite.setEnabled(false);
+        mIvSound.setEnabled(false);
         mIvPaste.setEnabled(false);
     }
 
@@ -459,6 +462,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         isFavorite = false;
         mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         mIvFavorite.setTag(null);
+        mIvSound.setTag(null);
         mList.removeAllViews();
         mRlAction.setVisibility(View.GONE);
     }
@@ -497,6 +501,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         Toast.makeText(MainActivity.this, "长按翻译结果可复制", Toast.LENGTH_SHORT).show();
     }
 
+    @OnClick(R.id.iv_sound)
+    public void onClickSound(View view){
+        MobclickAgent.onEvent(getApplicationContext(),"action_sound");
+        Object obj = view.getTag();
+        if (obj != null && obj instanceof AbsResult) {
+            AbsResult entity = (AbsResult) obj;
+            mPresenter.playSound(entity);
+        }
+    }
+
     @Override
     public void initReciteSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
@@ -523,6 +537,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         if (result == null) return;
 
         mIvFavorite.setTag(result);
+        mIvSound.setTag(result);
         if (mPresenter.isFavorite(result.wrapQuery())) {
             mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
             isFavorite = true;
@@ -539,6 +554,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mRlAction.setVisibility(View.VISIBLE);
 
         mIvFavorite.setEnabled(true);
+        mIvSound.setEnabled(true);
         mIvPaste.setEnabled(true);
     }
 

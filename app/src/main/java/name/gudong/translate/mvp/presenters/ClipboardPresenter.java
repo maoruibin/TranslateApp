@@ -38,6 +38,7 @@ import me.gudong.translate.BuildConfig;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.listener.view.TipViewController;
+import name.gudong.translate.mvp.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.entity.Result;
@@ -75,8 +76,8 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
     Action1 mActionShowTip;
 
     @Inject
-    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, Service service) {
-        super(liteOrm, apiService, service);
+    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Service service) {
+        super(liteOrm, apiService,downloadService, service);
     }
 
     @Override

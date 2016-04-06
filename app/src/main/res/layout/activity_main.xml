@@ -99,8 +99,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toLeftOf="@+id/iv_paste"
+                android:layout_toLeftOf="@+id/iv_sound"
                 app:srcCompat="@drawable/ic_favorite_border_black_24dp"/>
+
+
+            <ImageView
+                android:id="@+id/iv_sound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_toLeftOf="@+id/iv_paste"
+                app:srcCompat="@drawable/ic_volume_up_black_24dp"/>
 
             <ImageView
                 android:id="@+id/iv_paste"

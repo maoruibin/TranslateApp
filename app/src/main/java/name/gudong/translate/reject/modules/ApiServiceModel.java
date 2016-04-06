@@ -26,6 +26,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import name.gudong.translate.mvp.DownloadService;
 import name.gudong.translate.mvp.model.ApiService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.util.SpUtils;
@@ -41,7 +42,6 @@ import retrofit.RxJavaCallAdapterFactory;
  */
 @Module
 public class ApiServiceModel {
-
     @Provides
     @Singleton
     ApiService provideApiService(){
@@ -59,6 +59,14 @@ public class ApiServiceModel {
         return retrofit.create(ApiService.class);
     }
 
+    @Provides
+    @Singleton
+    DownloadService provideDownloadService(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(DownloadService.KEY_URL)
+                .build();
+        return retrofit.create(DownloadService.class);
+    }
 
     @Provides
     @Singleton

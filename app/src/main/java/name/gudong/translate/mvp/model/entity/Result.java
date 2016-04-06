@@ -33,29 +33,42 @@ import java.util.List;
  */
 @Table("tb_words")
 public class Result {
+    public static final String COL_ID = "_id";
+    public static final String COL_QUERY = "query";
+    public static final String COL_TRANSLATION= "translation";
+    public static final String COL_EXPLAINS= "explains";
+    public static final String COL_US_PHONETIC= "us_phonetic";
+    public static final String COL_UK_PHONETIC= "uk_phonetic";
+    public static final String COL_PH_EN_MP3= "ph_en_mp3";
+    public static final String COL_PH_AM_MP3= "ph_am_mp3";
+    public static final String COL_TRANSLATE_FROM= "translate_from";
+    public static final String COL_PH_EN =  "ph_en";
+    public static final String COL_PH_AM= "ph_am";
+
+
     @PrimaryKey(AssignType.AUTO_INCREMENT)
-    @Column("_id")
+    @Column(COL_ID)
     protected long id;
 
-    @Column("query")
+    @Column(COL_QUERY)
     protected String query;
-    @Column("translation")
+    @Column(COL_TRANSLATION)
     protected List<String> translation;
-    @Column("explains")
+    @Column(COL_EXPLAINS)
     protected List<String> explains;
-    @Column("us_phonetic")
+    @Column(COL_US_PHONETIC)
     protected String usPhonetic;
-    @Column("uk_phonetic")
+    @Column(COL_UK_PHONETIC)
     protected String ukPhonetic;
-    @Column("ph_en_mp3")
+    @Column(COL_PH_EN_MP3)
     protected String enMp3;
-    @Column("ph_am_mp3")
+    @Column(COL_PH_AM_MP3)
     protected String amMp3;
-    @Column("translate_from")
+    @Column(COL_TRANSLATE_FROM)
     protected String translateFrom;
-    @Column("ph_en")
+    @Column(COL_PH_EN)
     protected String phEn;
-    @Column("ph_am")
+    @Column(COL_PH_AM)
     protected String phAm;
 
     public Result() {
