@@ -1,4 +1,4 @@
-package name.gudong.translate.mvp;
+package name.gudong.translate.mvp.model;
 
 import com.squareup.okhttp.ResponseBody;
 

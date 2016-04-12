@@ -3,6 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="normal_margin">6dp</dimen>
+
     <dimen name="activity_main_button_translate_width">90dp</dimen>
     <dimen name="activity_main_button_translate_height">40dp</dimen>
 </resources>

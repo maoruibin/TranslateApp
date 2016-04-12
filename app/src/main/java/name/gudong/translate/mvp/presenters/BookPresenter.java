@@ -31,12 +31,11 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import name.gudong.translate.mvp.DownloadService;
+import name.gudong.translate.mvp.model.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.views.IBookView;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -103,19 +102,6 @@ public class BookPresenter extends BasePresenter<IBookView> {
 
     private Callable<Integer> deleteWordReal(Result entity) {
         return () -> mLiteOrm.delete(entity);
-    }
-
-    private <T> Observable<T> makeObservable(final Callable<T> func) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(Subscriber<? super T> subscriber) {
-                try {
-                    subscriber.onNext(func.call());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
 }

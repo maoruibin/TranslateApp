@@ -16,21 +16,25 @@ import me.gudong.translate.BuildConfig;
  * Contact with gudong.name@gmail.com.
  */
 public class FileManager {
+
     private static final String KEY_CACHE_DIRECTORY = "CACHE_DIRECTORY";
 
-    public void cacheFileOnDisk(Context context,String url,byte[]data){
+    public File cacheFileOnDisk(Context context,String url,byte[]data){
         File cacheParent = checkCacheParentDirectory(context);
         if(cacheParent!=null){
-            saveFile(cacheParent,url,data);
+            return saveFile(cacheParent,url,data);
         }
+        return null;
     }
 
-    public void saveFile(File parent,String url,byte[]data){
+    public File saveFile(File parent,String url,byte[]data){
         String fileName = getFileName(url);
         if(!TextUtils.isEmpty(fileName)){
             File file = new File(parent,fileName);
             saveBytesToFile(data,file);
+            return file;
         }
+        return null;
     }
 
     private File checkCacheParentDirectory(Context context){
@@ -41,6 +45,21 @@ public class FileManager {
             }
         }else{
             return cacheFileDir;
+        }
+        return null;
+    }
+
+    /**
+     * gee CacheFile by url
+     * @param context Context
+     * @param url map url address
+     * @return cache file
+     */
+    public File getChacheFileByUrl(Context context,String url){
+        String fileName = getFileName(url);
+        File cacheParent = checkCacheParentDirectory(context);
+        if(!TextUtils.isEmpty(fileName) && cacheParent!=null && cacheParent.isDirectory()){
+            return new File(cacheParent,fileName);
         }
         return null;
     }

@@ -51,7 +51,7 @@ import butterknife.OnClick;
 import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
-import name.gudong.translate.mvp.model.entity.AbsResult;
+import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
@@ -103,7 +103,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         startListenService();
         initSpinner();
         checkTranslateWay();
-        checkSomething();
         checkVersion();
         initConfig();
     }
@@ -111,6 +110,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onResume() {
         super.onResume();
+        checkSomething();
         if(BuildConfig.DEBUG){
             SpUtils.setAppFront(this,false);
         }else{
@@ -456,6 +456,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         InputMethodUtils.openSoftKeyboard(this,mInput);
     }
 
+    @OnClick(R.id.tv_point)
+    public void onClickInputPoint(View view) {
+        MobclickAgent.onEvent(getApplicationContext(),"action_input_point");
+        mInput.requestFocus();
+    }
+
     private void resetView() {
         clearInputContent();
         mPresenter.clearClipboard();
@@ -478,15 +484,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void onClickFavorite(View view) {
         MobclickAgent.onEvent(getApplicationContext(),"favorite_main");
         Object obj = view.getTag();
-        if (obj != null && obj instanceof AbsResult) {
-            AbsResult entity = (AbsResult) obj;
+        if (obj != null && obj instanceof Result) {
+            Result entity = (Result) obj;
             if (isFavorite) {
-                mPresenter.unFavoriteWord(entity.getResult());
+                mPresenter.unFavoriteWord(entity);
                 Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
                 mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 isFavorite = false;
             } else {
-                mPresenter.favoriteWord(entity.getResult());
+                mPresenter.favoriteWord(entity);
                 Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
                 mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
                 isFavorite = true;
@@ -503,10 +509,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @OnClick(R.id.iv_sound)
     public void onClickSound(View view){
-        MobclickAgent.onEvent(getApplicationContext(),"action_sound");
+        MobclickAgent.onEvent(getApplicationContext(),"sound_main_activity");
         Object obj = view.getTag();
-        if (obj != null && obj instanceof AbsResult) {
-            AbsResult entity = (AbsResult) obj;
+        if (obj != null && obj instanceof Result) {
+            Result entity = (Result) obj;
             mPresenter.playSound(entity);
         }
     }
@@ -533,18 +539,31 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @Override
-    public void onGetDataSuccess(AbsResult result) {
-        if (result == null) return;
+    public void showPlaySound() {
+        mIvSound.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hidePlaySound() {
+        mIvSound.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void addTagForView(Result result) {
         mIvFavorite.setTag(result);
         mIvSound.setTag(result);
-        if (mPresenter.isFavorite(result.wrapQuery())) {
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
-            isFavorite = true;
-        } else {
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            isFavorite = false;
-        }
+    }
+
+    @Override
+    public void initWithFavorite() {
+        mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
+        isFavorite = true;
+    }
+
+    @Override
+    public void initWithNotFavorite() {
+        mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        isFavorite = false;
     }
 
     @Override

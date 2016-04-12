@@ -20,10 +20,19 @@
 
 package name.gudong.translate.mvp.views;
 
+import name.gudong.translate.mvp.model.entity.Result;
+
 /**
  * Created by GuDong on 2/28/16 20:48.
  * Contact with gudong.name@gmail.com.
  */
 public interface IClipboardService extends IBaseView {
-    void showTipToast(String msg);
+
+    void errorPoint(String error);
+
+    void showResult(Result result, boolean isShowFavorite);
+
+    void initWithFavorite(Result result);
+
+    void initWithNotFavorite(Result result);
 }

@@ -31,11 +31,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 
 import com.litesuits.orm.LiteOrm;
-import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
-import com.squareup.okhttp.ResponseBody;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,8 +43,7 @@ import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
-import name.gudong.translate.manager.FileManager;
-import name.gudong.translate.mvp.DownloadService;
+import name.gudong.translate.mvp.model.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.entity.Result;
@@ -57,10 +53,6 @@ import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.SpUtils;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -74,7 +66,7 @@ import rx.schedulers.Schedulers;
 public class MainPresenter extends BasePresenter<IMainView> {
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
-    FileManager mFileManager = new FileManager();
+
 
     // 可以看到在使用@Inject进行注入时，构造注入和成员变量注入两种方式可以共存
     @Inject
@@ -128,6 +120,12 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AbsResult, Boolean>() {
                     @Override
+                    public Boolean call(AbsResult absResult) {
+                        return absResult!=null;
+                    }
+                })
+                .filter(new Func1<AbsResult, Boolean>() {
+                    @Override
                     public Boolean call(AbsResult result) {
                         return result.wrapErrorCode() == 0;
                     }
@@ -135,12 +133,34 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .map(new Func1<AbsResult, List<String>>() {
                     @Override
                     public List<String> call(AbsResult absResult) {
-                        mView.onGetDataSuccess(absResult);
+                        Result result = absResult.getResult();
+                        if(result == null)return null;
+
+                        mView.addTagForView(result);
+
+                        if(!TextUtils.isEmpty(result.getEnMp3())){
+                            mView.showPlaySound();
+                        }else{
+                            mView.hidePlaySound();
+                        }
+
+                        if(isFavorite(result.getQuery())!=null){
+                            mView.initWithFavorite();
+                        }else{
+                            mView.initWithNotFavorite();
+                        }
+
                         List<String> temp = absResult.wrapExplains();
                         if (!temp.isEmpty()) {
                             return temp;
                         }
                         return absResult.wrapTranslation();
+                    }
+                })
+                .filter(new Func1<List<String>, Boolean>() {
+                    @Override
+                    public Boolean call(List<String> strings) {
+                        return strings!=null && !strings.isEmpty();
                     }
                 })
                 .flatMap(new Func1<List<String>, Observable<String>>() {
@@ -171,18 +191,6 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         mView.addExplainItem(s);
                     }
                 });
-    }
-
-    /**
-     * check the word is favorite or not
-     *
-     * @param word checked word
-     * @return true if word has been favorite else return false
-     */
-    public boolean isFavorite(String word) {
-        QueryBuilder queryBuilder = new QueryBuilder(Result.class);
-        queryBuilder = queryBuilder.whereEquals("query ", word);
-        return !mLiteOrm.query(queryBuilder).isEmpty();
     }
 
     public void favoriteWord(Result result) {
@@ -224,50 +232,6 @@ public class MainPresenter extends BasePresenter<IMainView> {
         mView.initJITSetting(menu, openJIT);
     }
 
-    public void playSound(AbsResult entity) {
-        if (entity == null) {
-            return;
-        }
-        Result result = entity.getResult();
-        if (result == null) {
-            return;
-        }
-        String amMp3Url = result.getEnMp3();
-        if (TextUtils.isEmpty(amMp3Url)) {
-            return;
-        }
-
-        if (!amMp3Url.startsWith(DownloadService.KEY_URL)) {
-            return;
-        }
-
-        String url = amMp3Url.replace(DownloadService.KEY_URL + "resource/amp3/", "");
-        String[] param = url.split("/");
-        if (param.length != 5) {
-            return;
-        }
-        //http://res.iciba.com/resource/amp3/oxford/0/24/8a/248a2aa9259a98ecb7a1ff677a0feed2.mp3
-//        @GET("resource/amp3/{first}/{second}/{third}/{forth}/{name}")
-        Logger.i(param.toString());
-        Call<ResponseBody> call = mDownloadService.downloadFileWithDynamicUrlSync(param[0], param[1], param[2], param[3], param[4]);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    try {
-                        mFileManager.cacheFileOnDisk(mActivity,amMp3Url,response.body().bytes());
-                        Logger.i("获取数据成功 大小为 " + response.body().bytes().length / 1000 + " kb");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Logger.e(t.getMessage());
-                t.printStackTrace();
-            }
-        });
-    }
 }
+
+
