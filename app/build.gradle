@@ -47,14 +47,14 @@ android {
 
     signingConfigs {
         //指定名叫release的一个签名对象，下面会动态根据配置文件设置属性
-        release
+        releaseConfig
     }
 
     buildTypes {
         release {
             //如果签名配置不为空 则设置签名信息
-            if (signingConfigs.release != null) {
-                signingConfig signingConfigs.release
+            if (signingConfigs.releaseConfig != null) {
+                signingConfig signingConfigs.releaseConfig
             }
             //设置是否混淆
             minifyEnabled false
@@ -77,8 +77,8 @@ android {
         }
 
         debug{
-            if (signingConfigs.release != null) {
-                signingConfig signingConfigs.release
+            if (signingConfigs.releaseConfig != null) {
+                signingConfig signingConfigs.releaseConfig
             }
             //设置压缩对齐
             zipAlignEnabled true
@@ -89,30 +89,30 @@ android {
             //设置混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
 
-        lintOptions {
-          abortOnError false
+    lintOptions {
+        abortOnError false
+    }
+
+    productFlavors {
+        beta{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
         }
-
-        productFlavors {
-            beta{
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
-            }
-            xiaomi {
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
-            }
-            m360 {
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE:"m360"]
-            }
-            wandoujia {
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
-            }
-            fir {
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "fir"]
-            }
-            play {
-                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
-            }
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
+        }
+        m360 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"m360"]
+        }
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        }
+        fir {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "fir"]
+        }
+        play {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
         }
     }
 
@@ -131,10 +131,10 @@ if (propFile.canRead()) {
             props.containsKey('SIGN_FILE') && props.containsKey('SIGN_KEYSTORE_PASS') &&
             props.containsKey('SIGN_KEYSTORE_ALIAS') && props.containsKey('SIGN_KEYSTORE_ALIAS_PASS')) {
         println 'release build signing'
-        android.signingConfigs.release.storeFile = file(props['SIGN_FILE'])
-        android.signingConfigs.release.storePassword = props['SIGN_KEYSTORE_PASS']
-        android.signingConfigs.release.keyAlias = props['SIGN_KEYSTORE_ALIAS']
-        android.signingConfigs.release.keyPassword = props['SIGN_KEYSTORE_ALIAS_PASS']
+        android.signingConfigs.releaseConfig.storeFile = file(props['SIGN_FILE'])
+        android.signingConfigs.releaseConfig.storePassword = props['SIGN_KEYSTORE_PASS']
+        android.signingConfigs.releaseConfig.keyAlias = props['SIGN_KEYSTORE_ALIAS']
+        android.signingConfigs.releaseConfig.keyPassword = props['SIGN_KEYSTORE_ALIAS_PASS']
     } else {
         println 'release build not found signing properties'
         android.buildTypes.release.signingConfig = null
