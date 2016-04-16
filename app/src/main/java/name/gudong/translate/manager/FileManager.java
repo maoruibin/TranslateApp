@@ -55,7 +55,7 @@ public class FileManager {
      * @param url map url address
      * @return cache file
      */
-    public File getChacheFileByUrl(Context context,String url){
+    public File getCacheFileByUrl(Context context, String url){
         String fileName = getFileName(url);
         File cacheParent = checkCacheParentDirectory(context);
         if(!TextUtils.isEmpty(fileName) && cacheParent!=null && cacheParent.isDirectory()){
@@ -76,7 +76,7 @@ public class FileManager {
         return null;
     }
 
-    public static void resetFileCache(Context context){
+    public boolean resetFileCache(Context context){
         File cacheFileDir = new File(context.getCacheDir(),KEY_CACHE_DIRECTORY);
         if(cacheFileDir.canWrite()){
             File files[] = cacheFileDir.listFiles();
@@ -84,11 +84,16 @@ public class FileManager {
                 boolean isSuc = file.delete();
                 if(BuildConfig.DEBUG){
                     if(isSuc){
-                        Logger.i("del "+file.getAbsolutePath()+" successfully.");
+                        Logger.i("del "+file.getAbsolutePath()+" successfully. save "+file.length()/1024+"kb space");
+                    }else{
+                        Logger.i("del fail ");
                     }
                 }
             }
+            Logger.i("del "+cacheFileDir.getAbsolutePath()+" successfully. save "+cacheFileDir.length()/1024+"kb space");
+            return true;
         }
+        return false;
     }
 
     private void saveBytesToFile(byte[]data, File destFile){

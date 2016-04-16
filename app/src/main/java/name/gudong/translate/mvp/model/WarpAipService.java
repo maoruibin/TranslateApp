@@ -20,7 +20,6 @@
 
 package name.gudong.translate.mvp.model;
 
-import com.orhanobut.logger.Logger;
 import me.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.entity.BaiDuResult;
@@ -78,8 +77,6 @@ public class WarpAipService {
             case BAI_DU:
                 String salt = SignUtils.getRandomInt(10);
                 String sign = SignUtils.getSign(BuildConfig.BAIDU_APP_ID, query, salt, BuildConfig.BAIDU_SCREAT_KEY);
-                Logger.i(salt);
-                Logger.i(sign);
                 resultObservable = mApiService.translateBaiDu(
                         query,
                         BuildConfig.LANGUAGE_AUTO,

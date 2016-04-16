@@ -29,11 +29,13 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.litesuits.orm.LiteOrm;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,6 +58,7 @@ import name.gudong.translate.util.SpUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -121,7 +124,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .filter(new Func1<AbsResult, Boolean>() {
                     @Override
                     public Boolean call(AbsResult absResult) {
-                        return absResult!=null;
+                        return absResult != null;
                     }
                 })
                 .filter(new Func1<AbsResult, Boolean>() {
@@ -134,19 +137,19 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     @Override
                     public List<String> call(AbsResult absResult) {
                         Result result = absResult.getResult();
-                        if(result == null)return null;
+                        if (result == null) return null;
 
                         mView.addTagForView(result);
 
-                        if(!TextUtils.isEmpty(result.getEnMp3())){
+                        if (!TextUtils.isEmpty(result.getEnMp3())) {
                             mView.showPlaySound();
-                        }else{
+                        } else {
                             mView.hidePlaySound();
                         }
 
-                        if(isFavorite(result.getQuery())!=null){
+                        if (isFavorite(result.getQuery()) != null) {
                             mView.initWithFavorite();
-                        }else{
+                        } else {
                             mView.initWithNotFavorite();
                         }
 
@@ -160,7 +163,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .filter(new Func1<List<String>, Boolean>() {
                     @Override
                     public Boolean call(List<String> strings) {
-                        return strings!=null && !strings.isEmpty();
+                        return strings != null && !strings.isEmpty();
                     }
                 })
                 .flatMap(new Func1<List<String>, Observable<String>>() {
@@ -230,6 +233,30 @@ public class MainPresenter extends BasePresenter<IMainView> {
         mView.initDurationTimeSetting(menu, durationTime);
         mView.initReciteSetting(menu, reciteFlag);
         mView.initJITSetting(menu, openJIT);
+    }
+
+    /**
+     * clear cache file  for play sounds mp3
+     */
+    public void clearSoundCache() {
+        makeObservable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return mFileManager.resetFileCache(getContext());
+            }
+        }).
+        subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if(aBoolean){
+                    Toast.makeText(getContext(), "清除缓存成功", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(), "无缓存需要清除", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 }

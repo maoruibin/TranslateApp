@@ -64,7 +64,7 @@ public class BasePresenter<V extends IBaseView> {
     protected DownloadService mDownloadService;
     protected LiteOrm mLiteOrm;
 
-    FileManager mFileManager = new FileManager();
+    protected FileManager mFileManager = new FileManager();
 
     public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,Activity activity) {
         mLiteOrm = liteOrm;
@@ -156,7 +156,7 @@ public class BasePresenter<V extends IBaseView> {
                 .subscribe(new Action1<String[]>() {
                     @Override
                     public void call(String[] param) {
-                        File cacheFile = mFileManager.getChacheFileByUrl(getContext(), entity.getEnMp3());
+                        File cacheFile = mFileManager.getCacheFileByUrl(getContext(), entity.getEnMp3());
                         if (cacheFile != null && cacheFile.exists()) {
                             playSound(cacheFile);
                             return;

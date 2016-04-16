@@ -120,7 +120,6 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
     public void controlShowTipCyclic(){
         EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
         int time = tipTime.getIntervalTime();
-        Logger.i(KEY_TAG,"time is "+time +" minute");
 
         boolean reciteFlag = SpUtils.getReciteOpenOrNot(mService);
         //用户设置了开启背单词 或者 时间隔时间变化了 下面的判断代码写的有点复杂

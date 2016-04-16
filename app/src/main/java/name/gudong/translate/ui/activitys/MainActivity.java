@@ -131,6 +131,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     private void initConfig() {
         // 第一次点击单词本开关需要给用户一个功能提示框
         Once.toDo(KEY_TIP_OF_RECITE);
+        mPresenter.clearSoundCache();
     }
 
     private void checkVersion() {
@@ -488,12 +489,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             Result entity = (Result) obj;
             if (isFavorite) {
                 mPresenter.unFavoriteWord(entity);
-                Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
                 mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 isFavorite = false;
             } else {
                 mPresenter.favoriteWord(entity);
-                Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
                 mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
                 isFavorite = true;
             }
@@ -521,7 +520,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void initReciteSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(isOpen);
-
 
         menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
