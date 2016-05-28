@@ -83,7 +83,7 @@ android {
             //设置压缩对齐
             zipAlignEnabled true
             //移除无用的资源文件
-            shrinkResources true
+            shrinkResources false
             //设置是否混淆
             minifyEnabled false
             //设置混淆配置文件
