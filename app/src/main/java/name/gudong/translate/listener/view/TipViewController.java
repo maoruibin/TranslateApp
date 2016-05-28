@@ -27,8 +27,11 @@ import android.os.Build;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
+import me.gudong.translate.R;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.util.SpUtils;
@@ -39,6 +42,10 @@ import rx.functions.Func1;
 public class TipViewController{
     private WindowManager mWindowManager;
     private Context mContext;
+    /**
+     * cache mul tip view
+     */
+    private Map<Result,TipView>mMapTipView = new WeakHashMap<>();
 
     //顶部提示框
 //    private TipView mTipView;
@@ -74,13 +81,29 @@ public class TipViewController{
                 .subscribe();
     }
 
-    public void show(Result result,boolean isShowFavoriteButton) {
+    public void show(Result result,boolean isShowFavoriteButton,TipView.IOperateTipView mListener) {
         TipView tipView = new TipView(mContext);
+        mMapTipView.put(result,tipView);
+        tipView.setListener(mListener);
         mWindowManager.addView(tipView, getPopViewParams());
         tipView.startWithAnim();
         tipView.setContent(result, isShowFavoriteButton);
         //向 WindowManager 添加浮动窗
         closeTipViewCountdown(tipView);
+    }
+
+    public void setWithFavorite(Result result){
+        TipView tipView = mMapTipView.get(result);
+        if(tipView != null){
+            tipView.setFavoriteBackground(R.drawable.ic_favorite_pink_24dp);
+        }
+    }
+
+    public void setWithNotFavorite(Result result){
+        TipView tipView = mMapTipView.get(result);
+        if(tipView != null){
+            tipView.setFavoriteBackground(R.drawable.ic_favorite_border_grey_24dp);
+        }
     }
 
 

@@ -23,6 +23,7 @@ package name.gudong.translate.mvp.presenters;
 import android.app.Activity;
 
 import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -30,11 +31,11 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import name.gudong.translate.mvp.model.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.views.IBookView;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -45,8 +46,8 @@ import rx.schedulers.Schedulers;
  */
 public class BookPresenter extends BasePresenter<IBookView> {
     @Inject
-    public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, Activity activity) {
-        super(liteOrm, apiService, activity);
+    public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Activity activity) {
+        super(liteOrm, apiService, downloadService,activity);
     }
 
     public void getWords() {
@@ -89,7 +90,10 @@ public class BookPresenter extends BasePresenter<IBookView> {
         return new Callable<List<Result>>() {
             @Override
             public List<Result> call() throws Exception {
-                List<Result> results = mLiteOrm.query(Result.class);
+                QueryBuilder<Result> qb = new QueryBuilder<>(Result.class)
+                        .appendOrderDescBy(Result.COL_ID);
+
+                List<Result> results = mLiteOrm.query(qb);
                 Logger.i(" results.size() "+results.size());
                 return results;
             }
@@ -98,19 +102,6 @@ public class BookPresenter extends BasePresenter<IBookView> {
 
     private Callable<Integer> deleteWordReal(Result entity) {
         return () -> mLiteOrm.delete(entity);
-    }
-
-    private <T> Observable<T> makeObservable(final Callable<T> func) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(Subscriber<? super T> subscriber) {
-                try {
-                    subscriber.onNext(func.call());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
 }

@@ -68,7 +68,6 @@ public class BaiDuResult extends AbsResult{
                     @Override
                     public void call(TransResultEntity transResultEntity) {
                         String result = transResultEntity.getDst();
-                        Logger.i(result);
                         explains.add(result);
                     }
                 });

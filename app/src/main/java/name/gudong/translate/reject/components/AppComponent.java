@@ -26,6 +26,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import name.gudong.translate.GDApplication;
+import name.gudong.translate.mvp.model.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.reject.modules.ApiServiceModel;
 import name.gudong.translate.reject.modules.AppModule;
@@ -43,5 +44,7 @@ public interface AppComponent {
     LiteOrm getLiteOrm();
 
     WarpAipService getWarpService();
+
+    DownloadService getDownloadServcie();
 
 }

@@ -22,7 +22,7 @@ package name.gudong.translate.mvp.views;
 
 import android.view.Menu;
 
-import name.gudong.translate.mvp.model.entity.AbsResult;
+import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
@@ -54,8 +54,6 @@ public interface IMainView extends IBaseView {
      */
     void initReciteSetting(Menu menu, boolean isOpen);
 
-    void onGetDataSuccess(AbsResult result);
-
     void onTranslateComplete();
 
     /**
@@ -69,4 +67,15 @@ public interface IMainView extends IBaseView {
      * 关闭软键盘
      */
     void closeKeyboard();
+
+    void showPlaySound();
+
+    void hidePlaySound();
+
+    void addTagForView(Result result);
+
+    void initWithFavorite();
+
+    void initWithNotFavorite();
+
 }

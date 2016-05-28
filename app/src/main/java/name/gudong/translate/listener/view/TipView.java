@@ -4,29 +4,22 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.litesuits.orm.db.assit.QueryBuilder;
-import com.orhanobut.logger.Logger;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.gudong.translate.R;
-import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.util.ViewUtil;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by GuDong on 3/15/16 18:26.
@@ -40,15 +33,18 @@ public class TipView extends LinearLayout {
     private TextView mTvPhonetic;
     private LinearLayout mLlDst;
     private LinearLayout mLlSrc;
-    private TextView mFavorite;
+    private ImageView mIvFavorite;
+    private ImageView mIvSound;
     private TextView mTvPoint;
 
+    private IOperateTipView mListener;
+
     public TipView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public TipView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public TipView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -59,12 +55,13 @@ public class TipView extends LinearLayout {
         mTvPhonetic = (TextView) view.findViewById(R.id.tv_pop_phonetic);
         mLlSrc = (LinearLayout) view.findViewById(R.id.ll_pop_src);
         mLlDst = (LinearLayout) view.findViewById(R.id.ll_pop_dst);
-        mFavorite = (TextView) view.findViewById(R.id.bt_action);
+        mIvFavorite = (ImageView) view.findViewById(R.id.iv_favorite);
+        mIvSound = (ImageView) view.findViewById(R.id.iv_sound);
         mContentView = view.findViewById(R.id.pop_view_content_view);
     }
 
-    public void error(String error){
-        mFavorite.setVisibility(INVISIBLE);
+    public void error(String error) {
+        mIvFavorite.setVisibility(INVISIBLE);
         mLlDst.setVisibility(INVISIBLE);
         mLlSrc.setVisibility(INVISIBLE);
         mTvPoint.setVisibility(VISIBLE);
@@ -72,34 +69,37 @@ public class TipView extends LinearLayout {
     }
 
     public void setContent(Result result, boolean isShowFavoriteButton) {
-        setUpFavorite(result,isShowFavoriteButton);
+        if (result == null) return;
+        initView(isShowFavoriteButton,result);
+        addListener(result);
+
         setQuery(result.getQuery());
         setPhonetic(result.getPhAm());
 
         List<String> temp = result.getExplains();
-        if (temp.isEmpty() ) {
+        if (temp.isEmpty()) {
             temp = result.getTranslation();
-            if(temp == null){
+            if (temp == null) {
                 temp = new ArrayList<>();
             }
         }
 
-        if(!temp.isEmpty()){
+        if (!temp.isEmpty()) {
             Observable.from(temp)
-                    .subscribe((s)->addExplain(s));
-        }else{
+                    .subscribe((s) -> addExplain(s));
+        } else {
             error(getContext().getString(R.string.tip_explain_empty));
         }
     }
 
-    public void startWithAnim(){
+    public void startWithAnim() {
         //设置显示动画
         ObjectAnimator translationAnim = ObjectAnimator.ofFloat(mContentView, "translationY", -700, 0);
         translationAnim.setDuration(DURATION_TIME);
         translationAnim.start();
     }
 
-    public void closeWithAnim(@NonNull OnAnimListener listener){
+    public void closeWithAnim(@NonNull OnAnimListener listener) {
         ObjectAnimator translationAnim = ObjectAnimator.ofFloat(mContentView, "translationY", 0, -700);
         translationAnim.start();
         translationAnim.addListener(new AnimatorListenerAdapter() {
@@ -111,30 +111,53 @@ public class TipView extends LinearLayout {
         });
     }
 
-    public interface OnAnimListener{
+    public interface OnAnimListener {
         void onCloseAnimEnd(Animator animation);
     }
+
     //为每个释义设置内容
     private void addExplain(String explains) {
-        mLlDst.addView(ViewUtil.getWordsView(getContext(), explains, android.R.color.white,false));
+        mLlDst.addView(ViewUtil.getWordsView(getContext(), explains, android.R.color.white, false));
     }
 
+    private void initView(boolean isShowFavoriteButton,Result result){
+        mIvFavorite.setVisibility(isShowFavoriteButton ? View.VISIBLE : View.GONE);
+        mIvSound.setVisibility(TextUtils.isEmpty(result.getEnMp3()) ? View.GONE : View.VISIBLE);
+        mListener.onInitFavorite(mIvFavorite, result);
+    }
 
-    //设置收藏按钮的隐藏显示 以及对应的点击事件处理
-    private void setUpFavorite(Result result,boolean isShowFavoriteButton){
-        if(mFavorite == null)return;
-        mFavorite.setVisibility(isShowFavoriteButton ? View.VISIBLE : View.GONE);
-        mFavorite.setOnClickListener((v)->{
-            MobclickAgent.onEvent(getContext(),"favorite_service");
-            QueryBuilder queryBuilder = new QueryBuilder(Result.class);
-            queryBuilder = queryBuilder.whereEquals("query ", result.getQuery());
-            if (GDApplication.getAppComponent().getLiteOrm().query(queryBuilder).isEmpty()) {
-                long res = GDApplication.getAppComponent().getLiteOrm().insert(result);
-                showToast(res > 0 ? "收藏成功" : "收藏失败");
-            } else {
-                showToast("'" + result.getQuery() + "' 已存在于单词本！");
+    private void addListener(Result result){
+        mIvFavorite.setOnClickListener((v) -> {
+            mListener.onClickFavorite(v,result);
+        });
+
+        mIvSound.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onClickPlaySound(v, result);
             }
         });
+    }
+
+    public void setFavoriteBackground(@DrawableRes int drawableSrc) {
+        mIvFavorite.setImageResource(drawableSrc);
+    }
+
+    public void setListener(IOperateTipView mListener) {
+        this.mListener = mListener;
+    }
+
+    public interface IOperateTipView {
+
+        void onClickFavorite(View view, Result result);
+
+        void onClickPlaySound(View view, Result result);
+
+        /**
+         * set up favorite view state  base on it change background of favorite view
+         * @param mIvFavorite
+         * @param result
+         */
+        void onInitFavorite(ImageView mIvFavorite, Result result);
     }
 
     //设置单词名称
@@ -144,23 +167,11 @@ public class TipView extends LinearLayout {
 
     //设置单词解释
     private void setPhonetic(String phonetic) {
-        if(!TextUtils.isEmpty(phonetic)){
+        if (!TextUtils.isEmpty(phonetic)) {
             mTvPhonetic.setVisibility(View.VISIBLE);
-            mTvPhonetic.setText("["+phonetic+"]");
-        }else{
+            mTvPhonetic.setText("[" + phonetic + "]");
+        } else {
             mTvPhonetic.setVisibility(View.GONE);
         }
-    }
-
-    private void showToast(String msg) {
-        Observable.just(msg)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Logger.i("show toast");
-                        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 }

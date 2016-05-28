@@ -29,12 +29,13 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.litesuits.orm.LiteOrm;
-import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +45,7 @@ import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
+import name.gudong.translate.mvp.model.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.entity.Result;
@@ -56,6 +58,7 @@ import name.gudong.translate.util.SpUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -63,45 +66,44 @@ import rx.schedulers.Schedulers;
  * Created by GuDong on 12/27/15 16:52.
  * Contact with gudong.name@gmail.com.
  */
-public class MainPresenter extends BasePresenter<IMainView>{
+public class MainPresenter extends BasePresenter<IMainView> {
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
-    private AbsResult mCurrentResult;
 
     // 可以看到在使用@Inject进行注入时，构造注入和成员变量注入两种方式可以共存
     @Inject
-    public MainPresenter(LiteOrm liteOrm, WarpAipService apiService,Activity activity) {
-        super(liteOrm, apiService,activity);
+    public MainPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Activity activity) {
+        super(liteOrm, apiService, downloadService, activity);
     }
 
-    public void checkClipboard(){
+    public void checkClipboard() {
         CharSequence sequence = mClipboardWatcher.getText();
         // 感谢 V 友提供的bug反馈
-        if(sequence == null)return;
+        if (sequence == null) return;
         String text = sequence.toString();
-        if(TextUtils.isEmpty(text))return;
+        if (TextUtils.isEmpty(text)) return;
         // 使用正则判断粘贴板中的字符是不是单词
         String patternWords = "[a-zA-Z1-9 ]{1,}";
         Pattern r = Pattern.compile(patternWords);
         Matcher m = r.matcher(text);
-        if(m.matches()){
+        if (m.matches()) {
             mView.onInitSearchText(text);
             executeSearch(text);
             mView.closeKeyboard();
         }
     }
 
-    public void clearClipboard(){
+    public void clearClipboard() {
         CharSequence sequence = mClipboardWatcher.getText();
-        if(!TextUtils.isEmpty(sequence)){
+        if (!TextUtils.isEmpty(sequence)) {
             ClipboardManager clipService = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("", "");
             clipService.setPrimaryClip(clipData);
         }
     }
 
-    public void checkVersionAndShowChangeLog(){
+    public void checkVersionAndShowChangeLog() {
         String showWhatsNew = "showWhatsNewTag";
         if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
             DialogUtil.showChangelog((AppCompatActivity) mActivity);
@@ -121,6 +123,12 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<AbsResult, Boolean>() {
                     @Override
+                    public Boolean call(AbsResult absResult) {
+                        return absResult != null;
+                    }
+                })
+                .filter(new Func1<AbsResult, Boolean>() {
+                    @Override
                     public Boolean call(AbsResult result) {
                         return result.wrapErrorCode() == 0;
                     }
@@ -128,8 +136,23 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 .map(new Func1<AbsResult, List<String>>() {
                     @Override
                     public List<String> call(AbsResult absResult) {
-                        mCurrentResult = absResult;
-                        mView.onGetDataSuccess(absResult);
+                        Result result = absResult.getResult();
+                        if (result == null) return null;
+
+                        mView.addTagForView(result);
+
+                        if (!TextUtils.isEmpty(result.getEnMp3())) {
+                            mView.showPlaySound();
+                        } else {
+                            mView.hidePlaySound();
+                        }
+
+                        if (isFavorite(result.getQuery()) != null) {
+                            mView.initWithFavorite();
+                        } else {
+                            mView.initWithNotFavorite();
+                        }
+
                         List<String> temp = absResult.wrapExplains();
                         if (!temp.isEmpty()) {
                             return temp;
@@ -137,10 +160,16 @@ public class MainPresenter extends BasePresenter<IMainView>{
                         return absResult.wrapTranslation();
                     }
                 })
+                .filter(new Func1<List<String>, Boolean>() {
+                    @Override
+                    public Boolean call(List<String> strings) {
+                        return strings != null && !strings.isEmpty();
+                    }
+                })
                 .flatMap(new Func1<List<String>, Observable<String>>() {
                     @Override
                     public Observable<String> call(List<String> strings) {
-                        if(strings == null){
+                        if (strings == null) {
                             return Observable.error(new Exception(("啥也没有翻译出来!")));
                         }
                         return Observable.from(strings);
@@ -154,7 +183,7 @@ public class MainPresenter extends BasePresenter<IMainView>{
 
                     @Override
                     public void onError(Throwable e) {
-                        if(BuildConfig.DEBUG){
+                        if (BuildConfig.DEBUG) {
                             e.printStackTrace();
                         }
                         mView.onError(e);
@@ -167,40 +196,29 @@ public class MainPresenter extends BasePresenter<IMainView>{
                 });
     }
 
-    /**
-     * check the word is favorite or not
-     * @param word checked word
-     * @return true if word has been favorite else return false
-     */
-    public boolean isFavorite(String word) {
-        QueryBuilder queryBuilder = new QueryBuilder(Result.class);
-        queryBuilder = queryBuilder.whereEquals("query ", word);
-        return !mLiteOrm.query(queryBuilder).isEmpty();
-    }
-
-    public void favoriteWord(Result result){
+    public void favoriteWord(Result result) {
         mLiteOrm.insert(result);
     }
 
-    public void unFavoriteWord(Result result){
+    public void unFavoriteWord(Result result) {
         mLiteOrm.delete(result);
     }
 
-    public void startListenClipboardService(){
+    public void startListenClipboardService() {
         ListenClipboardService.start(mActivity);
     }
 
     /**
      * 去评分
      */
-    public void gotoMarket(){
-        Uri uri = Uri.parse("market://details?id="+mActivity.getPackageName());
-        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+    public void gotoMarket() {
+        Uri uri = Uri.parse("market://details?id=" + mActivity.getPackageName());
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(intent);
     }
 
-    public void prepareTranslateWay(){
+    public void prepareTranslateWay() {
         ETranslateFrom from = SpUtils.getTranslateEngineWay(mActivity);
         mView.initTranslateEngineSetting(from);
     }
@@ -211,9 +229,36 @@ public class MainPresenter extends BasePresenter<IMainView>{
         boolean reciteFlag = SpUtils.getReciteOpenOrNot(mActivity);
         boolean openJIT = SpUtils.getOpenJITOrNot(mActivity);
 
-        mView.initIntervalTimeSetting(menu,intervalTime);
-        mView.initDurationTimeSetting(menu,durationTime);
-        mView.initReciteSetting(menu,reciteFlag);
-        mView.initJITSetting(menu,openJIT);
+        mView.initIntervalTimeSetting(menu, intervalTime);
+        mView.initDurationTimeSetting(menu, durationTime);
+        mView.initReciteSetting(menu, reciteFlag);
+        mView.initJITSetting(menu, openJIT);
     }
+
+    /**
+     * clear cache file  for play sounds mp3
+     */
+    public void clearSoundCache() {
+        makeObservable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return mFileManager.resetFileCache(getContext());
+            }
+        }).
+        subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if(aBoolean){
+                    Toast.makeText(getContext(), "清除缓存成功", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(), "无缓存需要清除", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 }
+
+

@@ -26,6 +26,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import me.gudong.translate.BuildConfig;
 import name.gudong.translate.GDApplication;
 
 @Module
@@ -46,6 +47,8 @@ public class AppModule {
     @Provides
     @Singleton
     public LiteOrm provideLiteOrm(){
-        return LiteOrm.newSingleInstance(application, DB_NAME);
+        LiteOrm liteOrm = LiteOrm.newSingleInstance(application, DB_NAME);
+        liteOrm.setDebugged(BuildConfig.DEBUG);
+        return liteOrm;
     }
 }

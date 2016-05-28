@@ -20,8 +20,6 @@
 
 package name.gudong.translate.mvp.model.entity;
 
-import com.orhanobut.logger.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -299,7 +297,6 @@ public class JinShanResult  extends AbsResult{
                         if(!partEntity.getMeans().isEmpty()){
                             sb.append(partEntity.getMeans().get(0));
                         }
-                        Logger.i(sb.toString());
                         explains.add(sb.toString());
                     }
                 });

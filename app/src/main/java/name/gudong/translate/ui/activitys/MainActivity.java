@@ -51,7 +51,7 @@ import butterknife.OnClick;
 import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
-import name.gudong.translate.mvp.model.entity.AbsResult;
+import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
@@ -79,6 +79,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Bind(R.id.iv_favorite)
     ImageView mIvFavorite;
+    @Bind(R.id.iv_sound)
+    ImageView mIvSound;
     @Bind(R.id.iv_paste)
     ImageView mIvPaste;
     @Bind(R.id.tv_clear)
@@ -101,7 +103,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         startListenService();
         initSpinner();
         checkTranslateWay();
-        checkSomething();
         checkVersion();
         initConfig();
     }
@@ -109,6 +110,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onResume() {
         super.onResume();
+        checkSomething();
         if(BuildConfig.DEBUG){
             SpUtils.setAppFront(this,false);
         }else{
@@ -129,6 +131,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     private void initConfig() {
         // 第一次点击单词本开关需要给用户一个功能提示框
         Once.toDo(KEY_TIP_OF_RECITE);
+        mPresenter.clearSoundCache();
     }
 
     private void checkVersion() {
@@ -376,6 +379,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mBtTranslate.setText(R.string.action_translating);
         mBtTranslate.setEnabled(false);
         mIvFavorite.setEnabled(false);
+        mIvSound.setEnabled(false);
         mIvPaste.setEnabled(false);
     }
 
@@ -453,12 +457,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         InputMethodUtils.openSoftKeyboard(this,mInput);
     }
 
+    @OnClick(R.id.tv_point)
+    public void onClickInputPoint(View view) {
+        MobclickAgent.onEvent(getApplicationContext(),"action_input_point");
+        mInput.requestFocus();
+    }
+
     private void resetView() {
         clearInputContent();
         mPresenter.clearClipboard();
         isFavorite = false;
         mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         mIvFavorite.setTag(null);
+        mIvSound.setTag(null);
         mList.removeAllViews();
         mRlAction.setVisibility(View.GONE);
     }
@@ -474,16 +485,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void onClickFavorite(View view) {
         MobclickAgent.onEvent(getApplicationContext(),"favorite_main");
         Object obj = view.getTag();
-        if (obj != null && obj instanceof AbsResult) {
-            AbsResult entity = (AbsResult) obj;
+        if (obj != null && obj instanceof Result) {
+            Result entity = (Result) obj;
             if (isFavorite) {
-                mPresenter.unFavoriteWord(entity.getResult());
-                Toast.makeText(MainActivity.this, "取消收藏", Toast.LENGTH_SHORT).show();
+                mPresenter.unFavoriteWord(entity);
                 mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 isFavorite = false;
             } else {
-                mPresenter.favoriteWord(entity.getResult());
-                Toast.makeText(MainActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+                mPresenter.favoriteWord(entity);
                 mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
                 isFavorite = true;
             }
@@ -497,11 +506,20 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         Toast.makeText(MainActivity.this, "长按翻译结果可复制", Toast.LENGTH_SHORT).show();
     }
 
+    @OnClick(R.id.iv_sound)
+    public void onClickSound(View view){
+        MobclickAgent.onEvent(getApplicationContext(),"sound_main_activity");
+        Object obj = view.getTag();
+        if (obj != null && obj instanceof Result) {
+            Result entity = (Result) obj;
+            mPresenter.playSound(entity);
+        }
+    }
+
     @Override
     public void initReciteSetting(Menu menu, boolean isOpen) {
         menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(isOpen);
-
 
         menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
@@ -519,17 +537,31 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @Override
-    public void onGetDataSuccess(AbsResult result) {
-        if (result == null) return;
+    public void showPlaySound() {
+        mIvSound.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hidePlaySound() {
+        mIvSound.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void addTagForView(Result result) {
         mIvFavorite.setTag(result);
-        if (mPresenter.isFavorite(result.wrapQuery())) {
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
-            isFavorite = true;
-        } else {
-            mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            isFavorite = false;
-        }
+        mIvSound.setTag(result);
+    }
+
+    @Override
+    public void initWithFavorite() {
+        mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
+        isFavorite = true;
+    }
+
+    @Override
+    public void initWithNotFavorite() {
+        mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        isFavorite = false;
     }
 
     @Override
@@ -539,6 +571,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mRlAction.setVisibility(View.VISIBLE);
 
         mIvFavorite.setEnabled(true);
+        mIvSound.setEnabled(true);
         mIvPaste.setEnabled(true);
     }
 

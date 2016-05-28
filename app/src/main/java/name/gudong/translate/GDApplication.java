@@ -46,7 +46,7 @@ public class GDApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        setUpLog();
+        setUpSomethingsByDevMode(BuildConfig.DEBUG);
         FIR.init(this);
         Once.initialise(this);
         mAppComponent = DaggerAppComponent.builder()
@@ -55,8 +55,8 @@ public class GDApplication extends Application {
                 .build();
     }
 
-    private void setUpLog() {
-        if(BuildConfig.DEBUG){
+    private void setUpSomethingsByDevMode(boolean isDebug) {
+        if(isDebug){
             Logger.init("gdt").hideThreadInfo().setMethodCount(0);
         }else{
             Logger.init("gdt").hideThreadInfo().setMethodCount(0).setLogLevel(LogLevel.FULL);
