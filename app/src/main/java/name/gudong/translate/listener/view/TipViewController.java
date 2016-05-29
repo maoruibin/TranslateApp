@@ -21,11 +21,16 @@
 package name.gudong.translate.listener.view;
 
 import android.animation.Animator;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.WindowManager;
+
+import com.orhanobut.logger.Logger;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -82,6 +87,41 @@ public class TipViewController{
     }
 
     public void show(Result result,boolean isShowFavoriteButton,TipView.IOperateTipView mListener) {
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+
+            StringBuilder sb = new StringBuilder();
+            for(String string:result.getExplains()){
+                sb.append(string).append("\n");
+            }
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(mContext)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle(result.getQuery())
+//                            .setDefaults(Notification.DEFAULT_ALL)
+                            .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                            .setVibrate(new long[]{0l})
+                            .setPriority(Notification.PRIORITY_HIGH)
+                            .setContentText(sb.toString());
+
+             /* Add Big View Specific Configuration */
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+            // Moves events into the big view
+            for (String string:result.getExplains()) {
+                inboxStyle.addLine(string);
+            }
+
+            mBuilder.setStyle(inboxStyle);
+            mBuilder.addAction(R.drawable.ic_favorite_border_grey_24dp,"收藏",null);
+            NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification note = mBuilder.build();
+            // notificationID allows you to update the notification later on.
+            mNotificationManager.notify(result.getQuery().hashCode(), note);
+
+            return;
+        }
+        Logger.i("current version is ----------> ");
         TipView tipView = new TipView(mContext);
         mMapTipView.put(result,tipView);
         tipView.setListener(mListener);
