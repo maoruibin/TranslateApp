@@ -23,7 +23,9 @@ package name.gudong.translate.listener.view;
 import android.animation.Animator;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
@@ -39,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import me.gudong.translate.R;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.SpUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -113,12 +116,25 @@ public class TipViewController{
             }
 
             mBuilder.setStyle(inboxStyle);
+
+            Intent resultIntent = new Intent(mContext, MainActivity.class);
+            resultIntent.putExtra("data",result);
+// Because clicking the notification opens a new ("special") activity, there's
+// no need to create an artificial back stack.
+            PendingIntent resultPendingIntent =
+                    PendingIntent.getActivity(
+                            this,
+                            0,
+                            resultIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+
             mBuilder.addAction(R.drawable.ic_favorite_border_grey_24dp,"收藏",null);
             NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification note = mBuilder.build();
             // notificationID allows you to update the notification later on.
             mNotificationManager.notify(result.getQuery().hashCode(), note);
-
             return;
         }
         Logger.i("current version is ----------> ");

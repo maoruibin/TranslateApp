@@ -32,7 +32,7 @@ import java.util.List;
  * Contact with gudong.name@gmail.com.
  */
 @Table("tb_words")
-public class Result {
+public class Result{
     public static final String COL_ID = "_id";
     public static final String COL_QUERY = "query";
     public static final String COL_TRANSLATION= "translation";
