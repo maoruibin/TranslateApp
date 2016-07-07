@@ -125,7 +125,7 @@ android {
 //set release sign info synchronously
 def Properties props = new Properties()
 def propFile = file('../gradle.properties')
-if (propFile.canRead()) {
+if (propFile.exists()) {
     props.load(new FileInputStream(propFile))
     if (props != null &&
             props.containsKey('SIGN_FILE') && props.containsKey('SIGN_KEYSTORE_PASS') &&
