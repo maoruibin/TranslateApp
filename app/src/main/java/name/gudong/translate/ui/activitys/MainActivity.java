@@ -20,6 +20,7 @@
 
 package name.gudong.translate.ui.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
@@ -187,6 +188,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 DialogUtil.showAbout(this);
                 MobclickAgent.onEvent(this,"menu_about");
                 closeKeyboard();
+                Intent intent = new Intent(this,SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.menu_score:
                 mPresenter.gotoMarket();

@@ -76,7 +76,7 @@ android {
             }
         }
 
-        debug{
+        debug {
             if (signingConfigs.releaseConfig != null) {
                 signingConfig signingConfigs.releaseConfig
             }
@@ -96,14 +96,14 @@ android {
     }
 
     productFlavors {
-        beta{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
+        beta {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "beta"]
         }
         xiaomi {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
         }
         m360 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"m360"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "m360"]
         }
         wandoujia {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
@@ -166,7 +166,10 @@ dependencies {
     compile "io.reactivex:rxandroid:${libs.rxandroid}"
     // Other
     compile "com.orhanobut:logger:${libs.logger}"
-    compile "com.umeng.analytics:analytics:latest.integration"
     retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:${libs.retrolambda}"
     compile "com.jonathanfinerty.once:once:${libs.once}"
+
+    compile "com.android.support:preference-v7:${libs.supportVersion}"
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.android.support:support-v4:23.3.0'
 }
