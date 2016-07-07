@@ -26,6 +26,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
@@ -55,6 +56,7 @@ import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.StringUtils;
+import name.gudong.translate.util.Utils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -127,7 +129,12 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(context.getString(R.string.app_name));
         builder.setContentText("点击打开咕咚翻译");
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        if(Utils.isSDKHigh5()){
+            builder.setSmallIcon(R.drawable.icon_notification);
+            builder.setColor(Color.rgb(121,85,72));
+        }else{
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+        }
         builder.setPriority(NotificationCompat.PRIORITY_MIN);
         builder.setOngoing(true);
 

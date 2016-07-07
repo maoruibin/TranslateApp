@@ -25,6 +25,7 @@ import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.enums.AssignType;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ import java.util.List;
  * Contact with gudong.name@gmail.com.
  */
 @Table("tb_words")
-public class Result{
+public class Result implements Serializable{
     public static final String COL_ID = "_id";
     public static final String COL_QUERY = "query";
     public static final String COL_TRANSLATION= "translation";

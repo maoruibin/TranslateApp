@@ -32,8 +32,6 @@ import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.WindowManager;
 
-import com.orhanobut.logger.Logger;
-
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +41,7 @@ import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.SpUtils;
+import name.gudong.translate.util.Utils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -90,8 +89,7 @@ public class TipViewController{
     }
 
     public void show(Result result,boolean isShowFavoriteButton,TipView.IOperateTipView mListener) {
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-
+        if(Utils.isSDKHigh5()){
             StringBuilder sb = new StringBuilder();
             for(String string:result.getExplains()){
                 sb.append(string).append("\n");
@@ -99,9 +97,8 @@ public class TipViewController{
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(mContext)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.drawable.icon_notification)
                             .setContentTitle(result.getQuery())
-//                            .setDefaults(Notification.DEFAULT_ALL)
                             .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                             .setVibrate(new long[]{0l})
                             .setPriority(Notification.PRIORITY_HIGH)
@@ -119,33 +116,30 @@ public class TipViewController{
 
             Intent resultIntent = new Intent(mContext, MainActivity.class);
             resultIntent.putExtra("data",result);
-// Because clicking the notification opens a new ("special") activity, there's
-// no need to create an artificial back stack.
-            PendingIntent resultPendingIntent =
-                    PendingIntent.getActivity(
-                            this,
+
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                            mContext,
                             0,
                             resultIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
 
-            mBuilder.addAction(R.drawable.ic_favorite_border_grey_24dp,"收藏",null);
+            mBuilder.addAction(R.drawable.ic_favorite_border_grey_24dp,"收藏",resultPendingIntent);
             NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification note = mBuilder.build();
-            // notificationID allows you to update the notification later on.
             mNotificationManager.notify(result.getQuery().hashCode(), note);
-            return;
+
+        }else{
+            TipView tipView = new TipView(mContext);
+            mMapTipView.put(result,tipView);
+            tipView.setListener(mListener);
+            mWindowManager.addView(tipView, getPopViewParams());
+            tipView.startWithAnim();
+            tipView.setContent(result, isShowFavoriteButton);
+            //向 WindowManager 添加浮动窗
+            closeTipViewCountdown(tipView);
         }
-        Logger.i("current version is ----------> ");
-        TipView tipView = new TipView(mContext);
-        mMapTipView.put(result,tipView);
-        tipView.setListener(mListener);
-        mWindowManager.addView(tipView, getPopViewParams());
-        tipView.startWithAnim();
-        tipView.setContent(result, isShowFavoriteButton);
-        //向 WindowManager 添加浮动窗
-        closeTipViewCountdown(tipView);
     }
 
     public void setWithFavorite(Result result){
