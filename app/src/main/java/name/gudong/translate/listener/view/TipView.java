@@ -85,8 +85,7 @@ public class TipView extends LinearLayout {
         }
 
         if (!temp.isEmpty()) {
-            Observable.from(temp)
-                    .subscribe((s) -> addExplain(s));
+            Observable.from(temp).subscribe((s) -> addExplain(s));
         } else {
             error(getContext().getString(R.string.tip_explain_empty));
         }

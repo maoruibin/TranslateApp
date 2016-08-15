@@ -46,7 +46,7 @@ public class GDApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        setUpSomethingsByDevMode(BuildConfig.DEBUG);
+        setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
         FIR.init(this);
         Once.initialise(this);
         mAppComponent = DaggerAppComponent.builder()

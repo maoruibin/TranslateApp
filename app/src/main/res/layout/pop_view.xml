@@ -48,6 +48,8 @@
             android:layout_toLeftOf="@+id/view_gd"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:clickable="true"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:src="@drawable/ic_volume_up_grey_24dp"/>
 
         <View

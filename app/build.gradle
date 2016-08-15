@@ -42,6 +42,7 @@ android {
         //common value
         buildConfigField "String", "RESULT_JSON", '"json"'
         buildConfigField "String", "LANGUAGE_AUTO", '"auto"'
+        buildConfigField "Boolean", "IS_DEBUG", 'true'
 
     }
 
@@ -74,6 +75,7 @@ android {
                     }
                 }
             }
+            buildConfigField "Boolean", "IS_DEBUG", 'true'
         }
 
         debug {

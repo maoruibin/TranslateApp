@@ -112,6 +112,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     }
 
     public void executeSearch(String keywords) {
+        Logger.i("===========");
         mView.onPrepareTranslate();
         Observable<AbsResult> observable = mWarpApiService.translate(SpUtils.getTranslateEngineWay(mActivity), keywords);
         if (observable == null) {
@@ -154,7 +155,10 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         }
 
                         List<String> temp = absResult.wrapExplains();
-                        if (!temp.isEmpty()) {
+                        //增加音标显示
+                        String phAm = absResult.getResult().getPhAm();
+                        if (!temp.isEmpty() && !TextUtils.isEmpty(phAm)){
+                            temp.add(0,"["+phAm+"]");
                             return temp;
                         }
                         return absResult.wrapTranslation();
@@ -191,6 +195,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
                     @Override
                     public void onNext(String s) {
+                        Logger.i("res "+s);
                         mView.addExplainItem(s);
                     }
                 });
