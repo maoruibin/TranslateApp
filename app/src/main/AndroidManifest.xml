@@ -60,9 +60,6 @@
         </receiver>
 
         <activity android:name="name.gudong.translate.ui.activitys.WordsBookActivity"></activity>
-        <activity
-            android:name="name.gudong.translate.ui.activitys.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

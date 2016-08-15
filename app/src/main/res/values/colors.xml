@@ -5,7 +5,6 @@
     <color name="colorPrimaryDark">#3E2723</color>
     <color name="colorAccent">#E91E63</color>
 
-    <color name="gray">#c4c4c4</color>
     <color name="gray_deep">#707070</color>
 
     <color name="bg_app">#e2e2e2</color>
@@ -15,12 +14,8 @@
     <color name="color_explain">#a2a2a2</color>
 
     <color name="bg_pop">#607D8B</color>
-    <color name="bg_pop_deep">#455A64</color>
-    <color name="bg_pop_shadow">#90A4AE</color>
     <color name="bg_pop_white">#b8bec1</color>
     <color name="pop_phonetic">#ECEFF1</color>
-
-    <color name="error">#ECEFF1</color>
 
     <color name="shadow_blackcolor">#88000000</color>
 
