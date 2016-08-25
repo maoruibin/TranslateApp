@@ -59,6 +59,8 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
 
     WordsListAdapter mAdapter;
 
+    private Menu mMenu;
+
     public static void gotoWordsBook(Context context) {
         Intent intent = new Intent(context, WordsBookActivity.class);
         context.startActivity(intent);
@@ -77,7 +79,18 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.book,menu);
+        mMenu = menu;
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(mAdapter.getItemCount()<=0){
+            menu.findItem(R.id.menu_sort).setVisible(false);
+        }else{
+            menu.findItem(R.id.menu_sort).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -142,6 +155,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
             emptyTipText.setVisibility(View.GONE);
             mAdapter.update(transResultEntities);
             mResult = transResultEntities;
+
         }
     }
 

@@ -21,7 +21,7 @@
     <string name="duration_two_second">2秒钟</string>
     <string name="duration_four_second">4秒钟</string>
     <string name="duration_six_second">6秒钟</string>
-    <string name="empty_tip">您还没有收藏过单词</string>
+    <string name="empty_tip">您还没有收藏过任何单词</string>
     <string name="action_clear">清除</string>
     <string name="action_translate">翻译</string>
     <string name="action_translating">翻译中...</string>
