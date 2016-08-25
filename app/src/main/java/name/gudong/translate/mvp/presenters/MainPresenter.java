@@ -29,7 +29,6 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.widget.Toast;
 
 import com.litesuits.orm.LiteOrm;
 import com.orhanobut.logger.Logger;
@@ -256,9 +255,9 @@ public class MainPresenter extends BasePresenter<IMainView> {
             @Override
             public void call(Boolean aBoolean) {
                 if(aBoolean){
-                    Toast.makeText(getContext(), "清除缓存成功", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "清除缓存成功", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getContext(), "无缓存需要清除", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "无缓存需要清除", Toast.LENGTH_SHORT).show();
                 }
             }
         });

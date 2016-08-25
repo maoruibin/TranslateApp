@@ -52,6 +52,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            if (signingConfigs.releaseConfig != null) {
+                signingConfig signingConfigs.releaseConfig
+            }
+            //设置压缩对齐
+            zipAlignEnabled true
+            //移除无用的资源文件
+            shrinkResources false
+            //设置是否混淆
+            minifyEnabled false
+            //设置混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             //如果签名配置不为空 则设置签名信息
             if (signingConfigs.releaseConfig != null) {
@@ -75,21 +88,7 @@ android {
                     }
                 }
             }
-            buildConfigField "Boolean", "IS_DEBUG", 'true'
-        }
-
-        debug {
-            if (signingConfigs.releaseConfig != null) {
-                signingConfig signingConfigs.releaseConfig
-            }
-            //设置压缩对齐
-            zipAlignEnabled true
-            //移除无用的资源文件
-            shrinkResources false
-            //设置是否混淆
-            minifyEnabled false
-            //设置混淆配置文件
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "Boolean", "IS_DEBUG", 'false'
         }
     }
 
