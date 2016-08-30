@@ -26,8 +26,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -89,7 +91,9 @@ public class TipViewController{
     }
 
     public void show(Result result,boolean isShowFavoriteButton,TipView.IOperateTipView mListener) {
-        if(Utils.isSDKHigh5()){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean isSettingUseSystemNotification = sharedPreferences.getBoolean("preference_show_float_view_use_system",false);
+        if(Utils.isSDKHigh5() && isSettingUseSystemNotification){
             StringBuilder sb = new StringBuilder();
             for(String string:result.getExplains()){
                 sb.append(string).append("\n");

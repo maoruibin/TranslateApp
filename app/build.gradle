@@ -174,5 +174,7 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.android.support:support-v4:23.3.0'
 
-    compile 'com.github.RikkaW:MaterialPreference:v1.2'
+    compile 'moe.feng:AlipayZeroSdk:1.0.1'
+
+    compile 'com.jenzz:materialpreference:1.3'
 }

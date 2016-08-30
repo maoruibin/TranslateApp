@@ -54,7 +54,7 @@ public class SpUtils {
     private static final String KEY_RECITE_OPEN = "RECITE_OPEN_OR_NOT";
 
     //is open JIT translate or not
-    private static final String KEY_OPEN_JIT = "RECITE_OPEN_JIT";
+    private static final String KEY_OPEN_JIT = "preference_recite_open_jit";
 
     //App 是否在前台
     private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";

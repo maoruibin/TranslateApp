@@ -34,6 +34,7 @@
         app:showAsAction="never"
         android:title="@string/open_jit_or_nor"
         android:checked="true"
+        android:visible="false"
         android:checkable="true"/>
 
     <item
@@ -72,6 +73,7 @@
     <item
         android:id="@+id/menu_duration_tip_time"
         app:showAsAction="never"
+        android:visible="false"
         android:title="@string/tip_time_duration">
         <menu>
             <group
@@ -98,6 +100,11 @@
         android:id="@+id/menu_score"
         app:showAsAction="never"
         android:title="@string/menu_score"/>
+    <item
+        android:id="@+id/menu_setting"
+        app:showAsAction="never"
+        android:title="@string/menu_setting"/>
+
     <item
         android:id="@+id/menu_about"
         app:showAsAction="never"

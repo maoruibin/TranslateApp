@@ -4,6 +4,7 @@
 
     <string name="favorite_list">单词本</string>
     <string name="menu_about">关于</string>
+    <string name="menu_setting">设置</string>
     <string name="menu_score">去评分</string>
     <string name="menu_support">支持作者</string>
 
@@ -95,5 +96,6 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="copy_success">复制成功</string>
     <string name="support_fail">打开支付宝失败</string>
+    <string name="support_fail_because_not_install">检测到您尚未安装支付宝，所以打赏失败，再次感谢你的支持。</string>
 
 </resources>

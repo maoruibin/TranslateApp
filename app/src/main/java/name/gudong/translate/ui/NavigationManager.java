@@ -8,6 +8,8 @@ import android.net.Uri;
 
 import java.util.List;
 
+import name.gudong.translate.ui.activitys.SettingActivity;
+
 /**
  * Created by GuDong on 3/9/16 14:01.
  * Contact with gudong.name@gmail.com.
@@ -21,6 +23,11 @@ public class NavigationManager {
         if (infos == null || infos.size() <= 0){
             return;
         }
+        context.startActivity(intent);
+    }
+
+    public static void gotoSetting(Context context){
+        Intent intent = new Intent(context, SettingActivity.class);
         context.startActivity(intent);
     }
 }

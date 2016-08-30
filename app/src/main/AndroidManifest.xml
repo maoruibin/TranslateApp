@@ -59,7 +59,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="name.gudong.translate.ui.activitys.WordsBookActivity"></activity>
+        <activity android:name="name.gudong.translate.ui.activitys.WordsBookActivity" />
+        <activity android:name="name.gudong.translate.ui.activitys.SettingActivity"></activity>
     </application>
 
 </manifest>

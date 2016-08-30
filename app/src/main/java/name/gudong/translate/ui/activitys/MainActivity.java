@@ -188,6 +188,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 MobclickAgent.onEvent(this,"menu_about");
                 closeKeyboard();
                 break;
+            case R.id.menu_setting:
+                MobclickAgent.onEvent(this,"menu_setting");
+                closeKeyboard();
+                NavigationManager.gotoSetting(this);
+                break;
             case R.id.menu_score:
                 mPresenter.gotoMarket();
                 MobclickAgent.onEvent(this,"menu_score");
