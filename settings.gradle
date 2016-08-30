@@ -1,1 +1,1 @@
-include ':app', ':MaterialPreference'
+include ':app'

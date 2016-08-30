@@ -173,4 +173,6 @@ dependencies {
     compile "com.android.support:preference-v7:${libs.supportVersion}"
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.android.support:support-v4:23.3.0'
+
+    compile 'com.github.RikkaW:MaterialPreference:v1.2'
 }
