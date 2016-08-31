@@ -2,32 +2,25 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="通用">
-
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_recite_open_jit"
             android:title="@string/open_jit_or_nor"
-            android:defaultValue="true"
-            android:summaryOn="开启"
-            android:summaryOff="关闭"
-            />
-
+            android:defaultValue="true"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
-
     <com.jenzz.materialpreference.PreferenceCategory android:title="浮动提示">
-
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_show_icon_in_notification"
+            android:title="通知栏图标"
+            android:summary="开启后，通知栏将会常驻图标，方便快速打开 App。"
+            android:defaultValue="false" />
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_show_float_view_use_system"
             android:title="Android 5.0 设备使用系统通知显示结果"
-            android:defaultValue="false"
-            android:summaryOn="开启"
-            android:summaryOff="关闭"
-            />
-
-
+            android:summary="开启后，在 5.0 设备上以系统中会以系统通知的方式显示翻译结果。"
+            android:defaultValue="false"/>
         <com.jenzz.materialpreference.Preference
             android:key="preference_show_time"
-            android:title="@string/tip_time_duration"
-            />
+            android:title="@string/tip_time_duration" />
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>

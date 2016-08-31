@@ -20,14 +20,7 @@
 
 package name.gudong.translate.mvp.presenters;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
 import com.litesuits.orm.LiteOrm;
@@ -44,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import me.gudong.translate.BuildConfig;
-import me.gudong.translate.R;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.DownloadService;
@@ -53,7 +45,6 @@ import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.views.IClipboardService;
-import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.StringUtils;
 import name.gudong.translate.util.Utils;
@@ -114,7 +105,9 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
     public void onCreate(){
         super.onCreate();
         initCountdownSetting();
-        showNormalNotification(getContext());
+        if(SpUtils.isShowIconInNotification(getContext())){
+            Utils.showNormalNotification(getContext());
+        }
     }
 
     private void initCountdownSetting(){
@@ -123,36 +116,6 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
             if(result == null)return;
             mView.showResult(getResult(),false);
         };
-    }
-
-    private void showNormalNotification(Context context) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle(context.getString(R.string.app_name));
-        builder.setContentText("点击打开咕咚翻译");
-        if(Utils.isSDKHigh5()){
-            builder.setSmallIcon(R.drawable.icon_notification);
-            builder.setColor(Color.rgb(121,85,72));
-        }else{
-            builder.setSmallIcon(R.mipmap.ic_launcher);
-        }
-        builder.setPriority(NotificationCompat.PRIORITY_MIN);
-        builder.setOngoing(true);
-
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setClass(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
-        PendingIntent contextIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        builder.setContentIntent(contextIntent);
-
-        long[] vibrate = {0, 50, 0, 0};
-        builder.setVibrate(vibrate);
-
-        Notification notification = builder.build();
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        int NOTIFY_ID = 524947901;
-        mNotificationManager.notify(NOTIFY_ID, notification);
     }
 
     /**

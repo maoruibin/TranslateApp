@@ -14,6 +14,7 @@ import com.umeng.analytics.MobclickAgent;
 import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.util.SpUtils;
+import name.gudong.translate.util.Utils;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -46,8 +47,10 @@ public class SettingActivity extends AppCompatActivity {
     }
 
 
-    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+
+    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
         private com.jenzz.materialpreference.Preference mDurationPreference;
+        private com.jenzz.materialpreference.SwitchPreference mShowIconInNotification;
         @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs);
@@ -57,9 +60,14 @@ public class SettingActivity extends AppCompatActivity {
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             mDurationPreference = (com.jenzz.materialpreference.Preference) findPreference("preference_show_time");
+            mShowIconInNotification = (com.jenzz.materialpreference.SwitchPreference) findPreference("preference_show_icon_in_notification");
             EDurationTipTime durationTime = SpUtils.getDurationTimeWay(getActivity());
             mDurationPreference.setSummary(getArrayValue(R.array.tip_time,durationTime.getIndex()));
             mDurationPreference.setOnPreferenceClickListener(this);
+
+            mShowIconInNotification.setOnPreferenceChangeListener(this);
+
+            findPreference("preference_show_float_view_use_system").setEnabled(Utils.isSDKHigh5());
         }
 
         @Override
@@ -102,6 +110,16 @@ public class SettingActivity extends AppCompatActivity {
 
         private void selectDurationTime(String name) {
             SpUtils.setDurationTipTime(getActivity(), name);
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            if((Boolean) newValue){
+                Utils.showNormalNotification(getActivity());
+            }else{
+                Utils.cancelNotification(getActivity());
+            }
+            return true;
         }
     }
 

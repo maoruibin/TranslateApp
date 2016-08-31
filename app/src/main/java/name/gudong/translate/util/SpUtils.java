@@ -56,6 +56,9 @@ public class SpUtils {
     //is open JIT translate or not
     private static final String KEY_OPEN_JIT = "preference_recite_open_jit";
 
+    //is open JIT translate or not
+    private static final String KEY_PREFERENCE_SHOW_ICON_IN_NOTIFICATION = "preference_show_icon_in_notification";
+
     //App 是否在前台
     private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";
 
@@ -112,6 +115,10 @@ public class SpUtils {
     //是否开启划词翻译
     public static void setOpenJITOrNot(Context context,boolean isOpen){
         putBooleanPreference(context,KEY_OPEN_JIT,isOpen);
+    }
+
+    public static boolean isShowIconInNotification(Context context){
+        return getBooleanPreference(context,KEY_PREFERENCE_SHOW_ICON_IN_NOTIFICATION,false);
     }
 
     public static boolean getOpenJITOrNot(Context context){
