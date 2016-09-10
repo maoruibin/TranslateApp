@@ -131,44 +131,26 @@ public class BasePresenter<V extends IBaseView> {
     public void playSound(Result entity) {
         Observable.just(entity)
                 .filter(result->{
-                    return result != null;
+                    return result != null && !TextUtils.isEmpty(entity.getMp3FileName());
                 })
-                .map(result3 -> {
-                    return result3.getEnMp3();
-                })
-                .filter(s -> {
-                    if(!TextUtils.isEmpty(s) && s.startsWith(DownloadService.KEY_URL)){
-                        Logger.i("格式符合条件 "+s);
-                        return true;
-                    }
-                    Logger.e("格式不符合条件 "+s);
-                    return false;
-                })
-                .map(s1 -> {
-                    return s1.replace(DownloadService.KEY_URL + "resource/amp3/", "");
-                })
-                .map(s2 -> {
-                    return s2.split("/");
-                })
-                .filter(strings -> {
-                    return strings.length == 5;
-                })
-                .subscribe(new Action1<String[]>() {
+                .subscribe(new Action1<Result>() {
                     @Override
-                    public void call(String[] param) {
-                        File cacheFile = mFileManager.getCacheFileByUrl(getContext(), entity.getEnMp3());
+                    public void call(Result entity) {
+                        String fileName = entity.getMp3FileName();
+                        String mp3Url = entity.getEnMp3();
+                        File cacheFile = mFileManager.getCacheFileByUrl(getContext(), fileName);
                         if (cacheFile != null && cacheFile.exists()) {
                             playSound(cacheFile);
                             return;
                         }
 
-                        Call<ResponseBody> call = mDownloadService.downloadFileWithDynamicUrlSync(param[0], param[1], param[2], param[3], param[4]);
+                        Call<ResponseBody> call = mDownloadService.downloadSoundFile(mp3Url);
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
                                 if (response.isSuccess()) {
                                     try {
-                                        cacheAndPlaySound(getContext(), entity.getEnMp3(), response.body().bytes());
+                                        cacheAndPlaySound(getContext(), fileName, response.body().bytes());
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -185,8 +167,8 @@ public class BasePresenter<V extends IBaseView> {
                 });
     }
 
-    private void cacheAndPlaySound(Context context, String url, byte[] data) {
-        makeObservable(cacheFileObservable(context, url, data))
+    private void cacheAndPlaySound(Context context, String fileName, byte[] data) {
+        makeObservable(cacheFileObservable(context, fileName, data))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<File>() {
                     @Override
@@ -197,6 +179,7 @@ public class BasePresenter<V extends IBaseView> {
     }
 
     private void playSound(File file) {
+        if(file == null)return;
         Uri myUri = Uri.fromFile(file);
         Logger.i("播放 "+file.getAbsolutePath());
         MediaPlayer mediaPlayer = new MediaPlayer();
@@ -210,11 +193,11 @@ public class BasePresenter<V extends IBaseView> {
         mediaPlayer.start();
     }
 
-    private Callable<File> cacheFileObservable(Context context, String url, byte[] data) {
+    private Callable<File> cacheFileObservable(Context context, String fileName, byte[] data) {
         return new Callable<File>() {
             @Override
             public File call() throws Exception {
-                return mFileManager.cacheFileOnDisk(context, url, data);
+                return mFileManager.cacheFileOnDisk(context, fileName, data);
             }
         };
     }

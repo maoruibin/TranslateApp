@@ -37,7 +37,7 @@ android {
         buildConfigField "String", "YOUDAO_KEY", '"1235023502"'
         buildConfigField "String", "YOUDAO_TYPE", '"data"'
         buildConfigField "String", "YOUDAO_DOC_TYPE", '"json"'
-        buildConfigField "String", "YOUDAO_VERSION", '"1.1"'
+        buildConfigField "String", "YOUDAO_VERSION", '"1.2"'
 
         //common value
         buildConfigField "String", "RESULT_JSON", '"json"'

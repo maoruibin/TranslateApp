@@ -93,4 +93,9 @@ public interface IResult {
      */
     String wrapPhAm();
 
+    /**
+     * mp3 本地存储文件名称
+     * @return
+     */
+    String wrapMp3Name();
 }

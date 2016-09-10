@@ -20,8 +20,6 @@
 
 package name.gudong.translate.mvp.model.entity;
 
-import com.orhanobut.logger.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class BaiDuResult extends AbsResult{
 
     @Override
     public List<String> wrapTranslation() {
-        return null;
+        return wrapExplains();
     }
 
     @Override
@@ -131,6 +129,11 @@ public class BaiDuResult extends AbsResult{
 
     @Override
     public String wrapPhAm() {
+        return null;
+    }
+
+    @Override
+    public String wrapMp3Name() {
         return null;
     }
 

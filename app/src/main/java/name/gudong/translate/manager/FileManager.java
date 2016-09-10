@@ -19,16 +19,15 @@ public class FileManager {
 
     private static final String KEY_CACHE_DIRECTORY = "CACHE_DIRECTORY";
 
-    public File cacheFileOnDisk(Context context,String url,byte[]data){
+    public File cacheFileOnDisk(Context context,String fileName,byte[]data){
         File cacheParent = checkCacheParentDirectory(context);
         if(cacheParent!=null){
-            return saveFile(cacheParent,url,data);
+            return saveFile(cacheParent,fileName,data);
         }
         return null;
     }
 
-    public File saveFile(File parent,String url,byte[]data){
-        String fileName = getFileName(url);
+    public File saveFile(File parent,String fileName,byte[]data){
         if(!TextUtils.isEmpty(fileName)){
             File file = new File(parent,fileName);
             saveBytesToFile(data,file);
@@ -52,11 +51,10 @@ public class FileManager {
     /**
      * gee CacheFile by url
      * @param context Context
-     * @param url map url address
+     * @param fileName
      * @return cache file
      */
-    public File getCacheFileByUrl(Context context, String url){
-        String fileName = getFileName(url);
+    public File getCacheFileByUrl(Context context, String fileName){
         File cacheParent = checkCacheParentDirectory(context);
         if(!TextUtils.isEmpty(fileName) && cacheParent!=null && cacheParent.isDirectory()){
             return new File(cacheParent,fileName);
@@ -64,17 +62,7 @@ public class FileManager {
         return null;
     }
 
-    private String getFileName(String url){
-        String[]temp = url.split("/");
-        String fileName = "";
-        if(temp.length != 0){
-            fileName = temp[temp.length-1];
-        }
-        if(!TextUtils.isEmpty(fileName) && fileName.endsWith(".mp3")){
-            return fileName;
-        }
-        return null;
-    }
+
 
     public boolean resetFileCache(Context context){
         File cacheFileDir = new File(context.getCacheDir(),KEY_CACHE_DIRECTORY);

@@ -20,6 +20,8 @@
 
 package name.gudong.translate.mvp.model.entity;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -400,5 +402,22 @@ public class JinShanResult  extends AbsResult{
                     }
                 });
         return phAm[0];
+    }
+
+    @Override
+    public String wrapMp3Name() {
+        return getFileName(wrapEnMp3());
+    }
+
+    private String getFileName(String url){
+        String[]temp = url.split("/");
+        String fileName = "";
+        if(temp.length != 0){
+            fileName = temp[temp.length-1];
+        }
+        if(!TextUtils.isEmpty(fileName) && fileName.endsWith(".mp3")){
+            return fileName;
+        }
+        return null;
     }
 }

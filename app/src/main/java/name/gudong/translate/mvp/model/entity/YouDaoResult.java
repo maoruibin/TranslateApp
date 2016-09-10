@@ -77,12 +77,12 @@ public class YouDaoResult extends AbsResult{
 
     @Override
     public String wrapEnMp3() {
-        return "";
+        return getBasic().getUkSpeech();
     }
 
     @Override
     public String wrapAmMp3() {
-        return "";
+        return getBasic().getUsSpeech();
     }
 
     @Override
@@ -102,9 +102,19 @@ public class YouDaoResult extends AbsResult{
         return getBasic().getUsPhonetic();
     }
 
+    @Override
+    public String wrapMp3Name() {
+        return "youdao_"+query+".mp3";
+    }
+
     public class BasicEntity {
         @SerializedName("us-phonetic")
         private String usPhonetic;
+        @SerializedName("uk-speech")
+        private String ukSpeech;
+        @SerializedName("us-speech")
+        private String usSpeech;
+        private String speech;
         private String phonetic;
         @SerializedName("uk-phonetic")
         private String ukPhonetic;
@@ -140,6 +150,30 @@ public class YouDaoResult extends AbsResult{
 
         public void setUsPhonetic(String usPhonetic) {
             this.usPhonetic = usPhonetic;
+        }
+
+        public String getSpeech() {
+            return speech;
+        }
+
+        public void setSpeech(String speech) {
+            this.speech = speech;
+        }
+
+        public String getUkSpeech() {
+            return ukSpeech;
+        }
+
+        public void setUkSpeech(String ukSpeech) {
+            this.ukSpeech = ukSpeech;
+        }
+
+        public String getUsSpeech() {
+            return usSpeech;
+        }
+
+        public void setUsSpeech(String usSpeech) {
+            this.usSpeech = usSpeech;
         }
     }
 

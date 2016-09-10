@@ -45,6 +45,8 @@ public class Result implements Serializable{
     public static final String COL_TRANSLATE_FROM= "translate_from";
     public static final String COL_PH_EN =  "ph_en";
     public static final String COL_PH_AM= "ph_am";
+    //update 2016/09/10
+    public static final String COL_MP3_FILE_NAME= "mp3_file_name";
 
 
     @PrimaryKey(AssignType.AUTO_INCREMENT)
@@ -72,6 +74,8 @@ public class Result implements Serializable{
     @Column(COL_PH_AM)
     protected String phAm;
 
+    protected String mp3FileName;
+
     public Result() {
     }
 
@@ -86,6 +90,7 @@ public class Result implements Serializable{
         translateFrom = mIResult.translateFrom();
         phAm = mIResult.wrapPhAm();
         phEn = mIResult.wrapPhEn();
+        mp3FileName = mIResult.wrapMp3Name();
     }
 
     public String getAmMp3() {
@@ -166,5 +171,13 @@ public class Result implements Serializable{
 
     public void setPhEn(String phEn) {
         this.phEn = phEn;
+    }
+
+    public String getMp3FileName() {
+        return mp3FileName;
+    }
+
+    public void setMp3FileName(String mp3FileName) {
+        this.mp3FileName = mp3FileName;
     }
 }

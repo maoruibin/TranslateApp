@@ -63,7 +63,7 @@ public class ApiServiceModel {
     @Singleton
     DownloadService provideDownloadService(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(DownloadService.KEY_URL)
+                .baseUrl("http://fanyi.youdao.com/")
                 .build();
         return retrofit.create(DownloadService.class);
     }
