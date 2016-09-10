@@ -115,6 +115,9 @@ android {
         play {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
         }
+        coolapk {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "coolapk"]
+        }
     }
 
     compileOptions {
