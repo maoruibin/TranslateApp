@@ -59,7 +59,7 @@ public class GDApplication extends Application {
         if(isDebug){
             Logger.init("gdt").hideThreadInfo().setMethodCount(1);
         }else{
-            Logger.init("gdt").hideThreadInfo().setMethodCount(1).setLogLevel(LogLevel.FULL);
+            Logger.init("gdt").hideThreadInfo().setMethodCount(1).setLogLevel(LogLevel.NONE);
         }
     }
 

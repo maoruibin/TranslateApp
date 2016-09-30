@@ -38,7 +38,7 @@
             android:layout_marginLeft="@dimen/normal_margin"
             android:layout_toLeftOf="@+id/iv_sound"
             android:clickable="true"
-            android:src="@drawable/ic_favorite_border_grey_24dp"/>
+            android:src="@drawable/ic_favorite_border_white_24dp"/>
 
 
         <ImageView
@@ -50,7 +50,7 @@
             android:clickable="true"
             android:visibility="gone"
             tools:visibility="visible"
-            android:src="@drawable/ic_volume_up_grey_24dp"/>
+            android:src="@drawable/ic_volume_up_white_24dp"/>
 
         <View
             android:id="@+id/view_gd"

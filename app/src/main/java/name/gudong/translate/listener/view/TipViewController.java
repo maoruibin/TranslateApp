@@ -156,7 +156,7 @@ public class TipViewController{
     public void setWithNotFavorite(Result result){
         TipView tipView = mMapTipView.get(result);
         if(tipView != null){
-            tipView.setFavoriteBackground(R.drawable.ic_favorite_border_grey_24dp);
+            tipView.setFavoriteBackground(R.drawable.ic_favorite_border_white_24dp);
         }
     }
 

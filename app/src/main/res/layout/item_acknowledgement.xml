@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/ff.padding.large"
+    android:background="?attr/selectableItemBackground"
+    >
+
+    <ImageView
+        android:id="@+id/image_view_icon"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginRight="@dimen/gd.margin.normal"
+        android:layout_marginEnd="@dimen/gd.margin.normal"
+        />
+
+    <!-- Placeholder only for layout preview-->
+    <name.gudong.translate.widget.CharacterView
+        xmlns:characterView="http://schemas.android.com/apk/res-auto"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        characterView:character="App"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <TextView
+        android:id="@+id/text_view_license"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:paddingLeft="12dp"
+        android:paddingRight="@dimen/ff.padding.normal"
+        android:paddingTop="@dimen/ff.padding.small"
+        android:paddingBottom="@dimen/ff.padding.small"
+        android:background="@drawable/bg_license"
+        android:textColor="@color/selector_license_text_color"
+        android:textSize="12sp"
+        tools:text="Apache 2.0"
+        tools:ignore="RtlHardcoded"/>
+
+    <TextView
+        android:id="@+id/text_view_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/ff.margin.small"
+        android:layout_toLeftOf="@+id/text_view_license"
+        android:layout_toStartOf="@+id/text_view_license"
+        android:layout_toRightOf="@+id/image_view_icon"
+        android:layout_toEndOf="@+id/image_view_icon"
+        android:textColor="@color/ff.textColor.title"
+        android:textSize="@dimen/ff.textSize.title"
+        android:singleLine="true"
+        tools:text="Open Source Project"
+        />
+
+    <TextView
+        android:id="@+id/text_view_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/image_view_icon"
+        android:layout_toEndOf="@+id/image_view_icon"
+        android:layout_below="@+id/text_view_name"
+        android:textColor="@color/ff.textColor.text"
+        android:textSize="@dimen/ff.textSize.text"
+        tools:text="This is a really nice project which gives you some great features to..."
+        />
+
+</RelativeLayout>

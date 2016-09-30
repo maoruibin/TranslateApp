@@ -19,4 +19,10 @@
 
     <color name="shadow_blackcolor">#88000000</color>
 
+    <color name="ff.textColor.title">#666666</color>
+    <color name="ff.textColor.text">#727272</color>
+    <color name="ff.textColor.tips">#4A4A4A</color>
+
+    <color name="ff.white">#ffffff</color>
+    <color name="ff.divider">#7AB6B6B6</color>
 </resources>
