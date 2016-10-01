@@ -10,7 +10,7 @@
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_use_recite_or_not"
             android:title="@string/use_recite_or_nor"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="浮动提示">

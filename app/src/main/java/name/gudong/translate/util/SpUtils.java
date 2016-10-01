@@ -105,7 +105,7 @@ public class SpUtils {
 
     //是否开启背单词
     public static boolean getReciteOpenOrNot(Context context){
-        return getBooleanPreference(context,KEY_RECITE_OPEN,false);
+        return getBooleanPreference(context,KEY_RECITE_OPEN,true);
     }
 
     //是否开启划词翻译

@@ -130,6 +130,8 @@ public class SettingActivity extends AppCompatActivity {
                                 .setPositiveButton("知道了", ((dialog, which) -> Once.markDone(KEY_TIP_OF_RECITE)))
                                 .show();
                     }
+                    //多进程信息同步有问题 使用 RxBus 解决
+//                    RxBus.getInstance().send(new ReciteSwitchEvent((Boolean) newValue));
                     startListenService();
                     break;
                 case "preference_show_icon_in_notification":

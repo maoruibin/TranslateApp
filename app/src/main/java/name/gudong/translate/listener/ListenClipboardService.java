@@ -28,6 +28,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;
@@ -35,11 +36,16 @@ import javax.inject.Inject;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.view.TipView;
 import name.gudong.translate.listener.view.TipViewController;
+import name.gudong.translate.manager.ReciteSwitchEvent;
+import name.gudong.translate.manager.RxBus;
 import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;
 import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.reject.components.DaggerServiceComponent;
 import name.gudong.translate.reject.modules.ServiceModule;
+import name.gudong.translate.util.SpUtils;
+import rx.functions.Action1;
 
 
 public final class ListenClipboardService extends Service implements IClipboardService, TipView.IOperateTipView {
@@ -55,6 +61,24 @@ public final class ListenClipboardService extends Service implements IClipboardS
         addListener();
         attachView();
         mPresenter.onCreate();
+        RxBus.getInstance().toObservable().subscribe(new Action1() {
+            @Override
+            public void call(Object o) {
+                if(o instanceof ReciteSwitchEvent){
+                    ReciteSwitchEvent msg = (ReciteSwitchEvent) o;
+                    if(msg.getData()){
+                        Logger.i("====","开启背单词");
+                        EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
+                        int time = tipTime.getIntervalTime();
+                        //设置定时显示任务
+                        mPresenter.openTipCyclic(time);
+                    }else {
+                        Logger.i("====","移除背单词");
+                        mPresenter.removeTipCyclic();
+                    }
+                }
+            }
+        });
     }
 
     private void attachView() {
@@ -80,8 +104,17 @@ public final class ListenClipboardService extends Service implements IClipboardS
                 BootCompletedReceiver.completeWakefulIntent(intent);
             }
         }
-        //设置定时显示任务
-        mPresenter.controlShowTipCyclic();
+        boolean isOpen = SpUtils.getReciteOpenOrNot(this);
+        if(isOpen){
+            Logger.i("====","开启背单词");
+            EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
+            int time = tipTime.getIntervalTime();
+            //设置定时显示任务
+            mPresenter.openTipCyclic(time);
+        }else {
+            Logger.i("====","移除背单词");
+            mPresenter.removeTipCyclic();
+        }
         return START_STICKY;
     }
 

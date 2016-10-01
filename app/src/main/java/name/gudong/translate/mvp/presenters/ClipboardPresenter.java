@@ -37,13 +37,11 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import me.gudong.translate.BuildConfig;
-import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.entity.Result;
-import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.StringUtils;
@@ -119,34 +117,24 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
     }
 
     /**
-     * 根据用户设置 循环显示生词本中的内容 逻辑写的稍负责
+     * 开启背单词
+     * @param interval 时间间隙 单位 分钟
      */
-    public void controlShowTipCyclic(){
-        EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
-        int time = tipTime.getIntervalTime();
-
-        boolean reciteFlag = SpUtils.getReciteOpenOrNot(mService);
-        Logger.i(KEY_TAG,"用户设置开启背单词 or not time is "+time+" reciteFlag is "+reciteFlag);
-        //用户设置了开启背单词 或者 时间隔时间变化了 下面的判断代码写的有点复杂
-        //但是这是错了好多次，试出来可以成功运行的代码，尼玛，多条件动态配置选项死去活来啊 ~
-        if((mSubscription == null && reciteFlag) || (mSubscription != null && reciteFlag && !mSubscription.isUnsubscribed())){
-            if(mSubscription != null && !mSubscription.isUnsubscribed()){
-                mSubscription.unsubscribe();
-            }
-            Logger.i(KEY_TAG,"用户设置了开启背单词 此时实例化 mSubscription 也可能是时间间隔值变化了 time is "+time);
-//            mSubscription = Observable.interval(time, TimeUnit.MINUTES)
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(mActionShowTip);
-            mSubscription = Observable.interval(20, TimeUnit.SECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(mActionShowTip);
+    public void openTipCyclic(long interval){
+        if(mSubscription != null && !mSubscription.isUnsubscribed()){
+            mSubscription.unsubscribe();
         }
 
-        //外界关闭 背单词 功能 并设置 mSubscription null
-        if(mSubscription != null && !reciteFlag && !mSubscription.isUnsubscribed()){
+        mSubscription = Observable.interval(interval, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mActionShowTip);
+    }
+
+    public void removeTipCyclic(){
+        if(mSubscription != null && !mSubscription.isUnsubscribed()){
             mSubscription.unsubscribe();
             mSubscription = null;
-            Logger.i(KEY_TAG,"用户关闭背单词");
+            Logger.i(KEY_TAG,"移除背单词服务");
         }
     }
 
