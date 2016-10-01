@@ -49,7 +49,6 @@ public final class ListenClipboardService extends Service implements IClipboardS
     @Inject
     TipViewController mTipViewController;
 
-
     @Override
     public void onCreate() {
         setUpInject();

@@ -11,7 +11,9 @@ import android.view.View;
 
 import com.umeng.analytics.MobclickAgent;
 
+import jonathanfinerty.once.Once;
 import me.gudong.translate.R;
+import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
@@ -49,11 +51,15 @@ public class SettingActivity extends AppCompatActivity {
 
 
     public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+        private static final String KEY_TIP_OF_RECITE = "TIP_OF_RECITE";
+
         private com.jenzz.materialpreference.Preference mDurationPreference;
         private com.jenzz.materialpreference.SwitchPreference mShowIconInNotification;
         @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs);
+            // 第一次点击单词本开关需要给用户一个功能提示框
+            Once.toDo(KEY_TIP_OF_RECITE);
         }
 
         @Override
@@ -66,6 +72,7 @@ public class SettingActivity extends AppCompatActivity {
             mDurationPreference.setOnPreferenceClickListener(this);
 
             mShowIconInNotification.setOnPreferenceChangeListener(this);
+            findPreference("preference_use_recite_or_not").setOnPreferenceChangeListener(this);
 
             findPreference("preference_show_float_view_use_system").setEnabled(Utils.isSDKHigh5());
         }
@@ -114,13 +121,33 @@ public class SettingActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            if((Boolean) newValue){
-                Utils.showNormalNotification(getActivity());
-            }else{
-                Utils.cancelNotification(getActivity());
+            switch (preference.getKey()){
+                case "preference_use_recite_or_not":
+                    if (Once.needToDo(KEY_TIP_OF_RECITE)) {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("提示")
+                                .setMessage("定时提示生词，是咕咚翻译做的一个帮助用户记住生词的功能。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，不一定那一次就记住了，当然这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
+                                .setPositiveButton("知道了", ((dialog, which) -> Once.markDone(KEY_TIP_OF_RECITE)))
+                                .show();
+                    }
+                    startListenService();
+                    break;
+                case "preference_show_icon_in_notification":
+                    if((Boolean) newValue){
+                        Utils.showNormalNotification(getActivity());
+                    }else{
+                        Utils.cancelNotification(getActivity());
+                    }
+                    break;
             }
+
             return true;
         }
+
+        private void startListenService() {
+            ListenClipboardService.start(getActivity());
+        }
+
     }
 
 }

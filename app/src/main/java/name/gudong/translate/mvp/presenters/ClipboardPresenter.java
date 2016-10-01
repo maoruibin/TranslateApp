@@ -126,6 +126,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
         int time = tipTime.getIntervalTime();
 
         boolean reciteFlag = SpUtils.getReciteOpenOrNot(mService);
+        Logger.i(KEY_TAG,"用户设置开启背单词 or not time is "+time+" reciteFlag is "+reciteFlag);
         //用户设置了开启背单词 或者 时间隔时间变化了 下面的判断代码写的有点复杂
         //但是这是错了好多次，试出来可以成功运行的代码，尼玛，多条件动态配置选项死去活来啊 ~
         if((mSubscription == null && reciteFlag) || (mSubscription != null && reciteFlag && !mSubscription.isUnsubscribed())){
@@ -133,7 +134,10 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
                 mSubscription.unsubscribe();
             }
             Logger.i(KEY_TAG,"用户设置了开启背单词 此时实例化 mSubscription 也可能是时间间隔值变化了 time is "+time);
-            mSubscription = Observable.interval(time, TimeUnit.MINUTES)
+//            mSubscription = Observable.interval(time, TimeUnit.MINUTES)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(mActionShowTip);
+            mSubscription = Observable.interval(20, TimeUnit.SECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mActionShowTip);
         }
@@ -183,7 +187,6 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
      * 添加粘贴板变化监听方法
      */
     public void addListener() {
-        //添加粘贴板变化监听方法
         mClipboardWatcher.addPrimaryClipChangedListener(mListener);
     }
 

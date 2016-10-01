@@ -51,7 +51,7 @@ public class SpUtils {
     //duration of tip
     private static final String KEY_DURATION_TIP_TIME = "DURATION_TIP_TIME";
 
-    private static final String KEY_RECITE_OPEN = "RECITE_OPEN_OR_NOT";
+    private static final String KEY_RECITE_OPEN = "preference_use_recite_or_not";
 
     //is open JIT translate or not
     private static final String KEY_OPEN_JIT = "preference_recite_open_jit";
@@ -104,10 +104,6 @@ public class SpUtils {
     }
 
     //是否开启背单词
-    public static void setReciteOpenOrNot(Context context,boolean isOpen){
-        putBooleanPreference(context,KEY_RECITE_OPEN,isOpen);
-    }
-
     public static boolean getReciteOpenOrNot(Context context){
         return getBooleanPreference(context,KEY_RECITE_OPEN,false);
     }

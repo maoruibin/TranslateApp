@@ -21,7 +21,6 @@
 package name.gudong.translate.ui.activitys;
 
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -48,7 +47,6 @@ import java.net.UnknownHostException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.Result;
@@ -68,7 +66,7 @@ import name.gudong.translate.util.ViewUtil;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements IMainView {
 
-    private static final String KEY_TIP_OF_RECITE = "TIP_OF_RECITE";
+
 
     @Bind(android.R.id.input)
     EditText mInput;
@@ -129,8 +127,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void initConfig() {
-        // 第一次点击单词本开关需要给用户一个功能提示框
-        Once.toDo(KEY_TIP_OF_RECITE);
         mPresenter.clearSoundCache();
     }
 
@@ -139,11 +135,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mPresenter.checkVersionAndShowChangeLog();
 
     }
-
-    private void startListenService() {
-        mPresenter.startListenClipboardService();
-    }
-
     private void checkSomething() {
         //检查粘贴板有没有英文单词 如果有就查询一次 并且显示给用户
         mPresenter.checkClipboard();
@@ -206,21 +197,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 boolean isOpenJit = item.isChecked();
                 SpUtils.setOpenJITOrNot(this, !isOpenJit);
                 break;
-
-            case R.id.menu_use_recite_or_not:
-                if (Once.needToDo(KEY_TIP_OF_RECITE)) {
-                    new AlertDialog.Builder(this)
-                            .setTitle("提示")
-                            .setMessage("定时提示生词，是咕咚翻译做的一个帮助用户记住生词的功能。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，不一定那一次就记住了，当然这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
-                            .setPositiveButton("知道了", ((dialog, which) -> Once.markDone(KEY_TIP_OF_RECITE)))
-                            .show();
-                }
-                boolean isCheck = item.isChecked();
-                SpUtils.setReciteOpenOrNot(this, !isCheck);
-                mMenu.findItem(R.id.menu_interval_tip_time).setVisible(!isCheck);
-                startListenService();
-                break;
-
             case R.id.interval_one_minute:
                 selectIntervalTime(item, EIntervalTipTime.ONE_MINUTE.name());
                 break;
@@ -236,26 +212,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             case R.id.interval_thirty_minute:
                 selectIntervalTime(item, EIntervalTipTime.THIRTY_MINUTE.name());
                 break;
-
-            case R.id.duration_two_second:
-                selectDurationTime(item, EDurationTipTime.ONE_SECOND.name());
-                MobclickAgent.onEvent(this,"menu_duration_time_2");
-                break;
-            case R.id.duration_four_second:
-                selectDurationTime(item, EDurationTipTime.FOUR_SECOND.name());
-                MobclickAgent.onEvent(this,"menu_duration_time_4");
-                break;
-            case R.id.duration_six_second:
-                selectDurationTime(item, EDurationTipTime.SIX_SECOND.name());
-                MobclickAgent.onEvent(this,"menu_duration_time_6");
-                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void selectDurationTime(MenuItem item, String name) {
-        SpUtils.setDurationTipTime(this, name);
-        item.setChecked(true);
     }
 
     private void selectIntervalTime(MenuItem item, String name) {
@@ -528,7 +486,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
         menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
         menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
-        SpUtils.setReciteOpenOrNot(this, false);
+
     }
 
     @Override
@@ -579,6 +537,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mIvSound.setEnabled(true);
         mIvPaste.setEnabled(true);
     }
+
+    private void startListenService() {
+        mPresenter.startListenClipboardService();
+    }
+
 
     private void initSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
