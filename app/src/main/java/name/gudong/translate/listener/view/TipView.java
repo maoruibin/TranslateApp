@@ -8,10 +8,14 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +30,12 @@ import rx.Observable;
  * Contact with gudong.name@gmail.com.
  */
 public class TipView extends LinearLayout {
+    private static final String TAG = "TipView";
     private static final int DURATION_TIME = 300;
 
     private View mContentView;
+    private RelativeLayout mRlInner;
+    private View rootView;
     private TextView mTvSrc;
     private TextView mTvPhonetic;
     private LinearLayout mLlDst;
@@ -36,6 +43,8 @@ public class TipView extends LinearLayout {
     private ImageView mIvFavorite;
     private ImageView mIvSound;
     private TextView mTvPoint;
+
+    Result mResult = null;
 
     private IOperateTipView mListener;
 
@@ -50,6 +59,8 @@ public class TipView extends LinearLayout {
     public TipView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TipView view = (TipView) View.inflate(context, R.layout.pop_view, this);
+        rootView = view;
+        mRlInner = (RelativeLayout) view.findViewById(R.id.rl_pop_inner);
         mTvSrc = (TextView) view.findViewById(R.id.tv_pop_src);
         mTvPoint = (TextView) view.findViewById(R.id.tv_point);
         mTvPhonetic = (TextView) view.findViewById(R.id.tv_pop_phonetic);
@@ -70,6 +81,7 @@ public class TipView extends LinearLayout {
 
     public void setContent(Result result, boolean isShowFavoriteButton) {
         if (result == null) return;
+        mResult = result;
         initView(isShowFavoriteButton,result);
         addListener(result);
 
@@ -91,8 +103,8 @@ public class TipView extends LinearLayout {
         }
     }
 
+    //设置显示动画
     public void startWithAnim() {
-        //设置显示动画
         ObjectAnimator translationAnim = ObjectAnimator.ofFloat(mContentView, "translationY", -700, 0);
         translationAnim.setDuration(DURATION_TIME);
         translationAnim.start();
@@ -157,6 +169,8 @@ public class TipView extends LinearLayout {
          * @param result
          */
         void onInitFavorite(ImageView mIvFavorite, Result result);
+
+        void removeTipView(Result result);
     }
 
     //设置单词名称
@@ -172,5 +186,37 @@ public class TipView extends LinearLayout {
         } else {
             mTvPhonetic.setVisibility(View.GONE);
         }
+    }
+
+    private float lastX;
+    float downX = 0;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                downX = event.getX();
+                Logger.i(TAG,"downX is "+downX);
+                lastX = downX;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float moveX = event.getX();
+                //Logger.i(TAG,"moveX is "+moveX);
+                rootView.offsetLeftAndRight((int) (moveX-lastX));
+                lastX = moveX;
+                break;
+            case MotionEvent.ACTION_UP:
+                float upX = event.getX();
+                Logger.i(TAG,"upX is "+upX+" downX is "+downX+" distance is "+(upX-downX));
+                //就隐藏掉
+                if((upX-downX)>300){
+                    rootView.offsetLeftAndRight(mRlInner.getRight());
+                    mListener.removeTipView(mResult);
+                }else{
+                    rootView.scrollTo(0,0);
+                }
+                break;
+        }
+//        return super.onTouchEvent(event);
+        return true;
     }
 }

@@ -13,15 +13,15 @@
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_use_recite_or_not"
             android:title="@string/use_recite_or_nor"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
         <com.jenzz.materialpreference.Preference
             android:dependency="preference_use_recite_or_not"
             android:key="preference_recite_time"
-            android:title="提示间隔时间"
+            android:title="自动提示间隔时间"
             android:summary="背单词时两次显示的间隔时间"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
-    <com.jenzz.materialpreference.PreferenceCategory android:title="浮动提示">
+    <com.jenzz.materialpreference.PreferenceCategory android:title="高级">
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_show_icon_in_notification"
             android:title="通知栏图标"

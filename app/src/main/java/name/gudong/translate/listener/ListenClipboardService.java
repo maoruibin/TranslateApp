@@ -68,7 +68,6 @@ public final class ListenClipboardService extends Service implements IClipboardS
             public void call(Object o) {
                 if(o instanceof ReciteSwitchEvent){
                     ReciteSwitchEvent msg = (ReciteSwitchEvent) o;
-
                 }
             }
         });
@@ -176,5 +175,10 @@ public final class ListenClipboardService extends Service implements IClipboardS
     @Override
     public void onInitFavorite(ImageView mIvFavorite, Result result) {
         mPresenter.initFavoriteStatus(result);
+    }
+
+    @Override
+    public void removeTipView(Result result) {
+        mTipViewController.removeTipView(result);
     }
 }

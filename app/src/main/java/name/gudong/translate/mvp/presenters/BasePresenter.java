@@ -183,9 +183,9 @@ public class BasePresenter<V extends IBaseView> {
         Uri myUri = Uri.fromFile(file);
         Logger.i("播放 "+file.getAbsolutePath());
         MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
         try {
-            mediaPlayer.setDataSource(mActivity, myUri);
+            mediaPlayer.setDataSource(getContext(), myUri);
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();

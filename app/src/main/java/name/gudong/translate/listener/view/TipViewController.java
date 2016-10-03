@@ -34,6 +34,8 @@ import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
@@ -56,8 +58,7 @@ public class TipViewController{
      */
     private Map<Result,TipView>mMapTipView = new WeakHashMap<>();
 
-    //顶部提示框
-//    private TipView mTipView;
+    private Observable mHideTipTask;
 
     public TipViewController(Context application) {
         mContext = application;
@@ -74,20 +75,26 @@ public class TipViewController{
 
     private void closeTipViewCountdown(final TipView tipView) {
         int duration = SpUtils.getDurationTimeWay(GDApplication.mContext).getDurationTime();
-        Observable.timer(duration, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+        mHideTipTask = Observable.timer(duration, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .map(new Func1<Long, Object>() {
                     @Override
                     public Object call(Long aLong) {
                         tipView.closeWithAnim(new TipView.OnAnimListener() {
                             @Override
                             public void onCloseAnimEnd(Animator animation) {
-                                mWindowManager.removeView(tipView);
+                                removeTipViewInner(tipView);
                             }
                         });
                         return null;
                     }
-                })
-                .subscribe();
+                });
+        mHideTipTask.subscribe();
+    }
+
+    private void removeTipViewInner(TipView tipView){
+        if(tipView.getParent() != null){
+            mWindowManager.removeView(tipView);
+        }
     }
 
     public void show(Result result,boolean isShowFavoriteButton,TipView.IOperateTipView mListener) {
@@ -141,7 +148,6 @@ public class TipViewController{
             mWindowManager.addView(tipView, getPopViewParams());
             tipView.startWithAnim();
             tipView.setContent(result, isShowFavoriteButton);
-            //向 WindowManager 添加浮动窗
             closeTipViewCountdown(tipView);
         }
     }
@@ -182,5 +188,18 @@ public class TipViewController{
         layoutParams.x = 0;
         layoutParams.y = 0;
         return layoutParams;
+    }
+
+    public void removeTipView(Result result) {
+        if(result == null)return;
+        TipView tipView = mMapTipView.get(result);
+        if(tipView != null){
+            Logger.i("移除 tipView ");
+            removeTipViewInner(tipView);
+        }
+        if(mHideTipTask != null){
+            Logger.i("移除 tipView 对应的 倒计时");
+            mHideTipTask.unsubscribeOn(AndroidSchedulers.mainThread());
+        }
     }
 }
