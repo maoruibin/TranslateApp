@@ -81,7 +81,7 @@ public class SpUtils {
     }
 
     public static String getIntervalTipTime(Context context) {
-        return getStringPreference(context, KEY_INTERVAL_TIP_TIME, EIntervalTipTime.FIVE_MINUTE.name());
+        return getStringPreference(context, KEY_INTERVAL_TIP_TIME, EIntervalTipTime.THREE_MINUTE.name());
     }
 
     public static EIntervalTipTime getIntervalTimeWay(Context context) {

@@ -31,6 +31,8 @@ import android.widget.ImageView;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import name.gudong.translate.GDApplication;
@@ -66,16 +68,7 @@ public final class ListenClipboardService extends Service implements IClipboardS
             public void call(Object o) {
                 if(o instanceof ReciteSwitchEvent){
                     ReciteSwitchEvent msg = (ReciteSwitchEvent) o;
-                    if(msg.getData()){
-                        Logger.i("====","开启背单词");
-                        EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
-                        int time = tipTime.getIntervalTime();
-                        //设置定时显示任务
-                        mPresenter.openTipCyclic(time);
-                    }else {
-                        Logger.i("====","移除背单词");
-                        mPresenter.removeTipCyclic();
-                    }
+
                 }
             }
         });
@@ -106,11 +99,13 @@ public final class ListenClipboardService extends Service implements IClipboardS
         }
         boolean isOpen = SpUtils.getReciteOpenOrNot(this);
         if(isOpen){
-            Logger.i("====","开启背单词");
             EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
             int time = tipTime.getIntervalTime();
+            boolean isSecond = tipTime == EIntervalTipTime.THIRTY_SECOND;
+            TimeUnit unit = isSecond? TimeUnit.SECONDS:TimeUnit.MINUTES;
+            Logger.i("====","开启背单词 每 "+time+" "+unit.name()+"显示一次");
             //设置定时显示任务
-            mPresenter.openTipCyclic(time);
+            mPresenter.openTipCyclic(time,unit);
         }else {
             Logger.i("====","移除背单词");
             mPresenter.removeTipCyclic();

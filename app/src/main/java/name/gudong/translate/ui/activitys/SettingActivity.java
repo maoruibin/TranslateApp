@@ -15,6 +15,7 @@ import jonathanfinerty.once.Once;
 import me.gudong.translate.R;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
+import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
 
@@ -75,6 +76,8 @@ public class SettingActivity extends AppCompatActivity {
             findPreference("preference_use_recite_or_not").setOnPreferenceChangeListener(this);
 
             findPreference("preference_show_float_view_use_system").setEnabled(Utils.isSDKHigh5());
+
+            findPreference("preference_recite_time").setOnPreferenceClickListener(this);
         }
 
         @Override
@@ -100,8 +103,52 @@ public class SettingActivity extends AppCompatActivity {
                                             selectDurationTime(EDurationTipTime.SIX_SECOND.name());
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_6");
                                             break;
+                                        case 3:
+                                            selectDurationTime(EDurationTipTime.TEN_SECOND.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_duration_time_10");
+                                            break;
                                     }
                                     preference.setSummary(getArrayValue(resArray,which));
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                    break;
+                case "preference_recite_time":
+                    EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(getActivity());
+                    final int resArrayInterval = R.array.recipe_time;
+                    new AlertDialog.Builder(getActivity())
+                            .setSingleChoiceItems(resArrayInterval,intervalTime.getIndex(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which){
+                                        case 0:
+                                            selectIntervalTipTime(EIntervalTipTime.THIRTY_SECOND.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_interval_time_30_scond");
+                                            break;
+                                        case 1:
+                                            selectIntervalTipTime(EIntervalTipTime.ONE_MINUTE.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_interval_time_1");
+                                            break;
+                                        case 2:
+                                            selectIntervalTipTime(EIntervalTipTime.THREE_MINUTE.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_interval_time_3");
+                                            break;
+                                        case 3:
+                                            selectIntervalTipTime(EIntervalTipTime.FIVE_MINUTE.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_interval_time_5");
+                                            break;
+                                        case 4:
+                                            selectIntervalTipTime(EIntervalTipTime.TEN_MINUTE.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_interval_time_10");
+                                            break;
+                                        case 5:
+                                            selectIntervalTipTime(EIntervalTipTime.THIRTY_MINUTE.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_interval_time_30");
+                                            break;
+
+                                    }
+                                    preference.setSummary(getArrayValue(resArrayInterval,which));
                                     dialog.dismiss();
                                 }
                             })
@@ -117,6 +164,10 @@ public class SettingActivity extends AppCompatActivity {
 
         private void selectDurationTime(String name) {
             SpUtils.setDurationTipTime(getActivity(), name);
+        }
+
+        private void selectIntervalTipTime(String name) {
+            SpUtils.setIntervalTipTime(getActivity(), name);
         }
 
         @Override

@@ -27,7 +27,8 @@ package name.gudong.translate.mvp.model.type;
 public enum EDurationTipTime {
     ONE_SECOND(0,2),
     FOUR_SECOND(1,4),
-    SIX_SECOND(2,6);
+    SIX_SECOND(2,6),
+    TEN_SECOND(3,10);
 
     private int mIndex;
     private int mDurationTime;

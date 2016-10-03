@@ -13,6 +13,7 @@
     <string name="tip_time_interval">提示间隔时间</string>
     <string name="tip_time_duration">提示显示时间</string>
 
+    <string name="interval_thirty_second">半分钟</string>
     <string name="interval_one_minute">1分钟</string>
     <string name="interval_three_minute">3分钟</string>
     <string name="interval_five_minute">5分钟</string>
@@ -22,6 +23,7 @@
     <string name="duration_two_second">2秒钟</string>
     <string name="duration_four_second">4秒钟</string>
     <string name="duration_six_second">6秒钟</string>
+    <string name="duration_ten_second">10秒钟</string>
     <string name="empty_tip">您还没有收藏过任何单词</string>
     <string name="action_clear">清除</string>
     <string name="action_translate">翻译</string>

@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array  name="translate_way">
+    <string-array name="translate_way">
         <item>百度</item>
         <item>有道</item>
         <item>金山</item>
     </string-array>
 
-    <string-array  name="tip_time">
+    <string-array name="recipe_time">
+        <item>@string/interval_thirty_second</item>
+        <item>@string/interval_one_minute</item>
+        <item>@string/interval_three_minute</item>
+        <item>@string/interval_five_minute</item>
+        <item>@string/interval_ten_minute</item>
+        <item>@string/interval_thirty_minute</item>
+    </string-array>
+
+    <string-array name="tip_time">
         <item>@string/duration_two_second</item>
         <item>@string/duration_four_second</item>
         <item>@string/duration_six_second</item>
+        <item>@string/duration_ten_second</item>
     </string-array>
 </resources>

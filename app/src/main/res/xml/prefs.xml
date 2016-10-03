@@ -7,10 +7,18 @@
             android:title="@string/open_jit_or_nor"
             android:defaultValue="true"/>
 
+    </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.PreferenceCategory android:title="背单词">
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_use_recite_or_not"
             android:title="@string/use_recite_or_nor"
             android:defaultValue="true"/>
+        <com.jenzz.materialpreference.Preference
+            android:dependency="preference_use_recite_or_not"
+            android:key="preference_recite_time"
+            android:title="提示间隔时间"
+            android:summary="背单词时两次显示的间隔时间"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="浮动提示">
@@ -26,6 +34,7 @@
             android:defaultValue="false"/>
         <com.jenzz.materialpreference.Preference
             android:key="preference_show_time"
-            android:title="@string/tip_time_duration" />
+            android:title="@string/tip_time_duration"
+            android:summary="提示显示时的停留时长"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>

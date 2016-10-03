@@ -30,7 +30,6 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -82,6 +81,13 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
+    /**
+     * 循环展示单词结果
+     */
+    private List<Result> results;
+
+    private int currentIndex = -1;
+
     private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> performClipboardCheck();
 
     /**
@@ -97,6 +103,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
     @Inject
     public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Service service) {
         super(liteOrm, apiService,downloadService, service);
+        results = mLiteOrm.query(Result.class);
     }
 
     @Override
@@ -110,9 +117,10 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
 
     private void initCountdownSetting(){
         mActionShowTip = (t)->{
+            Logger.i("====","time is out show words");
             Result result = getResult();
             if(result == null)return;
-            mView.showResult(getResult(),false);
+            mView.showResult(result,false);
         };
     }
 
@@ -120,12 +128,12 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
      * 开启背单词
      * @param interval 时间间隙 单位 分钟
      */
-    public void openTipCyclic(long interval){
+    public void openTipCyclic(long interval,TimeUnit unit){
         if(mSubscription != null && !mSubscription.isUnsubscribed()){
             mSubscription.unsubscribe();
         }
 
-        mSubscription = Observable.interval(interval, TimeUnit.SECONDS)
+        mSubscription = Observable.interval(interval,unit)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mActionShowTip);
     }
@@ -139,6 +147,8 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
     }
 
     public void search(final String content) {
+        Logger.i("search 开始查词 "+content);
+
         mWarpApiService.translate(SpUtils.getTranslateEngineWay(mService), content)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -214,7 +224,10 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
         //处理缓存 因为粘贴板的回调操作可能触发多次
         String query = content.toString();
         Logger.i("粘贴板的单词为 "+query);
-        if (listQuery.contains(query)) return;
+        if (listQuery.contains(query)) {
+            Logger.i("is search in "+query);
+            return;
+        }
         listQuery.add(query);
 
         //只有用户在打开了 划词翻译的情况下 划词翻译才能正常工作
@@ -226,7 +239,10 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
         }
 
         // 检查粘贴板的内容是不是单词 以及是不是为空
-        if(!checkInput(content.toString()))return;
+        if(!checkInput(content.toString())){
+            Logger.i("粘贴板为空");
+            return;
+        }
 
         //查询数据
         search(query);
@@ -275,11 +291,24 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
 
 
     private Result getResult(){
-        List<Result> results = mLiteOrm.query(Result.class);
-        if(results.isEmpty()){
+        int index = getResultIndex();
+        Logger.i("index is "+index);
+        if(index>=0){
+            return results.get(index);
+        } else{
             return null;
         }
-        int index = new Random().nextInt(results.size());
-        return results.get(index);
+    }
+
+    private int getResultIndex(){
+        if(results.isEmpty()){
+            return -1;
+        }
+        currentIndex = currentIndex+1;
+        if(currentIndex == results.size()-1){
+            currentIndex = -1;
+            return results.size()-1;
+        }
+        return currentIndex;
     }
 }
