@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.Acknowledgement;
@@ -53,13 +53,13 @@ public class AcknowledgementAdapter extends ListAdapter<Acknowledgement, Acknowl
 
     class AcknowledgementView extends RelativeLayout implements IAdapterView<Acknowledgement> {
 
-        @Bind(R.id.image_view_icon)
+        @BindView(R.id.image_view_icon)
         ImageView imageViewIcon;
-        @Bind(R.id.text_view_name)
+        @BindView(R.id.text_view_name)
         TextView textViewName;
-        @Bind(R.id.text_view_description)
+        @BindView(R.id.text_view_description)
         TextView textViewDescription;
-        @Bind(R.id.text_view_license)
+        @BindView(R.id.text_view_license)
         TextView textViewLicense;
 
         public AcknowledgementView(Context context) {

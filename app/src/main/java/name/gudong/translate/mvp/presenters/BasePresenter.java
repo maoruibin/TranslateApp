@@ -20,6 +20,10 @@
 
 package name.gudong.translate.mvp.presenters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -27,6 +31,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
@@ -166,6 +171,37 @@ public class BasePresenter<V extends IBaseView> {
                     }
                 });
     }
+
+    public void startSoundAnim(View view){
+        addScaleAnim(view,1000,null);
+    }
+
+    public void startFavoriteAnim(View view,AnimationEndListener listener){
+        addScaleAnim(view,500,listener);
+    }
+
+    private void addScaleAnim(View view, long duration, AnimationEndListener listener) {
+        ObjectAnimator animY = ObjectAnimator.ofFloat(view, "scaleY", 1f,0.5f, 1f, 1.2f,1f);
+        ObjectAnimator animX = ObjectAnimator.ofFloat(view, "scaleX", 1f,0.5f, 1f, 1.2f,1f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animX,animY);
+        animatorSet.setDuration(duration);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if(listener != null){
+                    listener.onAnimationEnd(animation);
+                }
+            }
+        });
+        animatorSet.start();
+    }
+
+    public interface AnimationEndListener{
+        void onAnimationEnd(Animator animation);
+    }
+
 
     private void cacheAndPlaySound(Context context, String fileName, byte[] data) {
         makeObservable(cacheFileObservable(context, fileName, data))

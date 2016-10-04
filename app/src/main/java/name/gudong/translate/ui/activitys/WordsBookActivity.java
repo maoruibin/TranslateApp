@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.Result;
@@ -49,10 +49,10 @@ import name.gudong.translate.ui.adapter.WordsListAdapter;
 
 public class WordsBookActivity extends BaseActivity<BookPresenter> implements WordsListAdapter.OnClick, IBookView {
 
-    @Bind(R.id.rv_words_list)
+    @BindView(R.id.rv_words_list)
     RecyclerView mRvWordsList;
 
-    @Bind(R.id.empty_tip_text)
+    @BindView(R.id.empty_tip_text)
     TextView emptyTipText;
 
     private  List<Result> mResult = new ArrayList<>();

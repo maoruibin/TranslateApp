@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.Acknowledgement;
@@ -42,7 +42,7 @@ public class AcknowledgementsActivity extends BaseActivity<AcknowledgementPresen
     private static final String DATA_PATH = "thirdparty/list.json";
     private static final String LICENSE_PATH = "thirdparty/";
 
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
 

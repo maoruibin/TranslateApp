@@ -20,6 +20,7 @@
 
 package name.gudong.translate.ui.activitys;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
@@ -44,7 +45,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.net.UnknownHostException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.gudong.translate.BuildConfig;
@@ -53,6 +54,7 @@ import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
+import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.MainPresenter;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.reject.components.AppComponent;
@@ -68,24 +70,24 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
 
 
-    @Bind(android.R.id.input)
+    @BindView(android.R.id.input)
     EditText mInput;
-    @Bind(R.id.list_result)
+    @BindView(R.id.list_result)
     LinearLayout mList;
-    @Bind(R.id.sp_translate_way)
+    @BindView(R.id.sp_translate_way)
     AppCompatSpinner mSpTranslateWay;
 
-    @Bind(R.id.iv_favorite)
+    @BindView(R.id.iv_favorite)
     ImageView mIvFavorite;
-    @Bind(R.id.iv_sound)
+    @BindView(R.id.iv_sound)
     ImageView mIvSound;
-    @Bind(R.id.iv_paste)
+    @BindView(R.id.iv_paste)
     ImageView mIvPaste;
-    @Bind(R.id.tv_clear)
+    @BindView(R.id.tv_clear)
     TextView mTvClear;
-    @Bind(R.id.rl_action)
+    @BindView(R.id.rl_action)
     RelativeLayout mRlAction;
-    @Bind(R.id.bt_translate)
+    @BindView(R.id.bt_translate)
     Button mBtTranslate;
 
     Menu mMenu;
@@ -445,21 +447,26 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @OnClick(R.id.iv_favorite)
-    public void onClickFavorite(View view) {
+    public void onClickFavorite(final View view) {
         MobclickAgent.onEvent(getApplicationContext(),"favorite_main");
-        Object obj = view.getTag();
-        if (obj != null && obj instanceof Result) {
-            Result entity = (Result) obj;
-            if (isFavorite) {
-                mPresenter.unFavoriteWord(entity);
-                mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                isFavorite = false;
-            } else {
-                mPresenter.favoriteWord(entity);
-                mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
-                isFavorite = true;
+        mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Object obj = view.getTag();
+                if (obj != null && obj instanceof Result) {
+                    Result entity = (Result) obj;
+                    if (isFavorite) {
+                        mPresenter.unFavoriteWord(entity);
+                        mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                        isFavorite = false;
+                    } else {
+                        mPresenter.favoriteWord(entity);
+                        mIvFavorite.setImageResource(R.drawable.ic_favorite_pink_24dp);
+                        isFavorite = true;
+                    }
+                }
             }
-        }
+        });
     }
 
     @OnClick(R.id.iv_paste)
@@ -477,6 +484,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             Result entity = (Result) obj;
             mPresenter.playSound(entity);
         }
+        mPresenter.startSoundAnim(view);
     }
 
     @Override

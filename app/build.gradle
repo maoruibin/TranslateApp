@@ -109,10 +109,10 @@ android {
         coolapk {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "coolapk"]
         }
-        dev21{
+        dev21 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dev21"]
             minSdkVersion cfg.minSdk21
         }
-
     }
 
     compileOptions {
@@ -159,6 +159,7 @@ dependencies {
     provided "org.glassfish:javax.annotation:${libs.javax_annotation}"
     // Square
     compile "com.jakewharton:butterknife:${libs.butterknife}"
+    apt "com.jakewharton:butterknife-compiler:${libs.butterknife}"
     compile "com.squareup.retrofit:retrofit:${libs.retrofit}"
     compile "com.squareup.retrofit:converter-gson:${libs.retrofit}"
     compile "com.squareup.retrofit:adapter-rxjava:${libs.retrofit}"

@@ -15,7 +15,7 @@ ext {
             dagger              : "2.0",
             rxandroid           : "1.0.1",
             retrofit            : "2.0.0-beta2",
-            butterknife         : "7.0.1",
+            butterknife         : "8.4.0",
             recycler_animators  : "2.0.0",
             javax_annotation    : "10.0-b28",
             logger              : "1.4",

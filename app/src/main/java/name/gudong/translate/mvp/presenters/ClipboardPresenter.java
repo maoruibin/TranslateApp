@@ -22,6 +22,7 @@ package name.gudong.translate.mvp.presenters;
 
 import android.app.Service;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.litesuits.orm.LiteOrm;
 import com.orhanobut.logger.Logger;
@@ -197,7 +198,7 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
         }
     }
 
-    public void clickFavorite(Result result){
+    public void clickFavorite(View view,Result result){
         Result localResult= isFavorite(result.getQuery());
         if (localResult!=null) {
             int index = deleteResultFromDb(localResult);

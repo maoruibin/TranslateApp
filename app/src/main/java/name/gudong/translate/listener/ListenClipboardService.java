@@ -20,6 +20,7 @@
 
 package name.gudong.translate.listener;
 
+import android.animation.Animator;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +43,7 @@ import name.gudong.translate.manager.ReciteSwitchEvent;
 import name.gudong.translate.manager.RxBus;
 import name.gudong.translate.mvp.model.entity.Result;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
+import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;
 import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.reject.components.DaggerServiceComponent;
@@ -163,13 +165,19 @@ public final class ListenClipboardService extends Service implements IClipboardS
     @Override
     public void onClickFavorite(View view, Result result) {
         MobclickAgent.onEvent(this, "favorite_service");
-        mPresenter.clickFavorite(result);
+        mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mPresenter.clickFavorite(view,result);
+            }
+        });
     }
 
     @Override
     public void onClickPlaySound(View view, Result result) {
         MobclickAgent.onEvent(this, "sound_service");
         mPresenter.playSound(result);
+        mPresenter.startSoundAnim(view);
     }
 
     @Override
