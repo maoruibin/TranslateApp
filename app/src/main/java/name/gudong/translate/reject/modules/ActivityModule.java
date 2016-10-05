@@ -20,29 +20,36 @@
 
 package name.gudong.translate.reject.modules;
 
-import android.app.Activity;
+import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
+import name.gudong.translate.listener.view.TipViewController;
 import name.gudong.translate.reject.ActivityScope;
 
 @Module
 public class ActivityModule {
-    private Activity mActivity;
+    private Context mContext;
 
-    public ActivityModule(Activity activity) {
-        mActivity = activity;
+    public ActivityModule(Context context) {
+        mContext = context;
     }
 
     @Provides
     @ActivityScope
-    public Activity provideActivity(){
-        return mActivity;
+    public Context provideContext(){
+        return mContext;
     }
 
     @Provides
     public ClipboardManagerCompat provideClipboardManage(){
-        return ClipboardManagerCompat.create(mActivity );
+        return ClipboardManagerCompat.create(mContext);
+    }
+
+    @Provides
+    @ActivityScope
+    public TipViewController provideTipViewControl(){
+        return new TipViewController(mContext);
     }
 }

@@ -21,9 +21,11 @@
 package name.gudong.translate.reject.components;
 
 import dagger.Component;
+import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.reject.ActivityScope;
 import name.gudong.translate.reject.modules.ActivityModule;
 import name.gudong.translate.ui.activitys.MainActivity;
+import name.gudong.translate.ui.activitys.ProcessTextActivity;
 import name.gudong.translate.ui.activitys.WordsBookActivity;
 
 /**
@@ -35,5 +37,7 @@ import name.gudong.translate.ui.activitys.WordsBookActivity;
 public interface ActivityComponent {
     void inject(MainActivity activity);
     void inject(WordsBookActivity activity);
+    void inject(ProcessTextActivity activity);
+    void inject(ListenClipboardService service);
     //void inject(AcknowledgementsActivity activity);
 }

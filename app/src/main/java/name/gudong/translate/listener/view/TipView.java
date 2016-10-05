@@ -46,7 +46,7 @@ public class TipView extends LinearLayout {
 
     Result mResult = null;
 
-    private IOperateTipView mListener;
+    private ITipViewListener mListener;
 
     public TipView(Context context) {
         this(context, null);
@@ -153,11 +153,11 @@ public class TipView extends LinearLayout {
         mIvFavorite.setImageResource(drawableSrc);
     }
 
-    public void setListener(IOperateTipView mListener) {
+    public void setListener(ITipViewListener mListener) {
         this.mListener = mListener;
     }
 
-    public interface IOperateTipView {
+    public interface ITipViewListener {
 
         void onClickFavorite(View view, Result result);
 
@@ -171,6 +171,8 @@ public class TipView extends LinearLayout {
         void onInitFavorite(ImageView mIvFavorite, Result result);
 
         void removeTipView(Result result);
+
+        void onRemove();
     }
 
     //设置单词名称
@@ -208,9 +210,10 @@ public class TipView extends LinearLayout {
                 float upX = event.getX();
                 Logger.i(TAG,"upX is "+upX+" downX is "+downX+" distance is "+(upX-downX));
                 //就隐藏掉
-                if((upX-downX)>300){
+                if((Math.abs(upX-downX))>300){
                     rootView.offsetLeftAndRight(mRlInner.getRight());
                     mListener.removeTipView(mResult);
+                    mListener.onRemove();
                 }else{
                     rootView.scrollTo(0,0);
                 }

@@ -24,8 +24,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -63,32 +61,24 @@ import rx.functions.Action1;
  */
 public class BasePresenter<V extends IBaseView> {
     protected V mView;
-    protected Activity mActivity;
-    protected Service mService;
     protected WarpAipService mWarpApiService;
     protected DownloadService mDownloadService;
     protected LiteOrm mLiteOrm;
+    protected Context mContext;
 
     protected FileManager mFileManager = new FileManager();
 
-    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,Activity activity) {
+    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,Context context) {
         mLiteOrm = liteOrm;
         mWarpApiService = apiService;
-        mActivity = activity;
+        mContext = context;
     }
 
-    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Activity activity) {
+    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,DownloadService downloadService,Context context) {
         mLiteOrm = liteOrm;
         mWarpApiService = apiService;
         mDownloadService = downloadService;
-        mActivity = activity;
-    }
-
-    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,DownloadService downloadService,Service service) {
-        mLiteOrm = liteOrm;
-        mWarpApiService = apiService;
-        mDownloadService = downloadService;
-        mService = service;
+        mContext = context;
     }
 
     public void onCreate(){}
@@ -106,7 +96,7 @@ public class BasePresenter<V extends IBaseView> {
     }
 
     protected Context getContext(){
-        return mActivity == null? mService:mActivity;
+        return mContext;
     }
 
     /**

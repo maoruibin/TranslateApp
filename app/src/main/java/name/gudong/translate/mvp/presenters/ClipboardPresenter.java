@@ -20,18 +20,12 @@
 
 package name.gudong.translate.mvp.presenters;
 
-import android.app.Service;
-import android.text.TextUtils;
-import android.view.View;
+import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
 import com.orhanobut.logger.Logger;
 
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -40,44 +34,21 @@ import me.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.DownloadService;
 import name.gudong.translate.mvp.model.WarpAipService;
-import name.gudong.translate.mvp.model.entity.AbsResult;
 import name.gudong.translate.mvp.model.entity.Result;
-import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.util.SpUtils;
-import name.gudong.translate.util.StringUtils;
 import name.gudong.translate.util.Utils;
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 
 /**
  * Created by GuDong on 2/28/16 20:48.
  * Contact with gudong.name@gmail.com.
  */
-public class ClipboardPresenter extends BasePresenter<IClipboardService> {
+public class ClipboardPresenter extends TipFloatPresenter {
     private static final String KEY_TAG = "clipboard";
-    /**
-     * 首先说明一个情况，这里的系统粘贴板在监听到粘贴板内容发生变化时
-     * 对应的监听方法会被执行多次 也就是说用户的复制操作 会引起这里发送多次数据请求
-     * 这是不合理的，所以设置一个缓存用于解决c重复请求问题
-     */
-
-    /**
-     * 定义一个查询集合，用于缓存当前的查询队列，当队列中存在已经复制的关键字就不会继续去发起查询操作了
-     * 注意要在合适的时候清空它
-     */
-    private List<String> listQuery = new ArrayList<>();
-
-    /**
-     * 记录不同 TipView 原始 Result -> 本地 Result 映射
-     * 当初始化界面时，会拿网络返回的 Result 去做本地查询，看他有没有本地的收藏，如果有，就把他加入这这个 map
-     * 键为原始 Result 值为 本地 Result  可能为空
-     */
-    private Map<Result,Result> mMapResult = new WeakHashMap<>();
 
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
@@ -89,7 +60,13 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
 
     private int currentIndex = -1;
 
-    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> performClipboardCheck();
+    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> {
+        CharSequence content = mClipboardWatcher.getText();
+        if(content != null){
+            performClipboardCheck(content.toString());
+        }
+    };
+
 
     /**
      * 定时显示 Tip 事件源
@@ -102,8 +79,8 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
 
 
     @Inject
-    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Service service) {
-        super(liteOrm, apiService,downloadService, service);
+    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Context context) {
+        super(liteOrm, apiService,downloadService, context);
         results = mLiteOrm.query(Result.class);
     }
 
@@ -147,41 +124,6 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
         }
     }
 
-    public void search(final String content) {
-        Logger.i("search 开始查词 "+content);
-
-        mWarpApiService.translate(SpUtils.getTranslateEngineWay(mService), content)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter((result)->{return result.wrapErrorCode() == 0;})
-                .subscribe(new Subscriber<AbsResult>() {
-                    @Override
-                    public void onCompleted() {
-                        //清空缓存
-                        listQuery.clear();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if(e instanceof SocketTimeoutException){
-                            mView.errorPoint("网络请求超时，请稍后重试。");
-                        }else{
-                            if(BuildConfig.DEBUG){
-                                mView.errorPoint("请求数据异常，您可以试试切换其他引擎。"+e.getMessage());
-                                e.printStackTrace();
-                            }else{
-                                mView.errorPoint("请求数据异常，您可以试试切换其他引擎。");
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onNext(AbsResult result) {
-                        mView.showResult(result.getResult(),true);
-                    }
-                });
-    }
-
     /**
      * 添加粘贴板变化监听方法
      */
@@ -189,100 +131,30 @@ public class ClipboardPresenter extends BasePresenter<IClipboardService> {
         mClipboardWatcher.addPrimaryClipChangedListener(mListener);
     }
 
-    public void initFavoriteStatus(Result result){
-        Result localResult= isFavorite(result.getQuery());
-        if(localResult!=null){
-            mView.initWithFavorite(result);
-        }else{
-            mView.initWithNotFavorite(result);
-        }
-    }
 
-    public void clickFavorite(View view,Result result){
-        Result localResult= isFavorite(result.getQuery());
-        if (localResult!=null) {
-            int index = deleteResultFromDb(localResult);
-            if (index > 0) {
-                mView.initWithNotFavorite(result);
-                Logger.i("删除成功");
-            } else {
-                Logger.i("删除失败");
-            }
-        }else{
-            long index = insertResultToDb(result);
-            if (index > 0) {
-                mView.initWithFavorite(result);
-                Logger.i("插入成功");
-            } else {
-                Logger.i("插入失败");
-            }
-        }
-    }
-
-    private void performClipboardCheck() {
-        CharSequence content = mClipboardWatcher.getText();
-
+    private void performClipboardCheck(String queryText) {
         //处理缓存 因为粘贴板的回调操作可能触发多次
-        String query = content.toString();
-        Logger.i("粘贴板的单词为 "+query);
-        if (listQuery.contains(query)) {
-            Logger.i("is search in "+query);
+        Logger.i("粘贴板的单词为 "+queryText);
+        if (listQuery.contains(queryText)) {
             return;
         }
-        listQuery.add(query);
+        listQuery.add(queryText);
 
         //只有用户在打开了 划词翻译的情况下 划词翻译才能正常工作
-        if(!SpUtils.getOpenJITOrNot(mService))return;
+        if(!SpUtils.getOpenJITOrNot(getContext()))return;
 
         //如果当前界面是 咕咚翻译的主界面 那么也不对粘贴板做监听( Debug 时开启)
         if(!BuildConfig.DEBUG){
-            if(SpUtils.getAppFront(mService))return;
+            if(SpUtils.getAppFront(getContext()))return;
         }
 
         // 检查粘贴板的内容是不是单词 以及是不是为空
-        if(!checkInput(content.toString())){
+        if(!checkInput(queryText)){
             Logger.i("粘贴板为空");
             return;
         }
-
         //查询数据
-        search(query);
-    }
-
-    private boolean checkInput(String input){
-        // empty check
-        if (TextUtils.isEmpty(input)) {
-            Logger.e("剪贴板为空了");
-            return false;
-        }
-
-        if(StringUtils.isChinese(input)){
-            Logger.e(input+" 中包含中文字符");
-            return false;
-        }
-
-        if(StringUtils.isValidEmailAddress(input)){
-            Logger.e(input+" 是一个邮箱");
-            return false;
-        }
-
-        if(StringUtils.isValidUrl(input)){
-            Logger.e(input+" 是一个网址");
-            return false;
-        }
-
-        if(StringUtils.isValidNumeric(input)){
-            Logger.e(input+" 是一串数字");
-            return false;
-        }
-
-        // length check
-        if(StringUtils.isMoreThanOneWord(input)){
-            mView.errorPoint("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
-            return false;
-        }
-
-        return true;
+        search(queryText);
     }
 
     public void onDestroy() {

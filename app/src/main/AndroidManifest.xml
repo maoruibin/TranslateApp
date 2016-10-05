@@ -36,6 +36,19 @@
             android:name="BUG_HD_SDK_GENERAL_KEY"
             android:value="60641333d73c37d9db66465ab8f78cc9" />
 
+        <!--android:theme="@android:style/Theme.NoDisplay"-->
+        <!--android:theme="@android:style/Theme.Dialog"-->
+        <activity
+            android:name="name.gudong.translate.ui.activitys.ProcessTextActivity"
+            android:label="@string/app_process_text"
+            android:theme="@style/myTransparent">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
         <activity android:name="name.gudong.translate.ui.activitys.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,8 +60,8 @@
         <service
             android:name="name.gudong.translate.listener.ListenClipboardService"
             android:enabled="true"
-            android:exported="true"
-            android:process=":process" />
+            android:label="@string/app_process_text"
+            android:process=":process"></service>
 
         <receiver
             android:name="name.gudong.translate.listener.BootCompletedReceiver"
@@ -60,7 +73,9 @@
         </receiver>
 
         <activity android:name="name.gudong.translate.ui.activitys.WordsBookActivity" />
-        <activity android:name="name.gudong.translate.ui.activitys.SettingActivity"></activity>
+
+        <activity android:name="name.gudong.translate.ui.activitys.SettingActivity" />
+
     </application>
 
 </manifest>

@@ -20,7 +20,7 @@
 
 package name.gudong.translate.mvp.presenters;
 
-import android.app.Activity;
+import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
@@ -46,8 +46,8 @@ import rx.schedulers.Schedulers;
  */
 public class BookPresenter extends BasePresenter<IBookView> {
     @Inject
-    public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Activity activity) {
-        super(liteOrm, apiService, downloadService,activity);
+    public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Context context) {
+        super(liteOrm, apiService, downloadService,context);
     }
 
     public void getWords() {

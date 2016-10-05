@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">GuDong Translate</string>
-    <string name="app_process_text">GuDong</string>
+    <string name="app_name">咕咚翻译</string>
+    <string name="app_process_text">咕咚一下</string>
     <string name="action_delete">删除</string>
 
     <string name="favorite_list">单词本</string>

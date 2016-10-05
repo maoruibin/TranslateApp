@@ -65,15 +65,15 @@ public class TipViewController{
         mWindowManager = (WindowManager) application.getSystemService(Context.WINDOW_SERVICE);
     }
 
-    public void showErrorInfo(String error){
+    public void showErrorInfo(String error,TipView.ITipViewListener mListener){
         TipView tipView = new TipView(mContext);
         mWindowManager.addView(tipView, getPopViewParams());
         tipView.startWithAnim();
         tipView.error(error);
-        closeTipViewCountdown(tipView);
+        closeTipViewCountdown(tipView, mListener);
     }
 
-    private void closeTipViewCountdown(final TipView tipView) {
+    private void closeTipViewCountdown(final TipView tipView, TipView.ITipViewListener mListener) {
         int duration = SpUtils.getDurationTimeWay(GDApplication.mContext).getDurationTime();
         mHideTipTask = Observable.timer(duration, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .map(new Func1<Long, Object>() {
@@ -83,6 +83,7 @@ public class TipViewController{
                             @Override
                             public void onCloseAnimEnd(Animator animation) {
                                 removeTipViewInner(tipView);
+                                mListener.onRemove();
                             }
                         });
                         return null;
@@ -97,7 +98,7 @@ public class TipViewController{
         }
     }
 
-    public void show(Result result,boolean isShowFavoriteButton,TipView.IOperateTipView mListener) {
+    public void show(Result result,boolean isShowFavoriteButton,TipView.ITipViewListener mListener) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         boolean isSettingUseSystemNotification = sharedPreferences.getBoolean("preference_show_float_view_use_system",false);
         if(Utils.isSDKHigh5() && isSettingUseSystemNotification){
@@ -148,7 +149,7 @@ public class TipViewController{
             mWindowManager.addView(tipView, getPopViewParams());
             tipView.startWithAnim();
             tipView.setContent(result, isShowFavoriteButton);
-            closeTipViewCountdown(tipView);
+            closeTipViewCountdown(tipView,mListener);
         }
     }
 

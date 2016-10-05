@@ -20,7 +20,6 @@
 
 package name.gudong.translate.mvp.presenters;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -72,8 +71,8 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
     // 可以看到在使用@Inject进行注入时，构造注入和成员变量注入两种方式可以共存
     @Inject
-    public MainPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Activity activity) {
-        super(liteOrm, apiService, downloadService, activity);
+    public MainPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService,Context context) {
+        super(liteOrm, apiService, downloadService, context);
     }
 
     public void checkClipboard() {
@@ -96,7 +95,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void clearClipboard() {
         CharSequence sequence = mClipboardWatcher.getText();
         if (!TextUtils.isEmpty(sequence)) {
-            ClipboardManager clipService = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager clipService = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("", "");
             clipService.setPrimaryClip(clipData);
         }
@@ -105,14 +104,14 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void checkVersionAndShowChangeLog() {
         String showWhatsNew = "showWhatsNewTag";
         if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
-            DialogUtil.showChangelog((AppCompatActivity) mActivity);
+            DialogUtil.showChangelog((AppCompatActivity) getContext());
             Once.markDone(showWhatsNew);
         }
     }
 
     public void executeSearch(String keywords) {
         mView.onPrepareTranslate();
-        Observable<AbsResult> observable = mWarpApiService.translate(SpUtils.getTranslateEngineWay(mActivity), keywords);
+        Observable<AbsResult> observable = mWarpApiService.translate(SpUtils.getTranslateEngineWay(getContext()), keywords);
         if (observable == null) {
             Logger.e("Observable<AbsResult> is null");
             return;
@@ -207,29 +206,29 @@ public class MainPresenter extends BasePresenter<IMainView> {
     }
 
     public void startListenClipboardService() {
-        ListenClipboardService.start(mActivity);
+        ListenClipboardService.start(getContext());
     }
 
     /**
      * 去评分
      */
     public void gotoMarket() {
-        Uri uri = Uri.parse("market://details?id=" + mActivity.getPackageName());
+        Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mActivity.startActivity(intent);
+        getContext().startActivity(intent);
     }
 
     public void prepareTranslateWay() {
-        ETranslateFrom from = SpUtils.getTranslateEngineWay(mActivity);
+        ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
         mView.initTranslateEngineSetting(from);
     }
 
     public void prepareOptionSettings(Menu menu) {
-        EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(mActivity);
-        EDurationTipTime durationTime = SpUtils.getDurationTimeWay(mActivity);
-        boolean reciteFlag = SpUtils.getReciteOpenOrNot(mActivity);
-        boolean openJIT = SpUtils.getOpenJITOrNot(mActivity);
+        EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(getContext());
+        EDurationTipTime durationTime = SpUtils.getDurationTimeWay(getContext());
+        boolean reciteFlag = SpUtils.getReciteOpenOrNot(getContext());
+        boolean openJIT = SpUtils.getOpenJITOrNot(getContext());
 
         mView.initIntervalTimeSetting(menu, intervalTime);
         mView.initDurationTimeSetting(menu, durationTime);
