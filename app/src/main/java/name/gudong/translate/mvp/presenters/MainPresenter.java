@@ -30,6 +30,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 
 import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.WhereBuilder;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -51,6 +52,7 @@ import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
+import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.SpUtils;
 import rx.Observable;
@@ -65,6 +67,7 @@ import rx.schedulers.Schedulers;
  * Contact with gudong.name@gmail.com.
  */
 public class MainPresenter extends BasePresenter<IMainView> {
+    private static final String KEY_RESULT = "RESULT";
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
@@ -73,6 +76,20 @@ public class MainPresenter extends BasePresenter<IMainView> {
     @Inject
     public MainPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService,Context context) {
         super(liteOrm, apiService, downloadService, context);
+    }
+
+    public void checkIntentFromClickTipView(Intent intent){
+        if(hasExtraResult(intent)){
+            Result result = (Result) intent.getSerializableExtra(KEY_RESULT);
+            if(result != null){
+                mView.onInitSearchText(result.getQuery());
+                executeSearch(result.getQuery());
+            }
+        }
+    }
+
+    public boolean hasExtraResult(Intent intent){
+        return intent.hasExtra(KEY_RESULT);
     }
 
     public void checkClipboard() {
@@ -202,7 +219,9 @@ public class MainPresenter extends BasePresenter<IMainView> {
     }
 
     public void unFavoriteWord(Result result) {
-        mLiteOrm.delete(result);
+        //,Result.COL_QUERY,new String[]{result.getQuery()
+        WhereBuilder builder = WhereBuilder.create(Result.class).andEquals(Result.COL_QUERY,result.getQuery());
+        mLiteOrm.delete(builder);
     }
 
     public void startListenClipboardService() {
@@ -260,6 +279,12 @@ public class MainPresenter extends BasePresenter<IMainView> {
         });
     }
 
+    public static void jumpMainActivityFromClickTipView(Context context,Result result){
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(KEY_RESULT,result);
+        context.startActivity(intent);
+    }
 }
 
 

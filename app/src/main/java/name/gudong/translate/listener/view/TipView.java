@@ -147,6 +147,14 @@ public class TipView extends LinearLayout {
                 mListener.onClickPlaySound(v, result);
             }
         });
+        mRlInner.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onClickTipFrame(v, result);
+                }
+            }
+        });
     }
 
     public void setFavoriteBackground(@DrawableRes int drawableSrc) {
@@ -162,6 +170,8 @@ public class TipView extends LinearLayout {
         void onClickFavorite(View view, Result result);
 
         void onClickPlaySound(View view, Result result);
+
+        void onClickTipFrame(View view, Result result);
 
         /**
          * set up favorite view state  base on it change background of favorite view

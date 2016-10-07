@@ -67,9 +67,6 @@ import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.ViewUtil;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements IMainView {
-
-
-
     @BindView(android.R.id.input)
     EditText mInput;
     @BindView(R.id.list_result)
@@ -105,6 +102,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkTranslateWay();
         checkVersion();
         initConfig();
+        checkIntent();
+    }
+
+    private void checkIntent() {
+        mPresenter.checkIntentFromClickTipView(getIntent());
     }
 
     @Override
@@ -138,8 +140,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     }
     private void checkSomething() {
-        //检查粘贴板有没有英文单词 如果有就查询一次 并且显示给用户
-        mPresenter.checkClipboard();
+        if(!mPresenter.hasExtraResult(getIntent())){
+            //检查粘贴板有没有英文单词 如果有就查询一次 并且显示给用户
+            mPresenter.checkClipboard();
+        }
     }
 
     @Override

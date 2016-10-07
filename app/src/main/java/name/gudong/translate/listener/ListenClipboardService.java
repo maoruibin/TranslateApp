@@ -182,6 +182,12 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     }
 
     @Override
+    public void onClickTipFrame(View view, Result result) {
+        mPresenter.jumpMainActivity(result);
+        removeTipView(result);
+    }
+
+    @Override
     public void onInitFavorite(ImageView mIvFavorite, Result result) {
         mPresenter.initFavoriteStatus(result);
     }
