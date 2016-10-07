@@ -46,6 +46,7 @@ import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
+import name.gudong.translate.mvp.model.entity.dayline.JinshanDayLineEntity;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
@@ -274,6 +275,20 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     //Toast.makeText(getContext(), "清除缓存成功", Toast.LENGTH_SHORT).show();
                 }else{
                     //Toast.makeText(getContext(), "无缓存需要清除", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void dayline(){
+        mSingleRequestService.dayline("http://open.iciba.com/dsapi/")
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<JinshanDayLineEntity>() {
+            @Override
+            public void call(JinshanDayLineEntity jinshanDayLineEntity) {
+                if(jinshanDayLineEntity != null){
+                    Logger.i(jinshanDayLineEntity.toString());
                 }
             }
         });

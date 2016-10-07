@@ -103,6 +103,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkVersion();
         initConfig();
         checkIntent();
+        mPresenter.dayline();
     }
 
     private void checkIntent() {

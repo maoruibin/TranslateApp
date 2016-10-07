@@ -97,5 +97,33 @@ public class JinshanDayLineEntity implements IDayLine{
     public static class TagsEntity {
         public String id;
         public String name;
+
+        @Override
+        public String toString() {
+            return "TagsEntity{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "JinshanDayLineEntity{" +
+                "caption='" + caption + '\'' +
+                ", sid='" + sid + '\'' +
+                ", tts='" + tts + '\'' +
+                ", content='" + content + '\'' +
+                ", note='" + note + '\'' +
+                ", love='" + love + '\'' +
+                ", translation='" + translation + '\'' +
+                ", picture='" + picture + '\'' +
+                ", picture2='" + picture2 + '\'' +
+                ", dateline='" + dateline + '\'' +
+                ", s_pv='" + s_pv + '\'' +
+                ", sp_pv='" + sp_pv + '\'' +
+                ", fenxiang_img='" + fenxiang_img + '\'' +
+                ", tags=" + tags +
+                '}';
     }
 }

@@ -64,6 +64,9 @@ public class ApiServiceModel {
     SingleRequestService provideDownloadService(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.baidu.com/")
+                // for RxJava
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(SingleRequestService.class);
     }
