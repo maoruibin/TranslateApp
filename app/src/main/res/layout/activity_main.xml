@@ -1,134 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bg_input"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="@string/point_input_key"/>
-
-            <TextView
-                android:id="@+id/tv_clear"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/colorPrimary"
-                android:text="@string/action_clear"/>
-        </RelativeLayout>
-
-        <EditText
-            android:id="@android:id/input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top"
-            tools:text="Make"
-            android:minHeight="100dp"
-            android:maxHeight="100dp"
-            android:background="@null"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_point_engine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone"
-                android:text="翻译引擎："/>
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/sp_translate_way"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tv_point_engine"
-                android:layout_centerVertical="true" />
-
-            <Button
-                android:id="@+id/bt_translate"
-                android:layout_width="@dimen/activity_main_button_translate_width"
-                android:layout_height="@dimen/activity_main_button_translate_height"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/selector_action_search"
-                android:textColor="@color/color_translate"
-                android:text="@string/action_translate"/>
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
-        <RelativeLayout
-            android:id="@+id/rl_action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:gravity="center_vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:textColor="#999999"
-                android:layout_height="wrap_content"
-                android:text="翻译结果"/>
-
-            <ImageView
-                android:id="@+id/iv_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toLeftOf="@+id/iv_sound"
-                app:srcCompat="@drawable/ic_favorite_border_black_24dp"/>
-
-
-            <ImageView
-                android:id="@+id/iv_sound"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_toLeftOf="@+id/iv_paste"
-                app:srcCompat="@drawable/ic_volume_up_black_24dp"/>
-
-            <ImageView
-                android:id="@+id/iv_paste"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                app:srcCompat="@drawable/ic_content_copy_black_24dp"/>
-        </RelativeLayout>
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
-            android:id="@+id/list_result"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="vertical"/>
-    </ScrollView>
-</LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_input"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/point_input_key" />
+
+                    <TextView
+                        android:id="@+id/tv_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/action_clear"
+                        android:textColor="@color/colorPrimary"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@android:id/input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:maxHeight="100dp"
+                    android:minHeight="100dp"
+                    tools:text="Make" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_point_engine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="翻译引擎："
+                        android:visibility="gone" />
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/sp_translate_way"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tv_point_engine" />
+
+                    <Button
+                        android:id="@+id/bt_translate"
+                        android:layout_width="@dimen/activity_main_button_translate_width"
+                        android:layout_height="@dimen/activity_main_button_translate_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/selector_action_search"
+                        android:text="@string/action_translate"
+                        android:textColor="@color/color_translate" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <RelativeLayout
+                    android:id="@+id/rl_action"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="翻译结果"
+                        android:textColor="#999999" />
+
+                    <ImageView
+                        android:id="@+id/iv_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_toLeftOf="@+id/iv_sound"
+                        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+
+
+                    <ImageView
+                        android:id="@+id/iv_sound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_toLeftOf="@+id/iv_paste"
+                        app:srcCompat="@drawable/ic_volume_up_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_paste"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/list_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical" />
+            </ScrollView>
+        </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:fitsSystemWindows="true"
+        app:behavior_hideable="false"
+        android:background="#f00"
+        app:behavior_peekHeight="?attr/actionBarSize"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+        <include layout="@layout/bottom_sheet_content_view" />
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
+

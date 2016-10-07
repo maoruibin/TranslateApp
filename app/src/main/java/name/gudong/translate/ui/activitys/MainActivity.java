@@ -22,6 +22,7 @@ package name.gudong.translate.ui.activitys;
 
 import android.animation.Animator;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -34,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -91,6 +93,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private boolean isFavorite;
 
+    private BottomSheetBehavior mBottomSheetBehavior;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +107,21 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         initConfig();
         checkIntent();
         mPresenter.dayline();
+//        View bottomSheet = findViewById( R.id.bottom_sheet);
+//        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+//        mBottomSheetBehavior.setPeekHeight((int) getResources().getDimension(R.dimen.actionbar_height));
+//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
+
+        final View peakView = findViewById(R.id.drag_me);
+        peakView.post(new Runnable() {
+            @Override
+            public void run() {
+                mBottomSheetBehavior.setPeekHeight(peakView.getHeight());
+            }
+        });
     }
 
     private void checkIntent() {
@@ -178,8 +196,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 MobclickAgent.onEvent(this,"menu_opinion");
                 break;
             case R.id.menu_book:
-                WordsBookActivity.gotoWordsBook(this);
-                MobclickAgent.onEvent(this,"open_book");
+                //WordsBookActivity.gotoWordsBook(this);
+                //MobclickAgent.onEvent(this,"open_book");
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 break;
             case R.id.menu_about:
                 DialogUtil.showAbout(this);
