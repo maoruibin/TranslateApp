@@ -40,7 +40,7 @@ import javax.inject.Inject;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.view.TipView;
 import name.gudong.translate.listener.view.TipViewController;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;

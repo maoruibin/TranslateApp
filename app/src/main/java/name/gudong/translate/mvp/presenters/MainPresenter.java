@@ -44,10 +44,10 @@ import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
-import name.gudong.translate.mvp.model.DownloadService;
+import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
-import name.gudong.translate.mvp.model.entity.AbsResult;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.AbsResult;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
@@ -74,8 +74,8 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
     // 可以看到在使用@Inject进行注入时，构造注入和成员变量注入两种方式可以共存
     @Inject
-    public MainPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService,Context context) {
-        super(liteOrm, apiService, downloadService, context);
+    public MainPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
+        super(liteOrm, apiService, singleRequestService, context);
     }
 
     public void checkIntentFromClickTipView(Intent intent){

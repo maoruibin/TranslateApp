@@ -27,7 +27,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import name.gudong.translate.mvp.model.ApiService;
-import name.gudong.translate.mvp.model.DownloadService;
+import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.util.SpUtils;
 import retrofit.BaseUrl;
@@ -61,11 +61,11 @@ public class ApiServiceModel {
 
     @Provides
     @Singleton
-    DownloadService provideDownloadService(){
+    SingleRequestService provideDownloadService(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://fanyi.youdao.com/")
+                .baseUrl("http://www.baidu.com/")
                 .build();
-        return retrofit.create(DownloadService.class);
+        return retrofit.create(SingleRequestService.class);
     }
 
     @Provides

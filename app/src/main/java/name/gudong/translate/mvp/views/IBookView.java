@@ -22,7 +22,7 @@ package name.gudong.translate.mvp.views;
 
 import java.util.List;
 
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 
 /**
  * Created by GuDong on 2/28/16 17:03.

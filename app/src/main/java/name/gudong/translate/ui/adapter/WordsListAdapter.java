@@ -36,7 +36,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import me.gudong.translate.R;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.util.ViewUtil;
 import rx.Observable;
 import rx.functions.Action0;

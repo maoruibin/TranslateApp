@@ -50,7 +50,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;

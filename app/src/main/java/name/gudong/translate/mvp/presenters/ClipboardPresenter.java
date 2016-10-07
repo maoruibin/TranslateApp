@@ -32,9 +32,9 @@ import javax.inject.Inject;
 
 import me.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
-import name.gudong.translate.mvp.model.DownloadService;
+import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
 import rx.Observable;
@@ -79,8 +79,8 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
 
     @Inject
-    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Context context) {
-        super(liteOrm, apiService,downloadService, context);
+    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
+        super(liteOrm, apiService, singleRequestService, context);
         results = mLiteOrm.query(Result.class);
     }
 

@@ -20,9 +20,9 @@
 
 package name.gudong.translate.mvp.model;
 
-import name.gudong.translate.mvp.model.entity.BaiDuResult;
-import name.gudong.translate.mvp.model.entity.JinShanResult;
-import name.gudong.translate.mvp.model.entity.YouDaoResult;
+import name.gudong.translate.mvp.model.entity.translate.BaiDuResult;
+import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
+import name.gudong.translate.mvp.model.entity.translate.YouDaoResult;
 import retrofit.http.GET;
 import retrofit.http.Query;
 import rx.Observable;

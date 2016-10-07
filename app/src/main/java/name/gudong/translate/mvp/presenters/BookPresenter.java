@@ -31,9 +31,9 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import name.gudong.translate.mvp.model.DownloadService;
+import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.views.IBookView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -46,8 +46,8 @@ import rx.schedulers.Schedulers;
  */
 public class BookPresenter extends BasePresenter<IBookView> {
     @Inject
-    public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, DownloadService downloadService, Context context) {
-        super(liteOrm, apiService, downloadService,context);
+    public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
+        super(liteOrm, apiService, singleRequestService,context);
     }
 
     public void getWords() {

@@ -42,9 +42,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import name.gudong.translate.manager.FileManager;
-import name.gudong.translate.mvp.model.DownloadService;
+import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.views.IBaseView;
 import retrofit.Call;
 import retrofit.Callback;
@@ -62,7 +62,7 @@ import rx.functions.Action1;
 public class BasePresenter<V extends IBaseView> {
     protected V mView;
     protected WarpAipService mWarpApiService;
-    protected DownloadService mDownloadService;
+    protected SingleRequestService mSingleRequestService;
     protected LiteOrm mLiteOrm;
     protected Context mContext;
 
@@ -74,10 +74,10 @@ public class BasePresenter<V extends IBaseView> {
         mContext = context;
     }
 
-    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,DownloadService downloadService,Context context) {
+    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         mLiteOrm = liteOrm;
         mWarpApiService = apiService;
-        mDownloadService = downloadService;
+        mSingleRequestService = singleRequestService;
         mContext = context;
     }
 
@@ -139,7 +139,7 @@ public class BasePresenter<V extends IBaseView> {
                             return;
                         }
 
-                        Call<ResponseBody> call = mDownloadService.downloadSoundFile(mp3Url);
+                        Call<ResponseBody> call = mSingleRequestService.downloadSoundFile(mp3Url);
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {

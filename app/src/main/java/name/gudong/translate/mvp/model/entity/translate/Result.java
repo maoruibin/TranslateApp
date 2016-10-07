@@ -18,7 +18,7 @@
  *
  */
 
-package name.gudong.translate.mvp.model.entity;
+package name.gudong.translate.mvp.model.entity.translate;
 
 import com.litesuits.orm.db.annotation.Column;
 import com.litesuits.orm.db.annotation.PrimaryKey;

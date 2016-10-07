@@ -18,7 +18,7 @@
  *
  */
 
-package name.gudong.translate.mvp.model.entity;
+package name.gudong.translate.mvp.model.entity.translate;
 
 /**
  * Created by GuDong on 1/22/16 10:19.

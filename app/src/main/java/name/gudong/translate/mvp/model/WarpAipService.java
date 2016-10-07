@@ -21,10 +21,10 @@
 package name.gudong.translate.mvp.model;
 
 import me.gudong.translate.BuildConfig;
-import name.gudong.translate.mvp.model.entity.AbsResult;
-import name.gudong.translate.mvp.model.entity.BaiDuResult;
-import name.gudong.translate.mvp.model.entity.JinShanResult;
-import name.gudong.translate.mvp.model.entity.YouDaoResult;
+import name.gudong.translate.mvp.model.entity.translate.AbsResult;
+import name.gudong.translate.mvp.model.entity.translate.BaiDuResult;
+import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
+import name.gudong.translate.mvp.model.entity.translate.YouDaoResult;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.util.SignUtils;
 import rx.Observable;

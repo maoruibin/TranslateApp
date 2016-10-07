@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 import me.gudong.translate.R;
 import name.gudong.translate.GDApplication;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;

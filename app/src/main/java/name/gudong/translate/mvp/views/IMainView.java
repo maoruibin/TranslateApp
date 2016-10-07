@@ -22,7 +22,7 @@ package name.gudong.translate.mvp.views;
 
 import android.view.Menu;
 
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;

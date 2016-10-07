@@ -10,7 +10,7 @@ import retrofit.http.Url;
  * Created by GuDong on 4/3/16 21:27.
  * Contact with gudong.name@gmail.com.
  */
-public interface DownloadService {
+public interface SingleRequestService {
     @GET
     Call<ResponseBody> downloadSoundFile(@Url String soundUrl);
 }
