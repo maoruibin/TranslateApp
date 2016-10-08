@@ -35,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -51,6 +52,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
+import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
+import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
@@ -88,6 +91,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @BindView(R.id.bt_translate)
     Button mBtTranslate;
 
+    @BindView(R.id.tv_dayline)
+    TextView mTvDayline;
+    @BindView(R.id.tv_dayline_note)
+    TextView mTvDaylineNote;
+    @BindView(R.id.iv_sound_dayline)
+    ImageView mIvSoundDayline;
+
+
     Menu mMenu;
 
     private boolean isFavorite;
@@ -105,22 +116,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkVersion();
         initConfig();
         checkIntent();
-        mPresenter.dayline();
-//        View bottomSheet = findViewById( R.id.bottom_sheet);
-//        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-//        mBottomSheetBehavior.setPeekHeight((int) getResources().getDimension(R.dimen.actionbar_height));
-//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        setUpDayline();
+    }
 
-//        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
-//        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
-//
-//        final View peakView = findViewById(R.id.drag_me);
-//        peakView.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mBottomSheetBehavior.setPeekHeight(peakView.getHeight());
-//            }
-//        });
+    private void setUpDayline() {
+        mPresenter.dayline();
+        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
     }
 
     private void checkIntent() {
@@ -512,7 +514,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         Object obj = view.getTag();
         if (obj != null && obj instanceof Result) {
             Result entity = (Result) obj;
-            mPresenter.playSound(entity);
+            String fileName = entity.getMp3FileName();
+            String mp3Url = entity.getEnMp3();
+            mPresenter.playSound(fileName,mp3Url);
         }
         mPresenter.startSoundAnim(view);
     }
@@ -563,6 +567,26 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void initWithNotFavorite() {
         mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         isFavorite = false;
+    }
+
+    @Override
+    public void fillDayline(IDayLine entity) {
+        mTvDayline.setText(entity.content());
+        mTvDaylineNote.setText(entity.note());
+        mIvSoundDayline.setTag(entity);
+    }
+
+    @OnClick(R.id.iv_sound_dayline)
+    public void onClickDaylineSound(View view){
+        MobclickAgent.onEvent(getApplicationContext(),"sound_dayline_activity");
+        Object obj = view.getTag();
+        if (obj != null && obj instanceof IDayLine) {
+            IDayLine entity = (IDayLine) obj;
+            String fileName = JinShanResult.getFileName(entity.tts());
+            String mp3Url = entity.tts();
+            mPresenter.playSound(fileName,mp3Url);
+        }
+        mPresenter.startSoundAnim(view);
     }
 
     @Override

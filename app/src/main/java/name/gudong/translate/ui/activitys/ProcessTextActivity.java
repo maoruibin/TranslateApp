@@ -101,7 +101,7 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
     @Override
     public void onClickPlaySound(View view, Result result) {
         MobclickAgent.onEvent(this, "sound_service");
-        mPresenter.playSound(result);
+        mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         mPresenter.startSoundAnim(view);
     }
 

@@ -22,6 +22,7 @@ package name.gudong.translate.mvp.views;
 
 import android.view.Menu;
 
+import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
@@ -78,4 +79,5 @@ public interface IMainView extends IBaseView {
 
     void initWithNotFavorite();
 
+    void fillDayline(IDayLine entity);
 }

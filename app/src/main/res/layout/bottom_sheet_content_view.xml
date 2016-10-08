@@ -2,19 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/drag_me"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/tv_dayline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Drag me"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_margin="12dp"
+        android:maxLines="2"
+        android:text="Even miracles take a little time. —The Fairy Godmother"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/tv_dayline_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="12dp"
+        android:layout_centerInParent="true"
+        android:maxLines="2"
+        android:text="就算是奇迹也要花点时间才能发生的。 —仙女教母"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+
+
+    <ImageView
+        android:id="@+id/iv_sound_dayline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:src="@drawable/ic_volume_up_black_24dp" />
 </LinearLayout>

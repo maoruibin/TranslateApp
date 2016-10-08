@@ -28,7 +28,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.litesuits.orm.LiteOrm;
@@ -123,22 +122,16 @@ public class BasePresenter<V extends IBaseView> {
         return mLiteOrm.delete(entity);
     }
 
-    public void playSound(Result entity) {
-        Observable.just(entity)
-                .filter(result->{
-                    return result != null && !TextUtils.isEmpty(entity.getMp3FileName());
-                })
-                .subscribe(new Action1<Result>() {
+    public void playSound(String fileName,String mp3Url) {
+        Observable.just(mp3Url)
+               .subscribe(new Action1<String>() {
                     @Override
-                    public void call(Result entity) {
-                        String fileName = entity.getMp3FileName();
-                        String mp3Url = entity.getEnMp3();
+                    public void call(String entity) {
                         File cacheFile = mFileManager.getCacheFileByUrl(getContext(), fileName);
                         if (cacheFile != null && cacheFile.exists()) {
                             playSound(cacheFile);
                             return;
                         }
-
                         Call<ResponseBody> call = mSingleRequestService.downloadSoundFile(mp3Url);
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override

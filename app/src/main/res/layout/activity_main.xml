@@ -149,8 +149,7 @@
         android:layout_height="300dp"
         android:fitsSystemWindows="true"
         app:behavior_hideable="false"
-        android:background="#f00"
-        android:visibility="gone"
+        android:background="@color/bg_app_dayline"
         app:behavior_peekHeight="?attr/actionBarSize"
         app:layout_behavior="@string/bottom_sheet_behavior">
         <include layout="@layout/bottom_sheet_content_view" />

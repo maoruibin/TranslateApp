@@ -409,7 +409,7 @@ public class JinShanResult  extends AbsResult{
         return getFileName(wrapEnMp3());
     }
 
-    private String getFileName(String url){
+    public static String getFileName(String url){
         String[]temp = url.split("/");
         String fileName = "";
         if(temp.length != 0){

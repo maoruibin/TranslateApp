@@ -288,7 +288,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
             @Override
             public void call(JinshanDayLineEntity jinshanDayLineEntity) {
                 if(jinshanDayLineEntity != null){
-                    Logger.i(jinshanDayLineEntity.toString());
+                    mView.fillDayline(jinshanDayLineEntity);
                 }
             }
         });
