@@ -18,6 +18,7 @@ import name.gudong.translate.ui.activitys.MainActivity;
  */
 public class Utils {
     private static final int NOTIFY_ID = 524947901;
+
     /**
      * 是否是5.0以上系统
      *
@@ -32,10 +33,10 @@ public class Utils {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(context.getString(R.string.app_name));
         builder.setContentText("点击打开咕咚翻译");
-        if(Utils.isSDKHigh5()){
+        if (Utils.isSDKHigh5()) {
             builder.setSmallIcon(R.drawable.icon_notification);
-            builder.setColor(Color.rgb(121,85,72));
-        }else{
+            builder.setColor(Color.rgb(121, 85, 72));
+        } else {
             builder.setSmallIcon(R.mipmap.ic_launcher);
         }
         builder.setPriority(NotificationCompat.PRIORITY_MIN);
@@ -44,7 +45,7 @@ public class Utils {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setClass(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
         PendingIntent contextIntent = PendingIntent.getActivity(context, 0, intent, 0);
         builder.setContentIntent(contextIntent);
@@ -65,4 +66,14 @@ public class Utils {
         nMgr.cancel(NOTIFY_ID);
     }
 
+    public static String getVersionName(Context context) {
+        try {
+            String pkName = context.getPackageName();
+            String versionName = context.getPackageManager().getPackageInfo(
+                    pkName, 0).versionName;
+            return versionName;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

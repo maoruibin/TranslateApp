@@ -68,6 +68,7 @@ import name.gudong.translate.ui.NavigationManager;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.InputMethodUtils;
 import name.gudong.translate.util.SpUtils;
+import name.gudong.translate.util.Utils;
 import name.gudong.translate.util.ViewUtil;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements IMainView {
@@ -189,7 +190,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         super.onPrepareOptionsMenu(menu);
         mPresenter.prepareOptionSettings(menu);
         mMenu = menu;
+        menu.findItem(R.id.menu_about).setTitle(formatAboutVersion());
         return true;
+    }
+
+    private String formatAboutVersion(){
+        String about = getString(R.string.menu_about);
+        return about.concat("("+ Utils.getVersionName(this)+")");
     }
 
     @Override
@@ -204,7 +211,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 MobclickAgent.onEvent(this,"open_book");
                 break;
             case R.id.menu_about:
-                DialogUtil.showAbout(this);
+                DialogUtil.showAbout(this,formatAboutVersion());
                 MobclickAgent.onEvent(this,"menu_about");
                 closeKeyboard();
                 break;
@@ -610,5 +617,38 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 R.array.translate_way, R.layout.spinner_drop_list_title);
         adapter.setDropDownViewResource(R.layout.spinner_drop_list_item);
         mSpTranslateWay.setAdapter(adapter);
+    }
+
+    @OnClick(R.id.fl_bottom_sheet)
+    public void onClickBottomSheet(View view){
+        if(mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }else{
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+    }
+
+    @OnClick(android.R.id.input)
+    public void onClickInput(View view){
+        checkBottomSheetIsExpandedAndReset();
+    }
+
+    /**
+     * 检查bottom sheet 是否展开 如果是 折叠 返回 true
+     * @return
+     */
+    private boolean checkBottomSheetIsExpandedAndReset(){
+        if(mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!checkBottomSheetIsExpandedAndReset()){
+            super.onBackPressed();
+        }
     }
 }

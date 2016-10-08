@@ -19,9 +19,9 @@ import name.gudong.translate.widget.WebDialog;
  * Contact with gudong.name@gmail.com.
  */
 public class DialogUtil {
-    public static void showAbout(AppCompatActivity activity){
+    public static void showAbout(AppCompatActivity activity,String title){
         int accentColor = activity.getResources().getColor(R.color.colorAccent);
-        WebDialog.create( "关于", "about.html",accentColor)
+        WebDialog.create(title, "about.html",accentColor)
         .show(activity.getSupportFragmentManager(),  "about");
     }
 
