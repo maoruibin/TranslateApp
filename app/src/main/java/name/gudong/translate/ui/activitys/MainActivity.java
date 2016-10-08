@@ -35,7 +35,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -131,6 +130,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onResume() {
         super.onResume();
+        //补丁  这不是一好现象
+        resetTranslateResultArea();
+        //检查粘贴板和 intent
         checkSomething();
         if(BuildConfig.DEBUG){
             SpUtils.setAppFront(this,false);
@@ -196,9 +198,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 MobclickAgent.onEvent(this,"menu_opinion");
                 break;
             case R.id.menu_book:
-                //WordsBookActivity.gotoWordsBook(this);
-                //MobclickAgent.onEvent(this,"open_book");
-                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                WordsBookActivity.gotoWordsBook(this);
+                MobclickAgent.onEvent(this,"open_book");
                 break;
             case R.id.menu_about:
                 DialogUtil.showAbout(this);
@@ -372,6 +373,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mIvPaste.setEnabled(false);
     }
 
+
     @Override
     public void onError(Throwable e) {
         String msg;
@@ -455,6 +457,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     private void resetView() {
         clearInputContent();
         mPresenter.clearClipboard();
+        resetTranslateResultArea();
+    }
+
+    private void resetTranslateResultArea(){
         isFavorite = false;
         mIvFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         mIvFavorite.setTag(null);
