@@ -112,16 +112,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 //        mBottomSheetBehavior.setPeekHeight((int) getResources().getDimension(R.dimen.actionbar_height));
 //        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
-        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
-
-        final View peakView = findViewById(R.id.drag_me);
-        peakView.post(new Runnable() {
-            @Override
-            public void run() {
-                mBottomSheetBehavior.setPeekHeight(peakView.getHeight());
-            }
-        });
+//        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
+//        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
+//
+//        final View peakView = findViewById(R.id.drag_me);
+//        peakView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mBottomSheetBehavior.setPeekHeight(peakView.getHeight());
+//            }
+//        });
     }
 
     private void checkIntent() {

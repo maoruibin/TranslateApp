@@ -147,7 +147,7 @@ public class TipView extends LinearLayout {
                 mListener.onClickPlaySound(v, result);
             }
         });
-        mRlInner.setOnClickListener(new OnClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
@@ -229,7 +229,6 @@ public class TipView extends LinearLayout {
                 }
                 break;
         }
-//        return super.onTouchEvent(event);
-        return true;
+        return super.onTouchEvent(event);
     }
 }
