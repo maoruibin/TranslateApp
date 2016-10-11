@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">咕咚翻译Debug版</string>
+    <string name="app_name">GuDong Translate-Debug</string>
+    <string name="app_process_text">TranslateFloat-Debug</string>
 </resources>

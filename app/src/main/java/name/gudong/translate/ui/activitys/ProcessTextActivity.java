@@ -8,6 +8,7 @@ package name.gudong.translate.ui.activitys;
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -35,11 +36,16 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
         checkText(intent);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkText(getIntent());
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        finish();
+        return super.onTouchEvent(event);
     }
 
     private void checkText(Intent intent) {
@@ -124,5 +130,12 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
     @Override
     public void onRemove() {
         finish();
+    }
+
+    @Override
+    public void finish() {
+        if(!isFinishing()){
+            super.finish();
+        }
     }
 }
