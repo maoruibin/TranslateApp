@@ -56,18 +56,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     @Inject
     TipViewController mTipViewController;
 
-    BroadcastReceiver mScreenStatusReceive = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                Logger.i("锁屏了");
-                closeTipCyclic();
-            } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
-                Logger.i("开屏了 解锁");
-                openTipCyclic();
-            }
-        }
-    };
+    BroadcastReceiver mScreenStatusReceive;
 
     @Override
     public void onCreate() {
@@ -81,11 +70,27 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
         IntentFilter screenStateFilter = new IntentFilter();
         screenStateFilter.addAction(Intent.ACTION_USER_PRESENT);
         screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        if(mScreenStatusReceive == null){
+            mScreenStatusReceive = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                        Logger.i("锁屏了");
+                        closeTipCyclic();
+                    } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
+                        Logger.i("开屏了 解锁");
+                        openTipCyclic();
+                    }
+                }
+            };
+        }
         registerReceiver(mScreenStatusReceive, screenStateFilter);
     }
 
     private void unregisterScreenReceiver(){
-        unregisterReceiver(mScreenStatusReceive);
+        if(mScreenStatusReceive != null){
+            unregisterReceiver(mScreenStatusReceive);
+        }
     }
 
     private void attachView() {

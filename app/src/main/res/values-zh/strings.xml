@@ -11,12 +11,14 @@
 
     <string name="use_recite_or_nor">开启定时单词提醒</string>
     <string name="play_sound_auto">开启自动发音</string>
+    <string name="notify_dayline">开启每日一句提醒</string>
     <string name="open_jit_or_nor">开启划词翻译</string>
     <string name="tip_time_interval">提示间隔时间</string>
     <string name="tip_time_duration">提示显示时间</string>
 
     <string name="play_sound_auto_summary">开启后,划词翻译显示结果时会自动播放单词发音。</string>
     <string name="use_recite_or_nor_summary">开启后,咕咚翻译将会自动的在手机山循环浮动显示已收藏的单词,帮助你更好的记忆这些单词。</string>
+    <string name="notify_dayline_summary">开启后,每天早晨8点,手机会为你提示学习每日一句。</string>
 
     <string name="interval_thirty_second">半分钟</string>
     <string name="interval_one_minute">1分钟</string>
