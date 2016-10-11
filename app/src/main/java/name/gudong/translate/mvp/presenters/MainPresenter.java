@@ -69,6 +69,7 @@ import rx.schedulers.Schedulers;
  */
 public class MainPresenter extends BasePresenter<IMainView> {
     private static final String KEY_RESULT = "RESULT";
+    private static final String KEY_INTENT_FLAG = "flag";
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 

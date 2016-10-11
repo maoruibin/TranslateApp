@@ -77,6 +77,18 @@
 
         <activity android:name="name.gudong.translate.ui.activitys.SettingActivity" />
 
+        <receiver android:name="name.gudong.translate.listener.AlarmReceiver">
+            <intent-filter>
+                <action android:name="name.gudong.translate.alarm"/>
+            </intent-filter>
+        </receiver>
+
+        <!--<receiver android:name=".service.KeepAlarmLiveReceiver">-->
+        <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+
     </application>
 
 </manifest>

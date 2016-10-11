@@ -52,6 +52,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
+import name.gudong.translate.manager.AlarmManagers;
 import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
@@ -116,8 +117,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkTranslateWay();
         checkVersion();
         initConfig();
-        checkIntent();
         setUpDayline();
+        checkIntent();
     }
 
     private void setUpDayline() {
@@ -128,6 +129,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void checkIntent() {
         mPresenter.checkIntentFromClickTipView(getIntent());
+        //每日一句
+        if(getIntent().getIntExtra("flag",-1) == 1){
+            onClickBottomSheet(findViewById(R.id.fl_bottom_sheet));
+        }
     }
 
     @Override
@@ -609,6 +614,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void startListenService() {
         mPresenter.startListenClipboardService();
+        AlarmManagers.register(this);
     }
 
 

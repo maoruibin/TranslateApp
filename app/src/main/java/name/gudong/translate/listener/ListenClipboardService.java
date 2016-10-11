@@ -62,8 +62,8 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 Logger.i("锁屏了");
                 closeTipCyclic();
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                Logger.i("开屏了");
+            } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
+                Logger.i("开屏了 解锁");
                 openTipCyclic();
             }
         }
@@ -79,7 +79,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
 
     private void registerScreenReceiver() {
         IntentFilter screenStateFilter = new IntentFilter();
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
+        screenStateFilter.addAction(Intent.ACTION_USER_PRESENT);
         screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mScreenStatusReceive, screenStateFilter);
     }

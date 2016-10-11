@@ -62,6 +62,9 @@ public class SpUtils {
     //is play mp3 auto
     private static final String KEY_PREFERENCE_AUTO_PLAY_SOUND = "preference_auto_play_sound";
 
+    //is notify dayline
+    private static final String KEY_PREFERENCE_NOTIFY_DAYLINE = "preference_notify_dayline";
+
     //App 是否在前台
     private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";
 
@@ -122,6 +125,10 @@ public class SpUtils {
 
     public static boolean isPlaySoundAuto(Context context){
         return getBooleanPreference(context,KEY_PREFERENCE_AUTO_PLAY_SOUND,false);
+    }
+
+    public static boolean isNotifyDayline(Context context){
+        return getBooleanPreference(context,KEY_PREFERENCE_NOTIFY_DAYLINE,true);
     }
 
     public static boolean getOpenJITOrNot(Context context){
