@@ -22,8 +22,10 @@ package name.gudong.translate.listener;
 
 import android.animation.Animator;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -33,15 +35,12 @@ import android.widget.ImageView;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.view.TipView;
 import name.gudong.translate.listener.view.TipViewController;
 import name.gudong.translate.mvp.model.entity.translate.Result;
-import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;
 import name.gudong.translate.mvp.views.ITipFloatView;
@@ -57,12 +56,36 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     @Inject
     TipViewController mTipViewController;
 
+    BroadcastReceiver mScreenStatusReceive = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                Logger.i("锁屏了");
+                closeTipCyclic();
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                Logger.i("开屏了");
+                openTipCyclic();
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         setUpInject();
         addListener();
         attachView();
         mPresenter.onCreate();
+    }
+
+    private void registerScreenReceiver() {
+        IntentFilter screenStateFilter = new IntentFilter();
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenStatusReceive, screenStateFilter);
+    }
+
+    private void unregisterScreenReceiver(){
+        unregisterReceiver(mScreenStatusReceive);
     }
 
     private void attachView() {
@@ -74,18 +97,11 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     }
 
     private void setUpInject() {
-//        DaggerServiceComponent.builder()
-//                .serviceModule(new ServiceModule(this))
-//                .appComponent(GDApplication.getAppComponent())
-//                .build()
-//                .inject(this);
-
         DaggerActivityComponent.builder()
                 .appComponent(GDApplication.getAppComponent())
                 .activityModule(new ActivityModule(this))
                 .build()
                 .inject(this);
-
     }
 
     @Override
@@ -97,18 +113,23 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
         }
         boolean isOpen = SpUtils.getReciteOpenOrNot(this);
         if(isOpen){
-            EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
-            int time = tipTime.getIntervalTime();
-            boolean isSecond = tipTime == EIntervalTipTime.THIRTY_SECOND;
-            TimeUnit unit = isSecond? TimeUnit.SECONDS:TimeUnit.MINUTES;
-            Logger.i("====","开启背单词 每 "+time+" "+unit.name()+"显示一次");
-            //设置定时显示任务
-            mPresenter.openTipCyclic(time,unit);
+            openTipCyclic();
+            registerScreenReceiver();
         }else {
-            Logger.i("====","移除背单词");
-            mPresenter.removeTipCyclic();
+            closeTipCyclic();
+            unregisterScreenReceiver();
         }
         return START_STICKY;
+    }
+
+    //设置定时显示任务
+    private void openTipCyclic(){
+        mPresenter.openTipCyclic();
+    }
+
+    //取消定时显示任务
+    private void closeTipCyclic(){
+        mPresenter.removeTipCyclic();
     }
 
     @Override
@@ -120,6 +141,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+        unregisterScreenReceiver();
     }
 
     public static void start(Context context) {
@@ -151,6 +173,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     @Override
     public void showResult(Result result, boolean isShowFavorite) {
         mTipViewController.show(result, isShowFavorite, this);
+        mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
     }
 
     @Override

@@ -31,10 +31,12 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import me.gudong.translate.BuildConfig;
+import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.Result;
+import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
 import rx.Observable;
@@ -104,16 +106,21 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
     /**
      * 开启背单词
-     * @param interval 时间间隙 单位 分钟
      */
-    public void openTipCyclic(long interval,TimeUnit unit){
+    public void openTipCyclic(){
+        EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
+        int time = tipTime.getIntervalTime();
+        boolean isSecond = tipTime == EIntervalTipTime.THIRTY_SECOND;
+        TimeUnit unit = isSecond? TimeUnit.SECONDS:TimeUnit.MINUTES;
+
         if(mSubscription != null && !mSubscription.isUnsubscribed()){
             mSubscription.unsubscribe();
         }
 
-        mSubscription = Observable.interval(interval,unit)
+        mSubscription = Observable.interval(time,unit)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mActionShowTip);
+        Logger.i(KEY_TAG,"开启背单词服务");
     }
 
     public void removeTipCyclic(){

@@ -11,6 +11,7 @@ def cfg = rootProject.ext.configuration
 def libs = rootProject.ext.libraries;
 def test = rootProject.ext.testingLibraries;
 
+
 android {
     compileSdkVersion cfg.compileVersion
     buildToolsVersion cfg.buildToolsVersion
