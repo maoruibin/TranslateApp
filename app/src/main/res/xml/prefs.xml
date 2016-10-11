@@ -7,12 +7,19 @@
             android:title="@string/open_jit_or_nor"
             android:defaultValue="true"/>
 
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_auto_play_sound"
+            android:title="@string/play_sound_auto"
+            android:summary="@string/play_sound_auto_summary"
+            android:defaultValue="false"/>
+
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="背单词">
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_use_recite_or_not"
             android:title="@string/use_recite_or_nor"
+            android:summary="@string/use_recite_or_nor_summary"
             android:defaultValue="false"/>
         <com.jenzz.materialpreference.Preference
             android:dependency="preference_use_recite_or_not"

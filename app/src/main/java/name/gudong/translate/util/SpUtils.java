@@ -59,6 +59,9 @@ public class SpUtils {
     //is open JIT translate or not
     private static final String KEY_PREFERENCE_SHOW_ICON_IN_NOTIFICATION = "preference_show_icon_in_notification";
 
+    //is play mp3 auto
+    private static final String KEY_PREFERENCE_AUTO_PLAY_SOUND = "preference_auto_play_sound";
+
     //App 是否在前台
     private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";
 
@@ -115,6 +118,10 @@ public class SpUtils {
 
     public static boolean isShowIconInNotification(Context context){
         return getBooleanPreference(context,KEY_PREFERENCE_SHOW_ICON_IN_NOTIFICATION,false);
+    }
+
+    public static boolean isPlaySoundAuto(Context context){
+        return getBooleanPreference(context,KEY_PREFERENCE_AUTO_PLAY_SOUND,false);
     }
 
     public static boolean getOpenJITOrNot(Context context){
