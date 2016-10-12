@@ -56,8 +56,6 @@ import name.gudong.translate.manager.AlarmManagers;
 import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
-import name.gudong.translate.mvp.model.type.EDurationTipTime;
-import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.MainPresenter;
@@ -193,7 +191,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        mPresenter.prepareOptionSettings(menu);
         mMenu = menu;
         menu.findItem(R.id.menu_about).setTitle(formatAboutVersion());
         return true;
@@ -233,35 +230,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 DialogUtil.showSupport(this);
                 MobclickAgent.onEvent(this,"menu_support");
                 break;
-
-            case R.id.menu_open_jit_or_nor:
-                boolean isOpenJit = item.isChecked();
-                SpUtils.setOpenJITOrNot(this, !isOpenJit);
-                break;
-            case R.id.interval_one_minute:
-                selectIntervalTime(item, EIntervalTipTime.ONE_MINUTE.name());
-                break;
-            case R.id.interval_three_minute:
-                selectIntervalTime(item, EIntervalTipTime.THREE_MINUTE.name());
-                break;
-            case R.id.interval_five_minute:
-                selectIntervalTime(item, EIntervalTipTime.FIVE_MINUTE.name());
-                break;
-            case R.id.interval_ten_minute:
-                selectIntervalTime(item, EIntervalTipTime.TEN_MINUTE.name());
-                break;
-            case R.id.interval_thirty_minute:
-                selectIntervalTime(item, EIntervalTipTime.THIRTY_MINUTE.name());
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void selectIntervalTime(MenuItem item, String name) {
-        SpUtils.setIntervalTipTime(this, name);
-        item.setChecked(true);
-        startListenService();
-    }
 
     private void selectEngine(ETranslateFrom way) {
         SpUtils.setTranslateEngine(this, way.name());
@@ -413,42 +385,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mSpTranslateWay.setSelection(from.getIndex());
     }
 
-    @Override
-    public void initDurationTimeSetting(Menu menu, EDurationTipTime durationTime) {
-        switch (durationTime) {
-            case ONE_SECOND:
-                menu.findItem(R.id.duration_two_second).setChecked(true);
-                break;
-            case FOUR_SECOND:
-                menu.findItem(R.id.duration_four_second).setChecked(true);
-                break;
-            case SIX_SECOND:
-                menu.findItem(R.id.duration_six_second).setChecked(true);
-                break;
-        }
-    }
-
-    @Override
-    public void initIntervalTimeSetting(Menu menu, EIntervalTipTime intervalTime) {
-        switch (intervalTime) {
-            case ONE_MINUTE:
-                menu.findItem(R.id.interval_one_minute).setChecked(true);
-                break;
-            case THREE_MINUTE:
-                menu.findItem(R.id.interval_three_minute).setChecked(true);
-                break;
-            case FIVE_MINUTE:
-                menu.findItem(R.id.interval_five_minute).setChecked(true);
-                break;
-            case TEN_MINUTE:
-                menu.findItem(R.id.interval_ten_minute).setChecked(true);
-                break;
-            case THIRTY_MINUTE:
-                menu.findItem(R.id.interval_thirty_minute).setChecked(true);
-                break;
-        }
-    }
-
     @OnClick(R.id.bt_translate)
     public void onClickTranslate(View view) {
         MobclickAgent.onEvent(getApplicationContext(),"action_translate");
@@ -531,21 +467,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             mPresenter.playSound(fileName,mp3Url);
         }
         mPresenter.startSoundAnim(view);
-    }
-
-    @Override
-    public void initReciteSetting(Menu menu, boolean isOpen) {
-        menu.findItem(R.id.menu_use_recite_or_not).setChecked(isOpen);
-        menu.findItem(R.id.menu_interval_tip_time).setVisible(isOpen);
-
-        menu.findItem(R.id.menu_use_recite_or_not).setVisible(false);
-        menu.findItem(R.id.menu_interval_tip_time).setVisible(false);
-
-    }
-
-    @Override
-    public void initJITSetting(Menu menu, boolean isOpen) {
-        menu.findItem(R.id.menu_open_jit_or_nor).setChecked(isOpen);
     }
 
     @Override

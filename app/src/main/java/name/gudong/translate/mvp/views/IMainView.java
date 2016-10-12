@@ -20,12 +20,8 @@
 
 package name.gudong.translate.mvp.views;
 
-import android.view.Menu;
-
 import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.Result;
-import name.gudong.translate.mvp.model.type.EDurationTipTime;
-import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 
 /**
@@ -44,25 +40,7 @@ public interface IMainView extends IBaseView {
 
     void initTranslateEngineSetting(ETranslateFrom way);
 
-    void initDurationTimeSetting(Menu menu, EDurationTipTime way);
-
-    void initIntervalTimeSetting(Menu menu,EIntervalTipTime way);
-
-    /**
-     * 初始化是否背单词的设置
-     * @param menu
-     * @param isOpen
-     */
-    void initReciteSetting(Menu menu, boolean isOpen);
-
     void onTranslateComplete();
-
-    /**
-     * 初始化是否开启划词翻译
-     * @param menu
-     * @param isOpen
-     */
-    void initJITSetting(Menu menu, boolean isOpen);
 
     /**
      * 关闭软键盘

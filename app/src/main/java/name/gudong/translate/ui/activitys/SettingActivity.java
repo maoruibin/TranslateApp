@@ -205,7 +205,6 @@ public class SettingActivity extends AppCompatActivity {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             switch (preference.getKey()){
                 case "preference_use_recite_or_not":
-//                    RxBus.getInstance().send(new ReciteSwitchEvent((Boolean) newValue));
                     startListenService();
                     break;
                 case "preference_show_icon_in_notification":

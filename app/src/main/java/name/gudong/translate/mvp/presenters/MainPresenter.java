@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Menu;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.WhereBuilder;
@@ -49,8 +48,6 @@ import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.dayline.JinshanDayLineEntity;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
-import name.gudong.translate.mvp.model.type.EDurationTipTime;
-import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.ui.activitys.MainActivity;
@@ -243,18 +240,6 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void prepareTranslateWay() {
         ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
         mView.initTranslateEngineSetting(from);
-    }
-
-    public void prepareOptionSettings(Menu menu) {
-        EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(getContext());
-        EDurationTipTime durationTime = SpUtils.getDurationTimeWay(getContext());
-        boolean reciteFlag = SpUtils.getReciteOpenOrNot(getContext());
-        boolean openJIT = SpUtils.getOpenJITOrNot(getContext());
-
-        mView.initIntervalTimeSetting(menu, intervalTime);
-        mView.initDurationTimeSetting(menu, durationTime);
-        mView.initReciteSetting(menu, reciteFlag);
-        mView.initJITSetting(menu, openJIT);
     }
 
     /**
