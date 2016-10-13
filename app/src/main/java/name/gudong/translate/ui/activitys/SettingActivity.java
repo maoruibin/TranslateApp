@@ -215,7 +215,6 @@ public class SettingActivity extends AppCompatActivity {
                     }
                     break;
             }
-
             return true;
         }
 

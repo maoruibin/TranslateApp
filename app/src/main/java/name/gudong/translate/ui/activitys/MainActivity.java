@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void initConfig() {
-        mPresenter.clearSoundCache();
+        //mPresenter.clearSoundCache();
     }
 
     private void checkVersion() {
