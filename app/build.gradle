@@ -1,0 +1,182 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+
+//格式化打完完成后APK名称中的时间
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC+8"))
+}
+
+def cfg = rootProject.ext.configuration
+def libs = rootProject.ext.libraries;
+def test = rootProject.ext.testingLibraries;
+
+
+android {
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
+
+    defaultConfig {
+        applicationId cfg.package
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode cfg.version_code
+        versionName cfg.version_name
+
+        //for use support vectorDrawables
+        vectorDrawables.useSupportLibrary = true
+
+        //baidu config
+        buildConfigField "String", "BAIDU_SCREAT_KEY", '"5jlBZtaMuo6Xlx5LOIVC"'
+        buildConfigField "String", "BAIDU_APP_ID", '"20151224000008231"'
+
+        //iciba config
+        buildConfigField "String", "ICIBA_KEY", '"8B660C51C6D4A410DE9D406667729BC4"'
+
+        //youdao config
+        buildConfigField "String", "YOUDAO_USERNAME", '"gudong"'
+        buildConfigField "String", "YOUDAO_KEY", '"1235023502"'
+        buildConfigField "String", "YOUDAO_TYPE", '"data"'
+        buildConfigField "String", "YOUDAO_DOC_TYPE", '"json"'
+        buildConfigField "String", "YOUDAO_VERSION", '"1.2"'
+
+        //common value
+        buildConfigField "String", "RESULT_JSON", '"json"'
+        buildConfigField "String", "LANGUAGE_AUTO", '"auto"'
+        buildConfigField "Boolean", "IS_DEBUG", 'true'
+
+    }
+
+    signingConfigs {
+        //指定名叫release的一个签名对象，下面会动态根据配置文件设置属性
+        releaseConfig
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+        release {
+            //如果签名配置不为空 则设置签名信息
+            if (signingConfigs.releaseConfig != null) {
+                signingConfig signingConfigs.releaseConfig
+            }
+            //设置是否混淆
+            minifyEnabled false
+            //设置压缩对齐
+            zipAlignEnabled true
+            //移除无用的资源文件
+            shrinkResources false
+            //设置混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //指定签名包得输入文件名称
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "GdTranslate_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_release.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+            buildConfigField "Boolean", "IS_DEBUG", 'false'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    productFlavors {
+        beta {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "beta"]
+        }
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+        }
+        m360 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "m360"]
+        }
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        }
+        fir {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "fir"]
+        }
+        play {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
+        }
+        coolapk {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "coolapk"]
+        }
+        dev21 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dev21"]
+            minSdkVersion cfg.minSdk21
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+//set release sign info synchronously
+def Properties props = new Properties()
+def propFile = file('../gradle.properties')
+if (propFile.exists()) {
+    props.load(new FileInputStream(propFile))
+    if (props != null &&
+            props.containsKey('SIGN_FILE') && props.containsKey('SIGN_KEYSTORE_PASS') &&
+            props.containsKey('SIGN_KEYSTORE_ALIAS') && props.containsKey('SIGN_KEYSTORE_ALIAS_PASS')) {
+        println 'release build signing'
+        android.signingConfigs.releaseConfig.storeFile = file(props['SIGN_FILE'])
+        android.signingConfigs.releaseConfig.storePassword = props['SIGN_KEYSTORE_PASS']
+        android.signingConfigs.releaseConfig.keyAlias = props['SIGN_KEYSTORE_ALIAS']
+        android.signingConfigs.releaseConfig.keyPassword = props['SIGN_KEYSTORE_ALIAS_PASS']
+    } else {
+        println 'release build not found signing properties'
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'release build not found signing file'
+    android.buildTypes.release.signingConfig = null
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/Bughd_android_sdk_v1.3.7.jar')
+    // Test
+    testCompile "junit:junit:${test.junit}"
+    // Android
+    compile "com.android.support:recyclerview-v7:${libs.supportVersion}"
+    compile "com.android.support:appcompat-v7:${libs.supportVersion}"
+    compile "com.android.support:design:${libs.supportVersion}"
+
+    // Google
+    compile "com.google.dagger:dagger:${libs.dagger}"
+    apt "com.google.dagger:dagger-compiler:${libs.dagger}"
+    provided "org.glassfish:javax.annotation:${libs.javax_annotation}"
+    // Square
+    compile "com.jakewharton:butterknife:${libs.butterknife}"
+    apt "com.jakewharton:butterknife-compiler:${libs.butterknife}"
+    compile "com.squareup.retrofit:retrofit:${libs.retrofit}"
+    compile "com.squareup.retrofit:converter-gson:${libs.retrofit}"
+    compile "com.squareup.retrofit:adapter-rxjava:${libs.retrofit}"
+    // Reactive
+    compile "io.reactivex:rxandroid:${libs.rxandroid}"
+    // Other
+    compile "com.orhanobut:logger:${libs.logger}"
+    retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:${libs.retrolambda}"
+    compile "com.jonathanfinerty.once:once:${libs.once}"
+
+    compile "com.android.support:preference-v7:${libs.supportVersion}"
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile "com.android.support:support-v4:${libs.supportVersion}"
+
+    compile "moe.feng:AlipayZeroSdk:${libs.alipay_zero_sdk}"
+
+    compile "com.jenzz:materialpreference:${libs.materialpreference}"
+    compile "com.github.bumptech.glide:glide:${libs.glide}"
+}
