@@ -98,7 +98,7 @@ public class TipViewController{
         }
     }
 
-    public void show(Result result,boolean isShowFavoriteButton,TipView.ITipViewListener mListener) {
+    public void show(Result result,boolean isShowFavoriteButton,boolean isShowDoneMark,TipView.ITipViewListener mListener) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         boolean isSettingUseSystemNotification = sharedPreferences.getBoolean("preference_show_float_view_use_system",false);
         if(Utils.isSDKHigh5() && isSettingUseSystemNotification){
@@ -148,7 +148,7 @@ public class TipViewController{
             tipView.setListener(mListener);
             mWindowManager.addView(tipView, getPopViewParams());
             tipView.startWithAnim();
-            tipView.setContent(result, isShowFavoriteButton);
+            tipView.setContent(result, isShowFavoriteButton,isShowDoneMark);
             closeTipViewCountdown(tipView,mListener);
         }
     }

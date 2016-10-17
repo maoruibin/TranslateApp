@@ -45,6 +45,8 @@ public class Result implements Serializable{
     public static final String COL_TRANSLATE_FROM= "translate_from";
     public static final String COL_PH_EN =  "ph_en";
     public static final String COL_PH_AM= "ph_am";
+    public static final String COL_MARK_DONE_ONCE= "make_done_once";
+    public static final String COL_MARK_DONE_ONCE_TIME= "make_done_once_time";
     //update 2016/09/10
     public static final String COL_MP3_FILE_NAME= "mp3_file_name";
 
@@ -73,6 +75,11 @@ public class Result implements Serializable{
     protected String phEn;
     @Column(COL_PH_AM)
     protected String phAm;
+
+    @Column(COL_MARK_DONE_ONCE)
+    protected boolean make_done_once;
+    @Column(COL_MARK_DONE_ONCE_TIME)
+    protected long make_done_once_time;
 
     protected String mp3FileName;
 
@@ -179,5 +186,37 @@ public class Result implements Serializable{
 
     public void setMp3FileName(String mp3FileName) {
         this.mp3FileName = mp3FileName;
+    }
+
+    public boolean isMake_done_once() {
+        return make_done_once;
+    }
+
+    public void setMake_done_once(boolean make_done_once) {
+        this.make_done_once = make_done_once;
+    }
+
+    public long getMake_done_once_time() {
+        return make_done_once_time;
+    }
+
+    public void setMake_done_once_time(long make_done_once_time) {
+        this.make_done_once_time = make_done_once_time;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Result result = (Result) o;
+
+        return query != null ? query.equals(result.query) : result.query == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return query != null ? query.hashCode() : 0;
     }
 }

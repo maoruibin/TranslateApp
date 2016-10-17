@@ -42,6 +42,7 @@ public class TipView extends LinearLayout {
     private LinearLayout mLlSrc;
     private ImageView mIvFavorite;
     private ImageView mIvSound;
+    private ImageView mIvDone;
     private TextView mTvPoint;
 
     Result mResult = null;
@@ -68,6 +69,7 @@ public class TipView extends LinearLayout {
         mLlDst = (LinearLayout) view.findViewById(R.id.ll_pop_dst);
         mIvFavorite = (ImageView) view.findViewById(R.id.iv_favorite);
         mIvSound = (ImageView) view.findViewById(R.id.iv_sound);
+        mIvDone = (ImageView) view.findViewById(R.id.iv_done);
         mContentView = view.findViewById(R.id.pop_view_content_view);
     }
 
@@ -79,10 +81,10 @@ public class TipView extends LinearLayout {
         mTvPoint.setText(error);
     }
 
-    public void setContent(Result result, boolean isShowFavoriteButton) {
+    public void setContent(Result result, boolean isShowFavoriteButton,boolean isShowDoneMark) {
         if (result == null) return;
         mResult = result;
-        initView(isShowFavoriteButton,result);
+        initView(result,isShowFavoriteButton,isShowDoneMark);
         addListener(result);
 
         setQuery(result.getQuery());
@@ -131,8 +133,9 @@ public class TipView extends LinearLayout {
         mLlDst.addView(ViewUtil.getWordsView(getContext(), explains, android.R.color.white, false));
     }
 
-    private void initView(boolean isShowFavoriteButton,Result result){
+    private void initView(Result result,boolean isShowFavoriteButton,boolean isShowDoneMark){
         mIvFavorite.setVisibility(isShowFavoriteButton ? View.VISIBLE : View.GONE);
+        mIvDone.setVisibility(isShowDoneMark ? View.VISIBLE : View.GONE);
         mIvSound.setVisibility(TextUtils.isEmpty(result.getEnMp3()) ? View.GONE : View.VISIBLE);
         mListener.onInitFavorite(mIvFavorite, result);
     }
@@ -145,6 +148,11 @@ public class TipView extends LinearLayout {
         mIvSound.setOnClickListener(v -> {
             if (mListener != null) {
                 mListener.onClickPlaySound(v, result);
+            }
+        });
+        mIvDone.setOnClickListener(v->{
+            if(mListener != null){
+                mListener.onClickDone(v,result);
             }
         });
         setOnClickListener(new OnClickListener() {
@@ -170,6 +178,8 @@ public class TipView extends LinearLayout {
         void onClickFavorite(View view, Result result);
 
         void onClickPlaySound(View view, Result result);
+
+        void onClickDone(View view, Result result);
 
         void onClickTipFrame(View view, Result result);
 

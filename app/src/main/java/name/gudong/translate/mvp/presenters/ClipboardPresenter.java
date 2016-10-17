@@ -23,6 +23,7 @@ package name.gudong.translate.mvp.presenters;
 import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -83,7 +84,9 @@ public class ClipboardPresenter extends TipFloatPresenter {
     @Inject
     public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         super(liteOrm, apiService, singleRequestService, context);
-        results = mLiteOrm.query(Result.class);
+        QueryBuilder queryBuilder = new QueryBuilder(Result.class);
+        queryBuilder = queryBuilder.whereEquals(Result.COL_MARK_DONE_ONCE, false);
+        results = mLiteOrm.query(queryBuilder);
     }
 
     @Override
@@ -190,5 +193,19 @@ public class ClipboardPresenter extends TipFloatPresenter {
             return results.size()-1;
         }
         return currentIndex;
+    }
+
+    /**
+     * 标记已背
+     * @param result
+     */
+    public void markDone(Result result) {
+        result.setMake_done_once(true);
+        Logger.i("size "+results.size());
+        if(results.remove(result)){
+            Logger.i("remove suc");
+        }
+        Logger.i("size "+results.size());
+        mLiteOrm.update(result);
     }
 }
