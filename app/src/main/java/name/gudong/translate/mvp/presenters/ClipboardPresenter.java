@@ -63,14 +63,6 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
     private int currentIndex = -1;
 
-    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> {
-        CharSequence content = mClipboardWatcher.getText();
-        if(content != null){
-            performClipboardCheck(content.toString());
-        }
-    };
-
-
     /**
      * 定时显示 Tip 事件源
      */
@@ -80,6 +72,12 @@ public class ClipboardPresenter extends TipFloatPresenter {
      */
     Action1 mActionShowTip;
 
+    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> {
+        CharSequence content = mClipboardWatcher.getText();
+        if(content != null){
+            performClipboardCheck(content.toString());
+        }
+    };
 
     @Inject
     public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
@@ -87,6 +85,7 @@ public class ClipboardPresenter extends TipFloatPresenter {
         QueryBuilder queryBuilder = new QueryBuilder(Result.class);
         queryBuilder = queryBuilder.whereEquals(Result.COL_MARK_DONE_ONCE, false);
         results = mLiteOrm.query(queryBuilder);
+        Logger.i("result size is "+results.size());
     }
 
     @Override

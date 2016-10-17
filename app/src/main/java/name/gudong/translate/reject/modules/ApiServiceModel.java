@@ -20,7 +20,9 @@
 
 package name.gudong.translate.reject.modules;
 
+import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
 
@@ -45,6 +47,9 @@ public class ApiServiceModel {
     @Provides
     @Singleton
     ApiService provideApiService(){
+        OkHttpClient client = new OkHttpClient();
+        client.networkInterceptors().add(new StethoInterceptor());
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(new BaseUrl() {
                     @Override
@@ -55,18 +60,25 @@ public class ApiServiceModel {
                 // for RxJava
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
+
+
         return retrofit.create(ApiService.class);
     }
 
     @Provides
     @Singleton
     SingleRequestService provideDownloadService(){
+        OkHttpClient client = new OkHttpClient();
+        client.networkInterceptors().add(new StethoInterceptor());
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.baidu.com/")
                 // for RxJava
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
         return retrofit.create(SingleRequestService.class);
     }

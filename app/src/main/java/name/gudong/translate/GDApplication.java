@@ -23,6 +23,7 @@ package name.gudong.translate;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
@@ -49,6 +50,7 @@ public class GDApplication extends Application {
         setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
         FIR.init(this);
         Once.initialise(this);
+        Stetho.initializeWithDefaults(this);
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .apiServiceModel(new ApiServiceModel())

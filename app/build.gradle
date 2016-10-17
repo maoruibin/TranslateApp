@@ -179,4 +179,7 @@ dependencies {
 
     compile "com.jenzz:materialpreference:${libs.materialpreference}"
     compile "com.github.bumptech.glide:glide:${libs.glide}"
+
+    compile "com.facebook.stetho:stetho:${libs.stetho}"
+    compile "com.facebook.stetho:stetho-okhttp:${libs.stetho}"
 }

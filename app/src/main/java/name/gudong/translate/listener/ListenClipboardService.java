@@ -180,7 +180,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
 
     @Override
     public void showResult(Result result, boolean isShowFavorite) {
-        mTipViewController.show(result, isShowFavorite,result.isMake_done_once(), this);
+        mTipViewController.show(result, isShowFavorite,!result.isMake_done_once(), this);
         if(SpUtils.isPlaySoundAuto(this)){
             mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         }
