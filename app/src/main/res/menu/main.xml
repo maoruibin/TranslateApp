@@ -26,8 +26,14 @@
 
     <item
         android:id="@+id/menu_book"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:title="@string/favorite_list"/>
+
+    <item
+        android:id="@+id/menu_setting"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_setting"/>
+
     <item
         android:id="@+id/menu_support"
         app:showAsAction="never"
@@ -37,10 +43,6 @@
         android:id="@+id/menu_score"
         app:showAsAction="never"
         android:title="@string/menu_score"/>
-    <item
-        android:id="@+id/menu_setting"
-        app:showAsAction="never"
-        android:title="@string/menu_setting"/>
 
     <item
         android:id="@+id/menu_about"
