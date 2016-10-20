@@ -122,6 +122,17 @@ public class MainPresenter extends BasePresenter<IMainView> {
         if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
             DialogUtil.showChangelog((AppCompatActivity) getContext());
             Once.markDone(showWhatsNew);
+            trigDbUpdate();
+        }
+    }
+
+    public void trigDbUpdate(){
+        List<Result>results = mLiteOrm.query(Result.class);
+        for (Result result:results) {
+            if(!result.isMake_done_once()){
+                result.setMake_done_once(false);
+                mLiteOrm.update(result);
+            }
         }
     }
 

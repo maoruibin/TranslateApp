@@ -83,7 +83,7 @@ public class ClipboardPresenter extends TipFloatPresenter {
     public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         super(liteOrm, apiService, singleRequestService, context);
         QueryBuilder queryBuilder = new QueryBuilder(Result.class);
-        queryBuilder = queryBuilder.whereEquals(Result.COL_MARK_DONE_ONCE, false);
+        queryBuilder = queryBuilder.whereNoEquals(Result.COL_MARK_DONE_ONCE, true);
         results = mLiteOrm.query(queryBuilder);
         Logger.i("result size is "+results.size());
     }
@@ -200,6 +200,7 @@ public class ClipboardPresenter extends TipFloatPresenter {
      */
     public void markDone(Result result) {
         result.setMake_done_once(true);
+        result.setMake_done_once_time(System.currentTimeMillis());
         Logger.i("size "+results.size());
         if(results.remove(result)){
             Logger.i("remove suc");
