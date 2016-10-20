@@ -130,6 +130,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         //每日一句
         if(getIntent().getIntExtra("flag",-1) == 1){
             onClickBottomSheet(findViewById(R.id.fl_bottom_sheet));
+            MobclickAgent.onEvent(getApplicationContext(),"enter_mainactivity_by_click_notification_dayline");
+            onClickDaylineSound(findViewById(R.id.iv_sound_dayline));
         }
     }
 

@@ -24,10 +24,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (SpUtils.isNotifyDayline(context)) {
             if(Utils.isSDKHigh5()){
-
                 Intent resultIntent = new Intent(mContext, MainActivity.class);
                 resultIntent.putExtra("flag",1);
-
                 PendingIntent resultPendingIntent = PendingIntent.getActivity(
                         mContext,
                         0,

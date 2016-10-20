@@ -77,7 +77,8 @@
 
         <activity android:name="name.gudong.translate.ui.activitys.SettingActivity" />
 
-        <receiver android:name="name.gudong.translate.listener.AlarmReceiver">
+        <receiver android:name="name.gudong.translate.listener.AlarmReceiver"
+            android:process=":remote">
             <intent-filter>
                 <action android:name="name.gudong.translate.alarm"/>
             </intent-filter>
