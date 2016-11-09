@@ -18,7 +18,7 @@
  *
  */
 
-package name.gudong.translate.reject.modules;
+package name.gudong.translate.injection.modules;
 
 import android.content.Context;
 
@@ -26,7 +26,7 @@ import dagger.Module;
 import dagger.Provides;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.listener.view.TipViewController;
-import name.gudong.translate.reject.ActivityScope;
+import name.gudong.translate.injection.ActivityScope;
 
 @Module
 public class ActivityModule {

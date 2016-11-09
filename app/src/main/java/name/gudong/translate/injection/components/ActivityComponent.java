@@ -18,12 +18,12 @@
  *
  */
 
-package name.gudong.translate.reject.components;
+package name.gudong.translate.injection.components;
 
 import dagger.Component;
 import name.gudong.translate.listener.ListenClipboardService;
-import name.gudong.translate.reject.ActivityScope;
-import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.injection.ActivityScope;
+import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.ui.activitys.ProcessTextActivity;
 import name.gudong.translate.ui.activitys.WordsBookActivity;

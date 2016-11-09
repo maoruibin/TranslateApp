@@ -32,8 +32,8 @@ import javax.inject.Inject;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.views.IBaseView;
-import name.gudong.translate.reject.components.AppComponent;
-import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.injection.components.AppComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
 
 /**
  * Created by GuDong on 1/28/16 11:35.

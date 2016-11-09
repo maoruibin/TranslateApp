@@ -18,14 +18,33 @@
  *
  */
 
-package name.gudong.translate.reject;
+package name.gudong.translate.injection.components;
 
-import javax.inject.Scope;
+import com.litesuits.orm.LiteOrm;
+
+import javax.inject.Singleton;
+
+import dagger.Component;
+import name.gudong.translate.GDApplication;
+import name.gudong.translate.mvp.model.SingleRequestService;
+import name.gudong.translate.mvp.model.WarpAipService;
+import name.gudong.translate.injection.modules.ApiServiceModel;
+import name.gudong.translate.injection.modules.AppModule;
 
 /**
- * Created by GuDong on 12/27/15 11:16.
+ * Created by GuDong on 12/27/15 16:41.
  * Contact with gudong.name@gmail.com.
  */
-@Scope
-public @interface ActivityScope {
+@Singleton
+@Component(modules = {AppModule.class,ApiServiceModel.class})
+public interface AppComponent {
+
+    GDApplication getApplication();
+
+    LiteOrm getLiteOrm();
+
+    WarpAipService getWarpService();
+
+    SingleRequestService getDwnloadService();
+
 }

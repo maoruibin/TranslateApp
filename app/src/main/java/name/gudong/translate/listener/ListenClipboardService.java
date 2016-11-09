@@ -44,8 +44,8 @@ import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;
 import name.gudong.translate.mvp.views.ITipFloatView;
-import name.gudong.translate.reject.components.DaggerActivityComponent;
-import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.injection.components.DaggerActivityComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.util.SpUtils;
 
 

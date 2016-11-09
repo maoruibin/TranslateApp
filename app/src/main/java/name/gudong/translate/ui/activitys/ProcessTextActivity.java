@@ -23,9 +23,9 @@ import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.TipFloatPresenter;
 import name.gudong.translate.mvp.views.ITipFloatView;
-import name.gudong.translate.reject.components.AppComponent;
-import name.gudong.translate.reject.components.DaggerActivityComponent;
-import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.injection.components.AppComponent;
+import name.gudong.translate.injection.components.DaggerActivityComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
 
 public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> implements ITipFloatView, TipView.ITipViewListener {
     @Inject
