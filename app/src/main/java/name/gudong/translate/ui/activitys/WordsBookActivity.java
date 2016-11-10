@@ -42,9 +42,9 @@ import me.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BookPresenter;
 import name.gudong.translate.mvp.views.IBookView;
-import name.gudong.translate.reject.components.AppComponent;
-import name.gudong.translate.reject.components.DaggerActivityComponent;
-import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.injection.components.AppComponent;
+import name.gudong.translate.injection.components.DaggerActivityComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.ui.adapter.WordsListAdapter;
 
 public class WordsBookActivity extends BaseActivity<BookPresenter> implements WordsListAdapter.OnClick, IBookView {
