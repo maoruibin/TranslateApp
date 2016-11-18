@@ -268,16 +268,22 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
     public void dayline(){
         mSingleRequestService.dayline("http://open.iciba.com/dsapi/")
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<JinshanDayLineEntity>() {
-            @Override
-            public void call(JinshanDayLineEntity jinshanDayLineEntity) {
-                if(jinshanDayLineEntity != null){
-                    mView.fillDayline(jinshanDayLineEntity);
-                }
-            }
-        });
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<JinshanDayLineEntity>() {
+                    @Override
+                    public void call(JinshanDayLineEntity jinshanDayLineEntity) {
+                        if(jinshanDayLineEntity != null){
+                            mView.fillDayline(jinshanDayLineEntity);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        //call onError to stop crashing the app
+                        //TODO error handling
+                    }
+                });
     }
 
     public static void jumpMainActivityFromClickTipView(Context context,Result result){
