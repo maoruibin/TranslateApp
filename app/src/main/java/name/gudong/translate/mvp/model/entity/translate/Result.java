@@ -47,6 +47,9 @@ public class Result implements Serializable{
     public static final String COL_PH_AM= "ph_am";
     public static final String COL_MARK_DONE_ONCE= "make_done_once";
     public static final String COL_MARK_DONE_ONCE_TIME= "make_done_once_time";
+
+    public static final String COL_CREATE_TIME= "create_time";
+    public static final String COL_UPDATE_TIME= "update_time";
     //update 2016/09/10
     public static final String COL_MP3_FILE_NAME= "mp3_file_name";
 
@@ -80,6 +83,11 @@ public class Result implements Serializable{
     protected boolean make_done_once;
     @Column(COL_MARK_DONE_ONCE_TIME)
     protected long make_done_once_time;
+
+    @Column(COL_CREATE_TIME)
+    protected long create_time;
+    @Column(COL_UPDATE_TIME)
+    protected long update_time;
 
     protected String mp3FileName;
 
@@ -202,6 +210,22 @@ public class Result implements Serializable{
 
     public void setMake_done_once_time(long make_done_once_time) {
         this.make_done_once_time = make_done_once_time;
+    }
+
+    public long getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(long update_time) {
+        this.update_time = update_time;
+    }
+
+    public long getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
     }
 
     @Override

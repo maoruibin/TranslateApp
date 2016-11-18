@@ -8,7 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
+import com.litesuits.orm.db.assit.WhereBuilder;
+import com.orhanobut.logger.Logger;
+
 import me.gudong.translate.R;
+import name.gudong.translate.GDApplication;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
@@ -22,6 +29,17 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if(intent.getBooleanExtra("checkWords",false)){
+            LiteOrm liteOrm = GDApplication.getAppComponent().getLiteOrm();
+            QueryBuilder builder = new QueryBuilder(Result.class);
+            WhereBuilder whereBuilder = new WhereBuilder(Result.class);
+            whereBuilder.lessThan(Result.COL_CREATE_TIME,System.currentTimeMillis()).and().greaterThan(Result.COL_CREATE_TIME,System.currentTimeMillis());
+            builder.where(whereBuilder);
+            long count = liteOrm.queryCount(builder);
+            Logger.i("count is "+count);
+        }
+
+
         if (SpUtils.isNotifyDayline(context)) {
             if(Utils.isSDKHigh5()){
                 Intent resultIntent = new Intent(mContext, MainActivity.class);

@@ -163,7 +163,8 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     public List<String> call(AbsResult absResult) {
                         Result result = absResult.getResult();
                         if (result == null) return null;
-
+                        result.setCreate_time(System.currentTimeMillis());
+                        result.setUpdate_time(System.currentTimeMillis());
                         mView.addTagForView(result);
 
                         if (!TextUtils.isEmpty(result.getEnMp3())) {

@@ -43,15 +43,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
+import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
+import com.litesuits.orm.db.assit.WhereBuilder;
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.net.UnknownHostException;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
+import name.gudong.translate.GDApplication;
 import name.gudong.translate.manager.AlarmManagers;
 import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
@@ -116,13 +122,36 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkVersion();
         initConfig();
         setUpDayline();
+        prepareDayLineData();
         checkIntent();
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int mouth = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        calendar.set(year,mouth,day);
+
+        long start = calendar.getTime().getTime();
+        long end = start+24*60*60*1000;
+
+        LiteOrm liteOrm = GDApplication.getAppComponent().getLiteOrm();
+        QueryBuilder builder = new QueryBuilder(Result.class);
+
+        WhereBuilder whereBuilder = new WhereBuilder(Result.class);
+        whereBuilder.lessThan(Result.COL_CREATE_TIME,end).and().greaterThan(Result.COL_CREATE_TIME,start);
+        builder.where(whereBuilder);
+        long count = liteOrm.queryCount(builder);
+        Logger.i("count is "+count);
     }
 
     private void setUpDayline() {
-        mPresenter.dayline();
         FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
+    }
+
+    private void prepareDayLineData(){
+        mPresenter.dayline();
     }
 
     private void checkIntent() {
@@ -131,7 +160,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         if(getIntent().getIntExtra("flag",-1) == 1){
             onClickBottomSheet(findViewById(R.id.fl_bottom_sheet));
             MobclickAgent.onEvent(getApplicationContext(),"enter_mainactivity_by_click_notification_dayline");
-            onClickDaylineSound(findViewById(R.id.iv_sound_dayline));
+            mIvSoundDayline.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onClickDaylineSound(findViewById(R.id.iv_sound_dayline));
+                }
+            },1000);
+
         }
     }
 
