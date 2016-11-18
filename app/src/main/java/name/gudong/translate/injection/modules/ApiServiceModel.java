@@ -18,7 +18,7 @@
  *
  */
 
-package name.gudong.translate.reject.modules;
+package name.gudong.translate.injection.modules;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.squareup.okhttp.HttpUrl;
