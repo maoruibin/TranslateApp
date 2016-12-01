@@ -22,6 +22,7 @@ package name.gudong.translate;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -45,6 +46,7 @@ public class GDApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         mContext = this;
         setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
         FIR.init(this);

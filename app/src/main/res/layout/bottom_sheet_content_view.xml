@@ -29,7 +29,7 @@
 
 
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_sound_dayline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
