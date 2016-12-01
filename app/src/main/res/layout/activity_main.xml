@@ -103,7 +103,7 @@
                         android:text="翻译结果"
                         android:textColor="#999999" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/iv_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                         app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/iv_sound"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                         android:layout_toLeftOf="@+id/iv_paste"
                         app:srcCompat="@drawable/ic_volume_up_black_24dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/iv_paste"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
