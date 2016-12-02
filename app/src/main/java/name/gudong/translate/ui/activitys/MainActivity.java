@@ -22,9 +22,9 @@ package name.gudong.translate.ui.activitys;
 
 import android.animation.Animator;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -37,7 +37,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -98,7 +97,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @BindView(R.id.tv_dayline_note)
     TextView mTvDaylineNote;
     @BindView(R.id.iv_sound_dayline)
-    ImageView mIvSoundDayline;
+    AppCompatImageView mIvSoundDayline;
     @BindView(R.id.main_content)
     CoordinatorLayout coordinatorLayout;
 
@@ -125,8 +124,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void setUpDayline() {
         mPresenter.dayline();
-        View bottomSheet = coordinatorLayout.findViewById(R.id.bottomsheet_view);
-        //点击 和拖拽都可以打开bottomsheet
+        View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet_view);
+        //点击 和拖拽都可以打开bottom sheet
         bottomSheet.setOnClickListener(v -> onClickBottomSheet());
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelOffset(R.dimen.actionbar_height));

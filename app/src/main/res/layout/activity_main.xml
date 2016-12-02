@@ -143,6 +143,8 @@
             </ScrollView>
         </LinearLayout>
 
-        <include android:id="@+id/bottomsheet_view" layout="@layout/bottom_sheet_content_view" />
+        <include
+            android:id="@+id/bottom_sheet_view"
+            layout="@layout/bottom_sheet_content_view" />
 </android.support.design.widget.CoordinatorLayout>
 
