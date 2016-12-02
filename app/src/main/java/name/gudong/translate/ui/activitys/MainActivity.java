@@ -22,7 +22,9 @@ package name.gudong.translate.ui.activitys;
 
 import android.animation.Animator;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -60,9 +62,9 @@ import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.MainPresenter;
 import name.gudong.translate.mvp.views.IMainView;
-import name.gudong.translate.reject.components.AppComponent;
-import name.gudong.translate.reject.components.DaggerActivityComponent;
-import name.gudong.translate.reject.modules.ActivityModule;
+import name.gudong.translate.injection.components.AppComponent;
+import name.gudong.translate.injection.components.DaggerActivityComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.ui.NavigationManager;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.InputMethodUtils;
@@ -97,6 +99,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     TextView mTvDaylineNote;
     @BindView(R.id.iv_sound_dayline)
     ImageView mIvSoundDayline;
+    @BindView(R.id.main_content)
+    CoordinatorLayout coordinatorLayout;
 
 
     Menu mMenu;
@@ -121,15 +125,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void setUpDayline() {
         mPresenter.dayline();
-        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
+        View bottomSheet = coordinatorLayout.findViewById(R.id.bottomsheet_view);
+        //点击 和拖拽都可以打开bottomsheet
+        bottomSheet.setOnClickListener(v -> onClickBottomSheet());
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelOffset(R.dimen.actionbar_height));
     }
 
     private void checkIntent() {
         mPresenter.checkIntentFromClickTipView(getIntent());
         //每日一句
         if(getIntent().getIntExtra("flag",-1) == 1){
-            onClickBottomSheet(findViewById(R.id.fl_bottom_sheet));
+            onClickBottomSheet();
         }
     }
 
@@ -546,8 +553,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mSpTranslateWay.setAdapter(adapter);
     }
 
-    @OnClick(R.id.fl_bottom_sheet)
-    public void onClickBottomSheet(View view){
+    public void onClickBottomSheet(){
         if(mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }else{

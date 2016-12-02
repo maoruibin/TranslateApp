@@ -22,6 +22,7 @@ package name.gudong.translate;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -29,10 +30,10 @@ import com.orhanobut.logger.Logger;
 import im.fir.sdk.FIR;
 import jonathanfinerty.once.Once;
 import me.gudong.translate.BuildConfig;
-import name.gudong.translate.reject.components.AppComponent;
-import name.gudong.translate.reject.components.DaggerAppComponent;
-import name.gudong.translate.reject.modules.ApiServiceModel;
-import name.gudong.translate.reject.modules.AppModule;
+import name.gudong.translate.injection.components.AppComponent;
+import name.gudong.translate.injection.components.DaggerAppComponent;
+import name.gudong.translate.injection.modules.ApiServiceModel;
+import name.gudong.translate.injection.modules.AppModule;
 
 /**
  * Created by GuDong on 12/27/15 16:46.
@@ -45,6 +46,7 @@ public class GDApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         mContext = this;
         setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
         FIR.init(this);
