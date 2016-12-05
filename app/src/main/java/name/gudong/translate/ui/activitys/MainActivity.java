@@ -393,8 +393,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @OnClick(R.id.bt_translate)
     public void onClickTranslate(View view) {
-        MobclickAgent.onEvent(getApplicationContext(),"action_translate");
-        translate();
+//        MobclickAgent.onEvent(getApplicationContext(),"action_translate");
+//        translate();
+        System.out.print(1/0);
     }
 
     @OnClick(R.id.tv_clear)

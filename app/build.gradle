@@ -60,7 +60,10 @@ android {
         release {
             //如果签名配置不为空 则设置签名信息
             if (signingConfigs.releaseConfig != null) {
+                print("use release key")
                 signingConfig signingConfigs.releaseConfig
+            }else{
+                print("use debug key")
             }
             //设置是否混淆
             minifyEnabled false
@@ -179,4 +182,8 @@ dependencies {
 
     compile "com.jenzz:materialpreference:${libs.materialpreference}"
     compile "com.github.bumptech.glide:glide:${libs.glide}"
+
+    compile ("me.drakeet.library:crashwoodpecker:${libs.crashwoodpecker}"){
+        exclude module: 'recyclerview-v7'
+    }
 }

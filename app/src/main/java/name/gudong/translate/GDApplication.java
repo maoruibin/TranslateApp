@@ -29,6 +29,8 @@ import com.orhanobut.logger.Logger;
 
 import im.fir.sdk.FIR;
 import jonathanfinerty.once.Once;
+import me.drakeet.library.CrashWoodpecker;
+import me.drakeet.library.PatchMode;
 import me.gudong.translate.BuildConfig;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerAppComponent;
@@ -55,6 +57,16 @@ public class GDApplication extends Application {
                 .appModule(new AppModule(this))
                 .apiServiceModel(new ApiServiceModel())
                 .build();
+        initCrashWoodpecker();
+    }
+
+    private void initCrashWoodpecker() {
+        CrashWoodpecker.instance()
+                .withKeys("widget", "me.drakeet")
+                .setPatchMode(PatchMode.SHOW_LOG_PAGE)
+                    .setPatchDialogUrlToOpen("http://gudong.name")
+                .setPassToOriginalDefaultHandler(true)
+                .flyTo(this);
     }
 
     private void setUpSomethingsByDevMode(boolean isDebug) {
