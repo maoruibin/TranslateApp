@@ -61,8 +61,8 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     @Override
     public void onCreate() {
         setUpInject();
-        addListener();
-        attachView();
+        mPresenter.addListener();
+        mPresenter.attachView(this);
         mPresenter.onCreate();
     }
 
@@ -93,13 +93,6 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
         }
     }
 
-    private void attachView() {
-        mPresenter.attachView(this);
-    }
-
-    private void addListener() {
-        mPresenter.addListener();
-    }
 
     private void setUpInject() {
         DaggerActivityComponent.builder()

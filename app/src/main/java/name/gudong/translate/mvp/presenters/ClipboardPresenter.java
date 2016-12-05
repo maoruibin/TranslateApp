@@ -51,6 +51,7 @@ import rx.functions.Action1;
  */
 public class ClipboardPresenter extends TipFloatPresenter {
     private static final String KEY_TAG = "clipboard";
+    private static final String KEY_TAG_COUNT_DOWN = "Countdown";
 
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
@@ -97,7 +98,7 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
     private void initCountdownSetting(){
         mActionShowTip = (t)->{
-            Logger.i("====","time is out show words");
+            Logger.i(KEY_TAG_COUNT_DOWN,"time is out show words");
             Result result = getResult();
             if(result == null)return;
             mView.showResult(result,false);
