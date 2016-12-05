@@ -20,7 +20,6 @@
 
 package name.gudong.translate.injection.modules;
 
-import com.squareup.okhttp.HttpUrl;
 
 import javax.inject.Singleton;
 
@@ -30,10 +29,10 @@ import name.gudong.translate.mvp.model.ApiService;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.util.SpUtils;
-import retrofit.BaseUrl;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import okhttp3.HttpUrl;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -46,12 +45,7 @@ public class ApiServiceModel {
     @Singleton
     ApiService provideApiService(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(new BaseUrl() {
-                    @Override
-                    public HttpUrl url() {
-                        return HttpUrl.parse(SpUtils.getUrlByLocalSetting());
-                    }
-                })
+                .baseUrl(HttpUrl.parse(SpUtils.getUrlByLocalSetting()))
                 // for RxJava
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

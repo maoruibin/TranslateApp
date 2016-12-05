@@ -164,9 +164,9 @@ dependencies {
     // Square
     compile "com.jakewharton:butterknife:${libs.butterknife}"
     apt "com.jakewharton:butterknife-compiler:${libs.butterknife}"
-    compile "com.squareup.retrofit:retrofit:${libs.retrofit}"
-    compile "com.squareup.retrofit:converter-gson:${libs.retrofit}"
-    compile "com.squareup.retrofit:adapter-rxjava:${libs.retrofit}"
+    compile "com.squareup.retrofit2:retrofit:${libs.retrofit}"
+    compile "com.squareup.retrofit2:converter-gson:${libs.retrofit}"
+    compile "com.squareup.retrofit2:adapter-rxjava:${libs.retrofit}"
     // Reactive
     compile "io.reactivex:rxandroid:${libs.rxandroid}"
     // Other

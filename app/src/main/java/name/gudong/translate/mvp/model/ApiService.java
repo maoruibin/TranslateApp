@@ -23,8 +23,8 @@ package name.gudong.translate.mvp.model;
 import name.gudong.translate.mvp.model.entity.translate.BaiDuResult;
 import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
 import name.gudong.translate.mvp.model.entity.translate.YouDaoResult;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -34,7 +34,7 @@ import rx.Observable;
 public interface ApiService {
 
     //http://api.fanyi.baidu.com/api/trans/vip/translate?q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4
-    @GET("?")
+    @GET("translate?")
     Observable<BaiDuResult> translateBaiDu(
             @Query("q") String q,
             @Query("from")String from,
@@ -45,7 +45,7 @@ public interface ApiService {
     );
 
     //http://fanyi.youdao.com/openapi.do?keyfrom=gudong&key=1235023502&type=data&doctype=json&version=1.1&q=what
-    @GET("?")
+    @GET("openapi.do?")
     Observable<YouDaoResult>translateYouDao(
             @Query("q") String q,
             @Query("keyfrom") String keyfrom,
@@ -56,7 +56,7 @@ public interface ApiService {
     );
 
     //http://dict-co.iciba.com/api/dictionary.php?type=json&w=do&key=3BE8E8ACA43FDA088E52EC05FA8FA203
-    @GET("?")
+    @GET("dictionary.php?")
     Observable<JinShanResult> translateJinShan(
             @Query("w") String q,
             @Query("key") String key,

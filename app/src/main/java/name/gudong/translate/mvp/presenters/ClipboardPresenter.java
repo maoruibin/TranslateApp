@@ -73,15 +73,15 @@ public class ClipboardPresenter extends TipFloatPresenter {
     /**
      * 定时显示 Tip 事件源
      */
-    Subscription mSubscription;
+    private Subscription mSubscription;
     /**
      * 显示 Tip 的动作
      */
-    Action1 mActionShowTip;
+    private Action1 mActionShowTip;
 
 
     @Inject
-    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
+    ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         super(liteOrm, apiService, singleRequestService, context);
         results = mLiteOrm.query(Result.class);
     }
@@ -120,7 +120,6 @@ public class ClipboardPresenter extends TipFloatPresenter {
         mSubscription = Observable.interval(time,unit)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mActionShowTip);
-        Logger.i(KEY_TAG,"开启背单词服务");
     }
 
     public void removeTipCyclic(){

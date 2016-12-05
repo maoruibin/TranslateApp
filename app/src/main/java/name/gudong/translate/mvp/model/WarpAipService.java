@@ -36,7 +36,7 @@ import rx.functions.Func1;
  */
 public class WarpAipService {
 
-    static ApiService mApiService;
+    private static ApiService mApiService;
 
     public WarpAipService(ApiService apiService) {
         mApiService = apiService;

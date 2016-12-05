@@ -1,11 +1,10 @@
 package name.gudong.translate.mvp.model;
 
-import com.squareup.okhttp.ResponseBody;
-
 import name.gudong.translate.mvp.model.entity.dayline.JinshanDayLineEntity;
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Url;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
