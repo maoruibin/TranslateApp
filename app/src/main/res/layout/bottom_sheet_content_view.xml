@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="120dp"
     android:gravity="center_horizontal"
-    android:background="@color/bg_app_dayline"
+    android:background="@color/colorPrimary"
     android:paddingLeft="@dimen/ff.padding.large"
     android:paddingRight="@dimen/ff.padding.large"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
@@ -23,6 +23,7 @@
             android:layout_toLeftOf="@+id/iv_sound_dayline"
             android:layout_toStartOf="@+id/iv_sound_dayline"
             tools:text="Even miracles take a little time. —The Fairy Godmother"
+            android:textColor="@color/ff.white"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <android.support.v7.widget.AppCompatImageView
@@ -32,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_volume_up_primary_24dp" />
+            app:srcCompat="@drawable/ic_volume_up_white_24dp" />
     </RelativeLayout>
 
 
@@ -42,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:maxLines="2"
+        android:textColor="@color/ff.white"
         tools:text="就算是奇迹也要花点时间才能发生的。 —仙女教母"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 
