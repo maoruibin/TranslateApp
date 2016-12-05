@@ -103,7 +103,7 @@
                         android:text="翻译结果"
                         android:textColor="#999999" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/iv_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                         app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/iv_sound"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                         android:layout_toLeftOf="@+id/iv_paste"
                         app:srcCompat="@drawable/ic_volume_up_black_24dp" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/iv_paste"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -143,16 +143,8 @@
             </ScrollView>
         </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:fitsSystemWindows="true"
-        app:behavior_hideable="false"
-        android:background="@color/bg_app_dayline"
-        app:behavior_peekHeight="?attr/actionBarSize"
-        app:layout_behavior="@string/bottom_sheet_behavior">
-        <include layout="@layout/bottom_sheet_content_view" />
-    </FrameLayout>
+        <include
+            android:id="@+id/bottom_sheet_view"
+            layout="@layout/bottom_sheet_content_view" />
 </android.support.design.widget.CoordinatorLayout>
 

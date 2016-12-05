@@ -23,6 +23,8 @@ package name.gudong.translate.ui.activitys;
 import android.animation.Animator;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -35,7 +37,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,21 +44,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonSyntaxException;
-import com.litesuits.orm.LiteOrm;
-import com.litesuits.orm.db.assit.QueryBuilder;
-import com.litesuits.orm.db.assit.WhereBuilder;
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.net.UnknownHostException;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.gudong.translate.BuildConfig;
 import me.gudong.translate.R;
-import name.gudong.translate.GDApplication;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerActivityComponent;
 import name.gudong.translate.injection.modules.ActivityModule;
@@ -102,7 +97,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @BindView(R.id.tv_dayline_note)
     TextView mTvDaylineNote;
     @BindView(R.id.iv_sound_dayline)
-    ImageView mIvSoundDayline;
+    AppCompatImageView mIvSoundDayline;
+    @BindView(R.id.main_content)
+    CoordinatorLayout coordinatorLayout;
 
 
     Menu mMenu;
@@ -122,43 +119,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkVersion();
         initConfig();
         setUpDayline();
-        prepareDayLineData();
         checkIntent();
-
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int mouth = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        calendar.set(year,mouth,day);
-
-        long start = calendar.getTime().getTime();
-        long end = start+24*60*60*1000;
-
-        LiteOrm liteOrm = GDApplication.getAppComponent().getLiteOrm();
-        QueryBuilder builder = new QueryBuilder(Result.class);
-
-        WhereBuilder whereBuilder = new WhereBuilder(Result.class);
-        whereBuilder.lessThan(Result.COL_CREATE_TIME,end).and().greaterThan(Result.COL_CREATE_TIME,start);
-        builder.where(whereBuilder);
-        long count = liteOrm.queryCount(builder);
-        Logger.i("count is "+count);
     }
 
     private void setUpDayline() {
-        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) findViewById(R.id.fl_bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
-    }
-
-    private void prepareDayLineData(){
         mPresenter.dayline();
+        View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet_view);
+        //点击 和拖拽都可以打开bottom sheet
+        bottomSheet.setOnClickListener(v -> onClickBottomSheet());
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelOffset(R.dimen.actionbar_height));
     }
 
     private void checkIntent() {
         mPresenter.checkIntentFromClickTipView(getIntent());
         //每日一句
         if(getIntent().getIntExtra("flag",-1) == 1){
-            onClickBottomSheet(findViewById(R.id.fl_bottom_sheet));
+            onClickBottomSheet();
             MobclickAgent.onEvent(getApplicationContext(),"enter_mainactivity_by_click_notification_dayline");
             mIvSoundDayline.postDelayed(new Runnable() {
                 @Override
@@ -166,7 +143,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                     onClickDaylineSound(findViewById(R.id.iv_sound_dayline));
                 }
             },1000);
-
         }
     }
 
@@ -583,8 +559,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mSpTranslateWay.setAdapter(adapter);
     }
 
-    @OnClick(R.id.fl_bottom_sheet)
-    public void onClickBottomSheet(View view){
+    public void onClickBottomSheet(){
         if(mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }else{
