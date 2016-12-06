@@ -67,6 +67,7 @@ public class TipViewController{
 
     public void showErrorInfo(String error,TipView.ITipViewListener mListener){
         TipView tipView = new TipView(mContext);
+        tipView.setListener(mListener);
         mWindowManager.addView(tipView, getPopViewParams());
         tipView.startWithAnim();
         tipView.error(error);
