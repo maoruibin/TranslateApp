@@ -19,6 +19,12 @@
             android:summary="@string/notify_dayline_summary"
             android:defaultValue="true"/>
 
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_auto_paste_words"
+           android:title="@string/open_auto_paste"
+            android:summary="@string/open_auto_paste_summary"
+            android:defaultValue="false"/>
+
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="背单词">

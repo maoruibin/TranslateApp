@@ -55,8 +55,6 @@ public class HeadsUpManager  {
     }
 
     public synchronized void notify(HeadsUp headsUp) {
-
-
         if (map.containsKey(headsUp.getCode())) {
             msgQueue.remove(map.get(headsUp.getCode()));
         }
@@ -70,7 +68,6 @@ public class HeadsUpManager  {
     public synchronized void notify(int code,HeadsUp headsUp) {
         headsUp.setCode(code);
         notify(headsUp);
-
     }
 
 

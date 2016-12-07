@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Calendar;
+
 import name.gudong.translate.R;
 import name.gudong.translate.ui.activitys.MainActivity;
 
@@ -75,5 +77,15 @@ public class Utils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static int[] getCurrentTime(){
+        Calendar now = Calendar.getInstance();
+        now.setTimeInMillis(System.currentTimeMillis());
+        int[]time = new int[3];
+        time[0] = now.get(Calendar.HOUR_OF_DAY);
+        time[1] = now.get(Calendar.MINUTE);
+        time[2] = now.get(Calendar.SECOND);
+        return time;
     }
 }

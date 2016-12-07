@@ -12,9 +12,10 @@ import com.mingle.headsUp.HeadsUpManager;
 
 public class HeadsUps {
 
-    public static void show(Context context, Class<?> targetActivity, String title, String content, int largeIcon, int smallIcon, int code) {
+    public static void show(Context context, Intent intent, String title, String content, int largeIcon, int smallIcon, int code) {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 11,
-                new Intent(context, targetActivity), PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         HeadsUpManager manage = HeadsUpManager.getInstant(context);
         HeadsUp.Builder builder = new HeadsUp.Builder(context);
         builder.setContentTitle(title)
