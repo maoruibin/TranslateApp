@@ -33,7 +33,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import me.gudong.translate.BuildConfig;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;

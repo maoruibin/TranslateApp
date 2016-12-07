@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -16,12 +17,14 @@ public class AlarmManagers {
         Calendar now = Calendar.getInstance();
 
         today.set(Calendar.HOUR_OF_DAY, 8);
-        today.set(Calendar.MINUTE, 20);
-        today.set(Calendar.SECOND, 38);
+        today.set(Calendar.MINUTE, 30);
+        today.set(Calendar.SECOND, 30);
 
         if (now.after(today)) {
+            Toast.makeText(context, "return", Toast.LENGTH_SHORT).show();
             return;
         }
+        Toast.makeText(context, "normal", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent("name.gudong.translate.alarm");
         intent.setClass(context, AlarmReceiver.class);

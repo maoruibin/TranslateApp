@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.ui.activitys.MainActivity;

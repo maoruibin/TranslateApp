@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import moe.feng.alipay.zerosdk.AlipayZeroSdk;
 import name.gudong.translate.widget.WebDialog;
 

@@ -31,7 +31,6 @@ import im.fir.sdk.FIR;
 import jonathanfinerty.once.Once;
 import me.drakeet.library.CrashWoodpecker;
 import me.drakeet.library.PatchMode;
-import me.gudong.translate.BuildConfig;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerAppComponent;
 import name.gudong.translate.injection.modules.ApiServiceModel;

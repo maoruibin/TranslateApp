@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import me.gudong.translate.BuildConfig;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.SingleRequestService;

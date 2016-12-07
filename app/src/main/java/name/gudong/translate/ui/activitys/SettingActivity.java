@@ -12,7 +12,7 @@ import android.view.View;
 import com.umeng.analytics.MobclickAgent;
 
 import jonathanfinerty.once.Once;
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;

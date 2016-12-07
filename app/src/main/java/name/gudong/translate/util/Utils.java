@@ -9,7 +9,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import name.gudong.translate.ui.activitys.MainActivity;
 
 /**

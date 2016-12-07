@@ -60,10 +60,7 @@ android {
         release {
             //如果签名配置不为空 则设置签名信息
             if (signingConfigs.releaseConfig != null) {
-                print("use release key")
                 signingConfig signingConfigs.releaseConfig
-            }else{
-                print("use debug key")
             }
             //设置是否混淆
             minifyEnabled false
@@ -74,15 +71,6 @@ android {
             //设置混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //指定签名包得输入文件名称
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        def fileName = "GdTranslate_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_release.apk"
-                        output.outputFile = new File(outputFile.parent, fileName)
-                    }
-                }
-            }
             buildConfigField "Boolean", "IS_DEBUG", 'false'
         }
     }
@@ -186,4 +174,5 @@ dependencies {
     compile ("me.drakeet.library:crashwoodpecker:${libs.crashwoodpecker}"){
         exclude module: 'recyclerview-v7'
     }
+    compile project(":headsupcompat")
 }

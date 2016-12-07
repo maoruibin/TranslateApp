@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import jonathanfinerty.once.Once;
-import me.gudong.translate.BuildConfig;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.SingleRequestService;
