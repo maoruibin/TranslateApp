@@ -14,9 +14,9 @@ import com.umeng.analytics.MobclickAgent;
 import jonathanfinerty.once.Once;
 import name.gudong.translate.R;
 import name.gudong.translate.listener.ListenClipboardService;
+import name.gudong.translate.manager.ReciteModulePreference;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
-import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
 
 public class SettingActivity extends AppCompatActivity {
@@ -58,11 +58,16 @@ public class SettingActivity extends AppCompatActivity {
         private com.jenzz.materialpreference.Preference mIntervalPreference;
         private com.jenzz.materialpreference.SwitchPreference mShowIconInNotification;
         private com.jenzz.materialpreference.SwitchPreference mUseReciteOrNot;
+
+        ReciteModulePreference mRecitePreference;
+
         @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs);
             // 第一次点击单词本开关需要给用户一个功能提示框
             Once.toDo(KEY_TIP_OF_RECITE);
+
+            mRecitePreference = new ReciteModulePreference(getActivity());
         }
 
         @Override
@@ -73,7 +78,7 @@ public class SettingActivity extends AppCompatActivity {
             mUseReciteOrNot = (com.jenzz.materialpreference.SwitchPreference) findPreference("preference_use_recite_or_not");
 
             mDurationPreference = (com.jenzz.materialpreference.Preference) findPreference("preference_show_time");
-            EDurationTipTime durationTime = SpUtils.getDurationTimeWay(getActivity());
+            EDurationTipTime durationTime = mRecitePreference.getDurationTimeWay();
             mDurationPreference.setSummary(getArrayValue(R.array.tip_time,durationTime.getIndex()));
             mDurationPreference.setOnPreferenceClickListener(this);
 
@@ -84,7 +89,8 @@ public class SettingActivity extends AppCompatActivity {
 
             mIntervalPreference = (com.jenzz.materialpreference.Preference) findPreference("preference_recite_time");
             mIntervalPreference.setOnPreferenceClickListener(this);
-            EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(getActivity());
+            findPreference("preference_auto_play_sound").setOnPreferenceChangeListener(this);
+            EIntervalTipTime intervalTime = mRecitePreference.getIntervalTimeWay();
             mIntervalPreference.setSummary(getArrayValue(R.array.recipe_time,intervalTime.getIndex()));
 
             initUseReciteOrNotStatus();
@@ -115,7 +121,7 @@ public class SettingActivity extends AppCompatActivity {
         public boolean onPreferenceClick(Preference preference) {
             switch (preference.getKey()){
                 case "preference_show_time":
-                    EDurationTipTime durationTime = SpUtils.getDurationTimeWay(getActivity());
+                    EDurationTipTime durationTime = mRecitePreference.getDurationTimeWay();
                     final int resArray = R.array.tip_time;
                     new AlertDialog.Builder(getActivity())
                             .setSingleChoiceItems(R.array.tip_time,durationTime.getIndex(), new DialogInterface.OnClickListener() {
@@ -146,7 +152,7 @@ public class SettingActivity extends AppCompatActivity {
                             .show();
                     break;
                 case "preference_recite_time":
-                    EIntervalTipTime intervalTime = SpUtils.getIntervalTimeWay(getActivity());
+                    EIntervalTipTime intervalTime = mRecitePreference.getIntervalTimeWay();
                     final int resArrayInterval = R.array.recipe_time;
                     new AlertDialog.Builder(getActivity())
                             .setSingleChoiceItems(resArrayInterval,intervalTime.getIndex(), new DialogInterface.OnClickListener() {
@@ -194,18 +200,21 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         private void selectDurationTime(String name) {
-            SpUtils.setDurationTipTime(getActivity(), name);
+            mRecitePreference.setDurationTipTime(name);
+            shiftRecite();
         }
 
         private void selectIntervalTipTime(String name) {
-            SpUtils.setIntervalTipTime(getActivity(), name);
+            mRecitePreference.setIntervalTipTime(name);
+            shiftRecite();
         }
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             switch (preference.getKey()){
                 case "preference_use_recite_or_not":
-                    startListenService();
+                    mRecitePreference.setReciteOpenOrNot((Boolean) newValue);
+                    shiftRecite();
                     break;
                 case "preference_show_icon_in_notification":
                     if((Boolean) newValue){
@@ -214,11 +223,15 @@ public class SettingActivity extends AppCompatActivity {
                         Utils.cancelNotification(getActivity());
                     }
                     break;
+                case "preference_auto_play_sound":
+                    mRecitePreference.setPlaySoundAuto((Boolean) newValue);
+                    break;
             }
             return true;
         }
 
-        private void startListenService() {
+        private void shiftRecite() {
+            //利用 Service 生命周期巧妙控制开关
             ListenClipboardService.start(getActivity());
         }
 

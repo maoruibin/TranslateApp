@@ -45,6 +45,7 @@ android {
         buildConfigField "String", "LANGUAGE_AUTO", '"auto"'
         buildConfigField "Boolean", "IS_DEBUG", 'true'
 
+        resValue "string", "tray__authority", "${cfg.package}.tray"
     }
 
     signingConfigs {
@@ -56,6 +57,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             debuggable true
+            resValue "string", "tray__authority", "${cfg.package}.debug.tray"
         }
         release {
             //如果签名配置不为空 则设置签名信息
@@ -175,4 +177,7 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
     compile project(":headsupcompat")
+
+    //compile "net.grandcentrix.tray:tray:${libs.tray}'"
+    compile 'net.grandcentrix.tray:tray:0.11.0'
 }
