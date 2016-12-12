@@ -30,9 +30,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import me.gudong.translate.BuildConfig;
-import name.gudong.translate.GDApplication;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
+import name.gudong.translate.manager.ReciteWordManager;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.Result;
@@ -52,7 +52,7 @@ import rx.functions.Action1;
 public class ClipboardPresenter extends TipFloatPresenter {
     private static final String KEY_TAG = "clipboard";
     private static final String KEY_TAG_COUNT_DOWN = "Countdown";
-
+    private static final ReciteWordManager mReciteManger = ReciteWordManager.getInstance();
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
@@ -74,11 +74,11 @@ public class ClipboardPresenter extends TipFloatPresenter {
     /**
      * 定时显示 Tip 事件源
      */
-    private Subscription mSubscription;
+    private static Subscription mSubscription;
     /**
      * 显示 Tip 的动作
      */
-    private Action1 mActionShowTip;
+    private static Action1 mActionShowTip;
 
 
     @Inject
@@ -96,12 +96,24 @@ public class ClipboardPresenter extends TipFloatPresenter {
         }
     }
 
+    public boolean isOpenReciteWords(){
+        return mReciteManger.isReciteOpenOrNot();
+    }
+
+    public boolean isPlaySoundsAuto(){
+        return mReciteManger.isPlaySoundAuto();
+    }
+
     private void initCountdownSetting(){
         mActionShowTip = (t)->{
-            Logger.i(KEY_TAG_COUNT_DOWN,"time is out show words");
-            Result result = getResult();
-            if(result == null)return;
-            mView.showResult(result,false);
+            if(isOpenReciteWords()){
+                Logger.t(KEY_TAG_COUNT_DOWN).i("time is to show words");
+                Result result = getResult();
+                if(result == null)return;
+                mView.showResult(result,false);
+            }else{
+                Logger.t(KEY_TAG_COUNT_DOWN).i("time is to show words but was close");
+            }
         };
     }
 
@@ -109,7 +121,7 @@ public class ClipboardPresenter extends TipFloatPresenter {
      * 开启背单词
      */
     public void openTipCyclic(){
-        EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
+        EIntervalTipTime tipTime = mReciteManger.getIntervalTimeWay();
         int time = tipTime.getIntervalTime();
         boolean isSecond = tipTime == EIntervalTipTime.THIRTY_SECOND;
         TimeUnit unit = isSecond? TimeUnit.SECONDS:TimeUnit.MINUTES;
@@ -121,6 +133,9 @@ public class ClipboardPresenter extends TipFloatPresenter {
         mSubscription = Observable.interval(time,unit)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mActionShowTip);
+
+
+        Logger.i(KEY_TAG,"开启背单词任务 间隔 "+tipTime.getIntervalTime());
     }
 
     public void removeTipCyclic(){

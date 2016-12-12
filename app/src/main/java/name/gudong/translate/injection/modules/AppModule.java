@@ -26,7 +26,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.gudong.translate.BuildConfig;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.GDApplication;
 
 @Module

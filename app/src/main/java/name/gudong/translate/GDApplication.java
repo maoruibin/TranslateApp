@@ -31,7 +31,6 @@ import im.fir.sdk.FIR;
 import jonathanfinerty.once.Once;
 import me.drakeet.library.CrashWoodpecker;
 import me.drakeet.library.PatchMode;
-import me.gudong.translate.BuildConfig;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerAppComponent;
 import name.gudong.translate.injection.modules.ApiServiceModel;
@@ -71,9 +70,9 @@ public class GDApplication extends Application {
 
     private void setUpSomethingsByDevMode(boolean isDebug) {
         if(isDebug){
-            Logger.init("gdt").hideThreadInfo().methodCount(1);
+            Logger.init("gdt").hideThreadInfo().methodCount(1).logLevel(LogLevel.FULL);
         }else{
-            Logger.init("gdt").hideThreadInfo().methodCount(1).logLevel(LogLevel.NONE);
+            Logger.init("gdt").hideThreadInfo().methodCount(1).logLevel(LogLevel.FULL);
         }
     }
 

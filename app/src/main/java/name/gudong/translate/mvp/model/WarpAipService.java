@@ -20,7 +20,7 @@
 
 package name.gudong.translate.mvp.model;
 
-import me.gudong.translate.BuildConfig;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
 import name.gudong.translate.mvp.model.entity.translate.BaiDuResult;
 import name.gudong.translate.mvp.model.entity.translate.JinShanResult;

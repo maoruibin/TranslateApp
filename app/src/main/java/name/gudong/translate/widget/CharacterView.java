@@ -10,7 +10,7 @@ import android.support.annotation.Dimension;
 import android.util.AttributeSet;
 import android.view.View;
 
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 
 public class CharacterView extends View {
 

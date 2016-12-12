@@ -20,7 +20,7 @@ import com.orhanobut.logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.util.ViewUtil;
 import rx.Observable;
@@ -83,7 +83,6 @@ public class TipView extends LinearLayout {
         if (result == null) return;
         mResult = result;
         initView(isShowFavoriteButton,result);
-        addListener(result);
 
         setQuery(result.getQuery());
         setPhonetic(result.getPhAm());
@@ -97,6 +96,7 @@ public class TipView extends LinearLayout {
         }
 
         if (!temp.isEmpty()) {
+            addListener(result);
             Observable.from(temp).subscribe((s) -> addExplain(s));
         } else {
             error(getContext().getString(R.string.tip_explain_empty));

@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import jonathanfinerty.once.Once;
-import me.gudong.translate.BuildConfig;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.SingleRequestService;
@@ -66,7 +66,6 @@ import rx.schedulers.Schedulers;
  */
 public class MainPresenter extends BasePresenter<IMainView> {
     private static final String KEY_RESULT = "RESULT";
-    private static final String KEY_INTENT_FLAG = "flag";
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
@@ -288,7 +287,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
     public static void jumpMainActivityFromClickTipView(Context context,Result result){
         Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(KEY_RESULT,result);
         context.startActivity(intent);
     }

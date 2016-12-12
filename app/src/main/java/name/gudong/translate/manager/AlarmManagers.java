@@ -15,9 +15,9 @@ public class AlarmManagers {
         Calendar today = Calendar.getInstance();
         Calendar now = Calendar.getInstance();
 
-        today.set(Calendar.HOUR_OF_DAY, 8);
-        today.set(Calendar.MINUTE, 20);
-        today.set(Calendar.SECOND, 38);
+        today.set(Calendar.HOUR_OF_DAY, 7);
+        today.set(Calendar.MINUTE, 30);
+        today.set(Calendar.SECOND, 30);
 
         if (now.after(today)) {
             return;
@@ -28,7 +28,6 @@ public class AlarmManagers {
         PendingIntent broadcast = PendingIntent.getBroadcast(context, 520, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+20*1000, broadcast);
         manager.set(AlarmManager.RTC_WAKEUP, today.getTimeInMillis(), broadcast);
     }
 }
