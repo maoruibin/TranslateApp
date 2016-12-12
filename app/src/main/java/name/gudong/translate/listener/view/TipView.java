@@ -83,7 +83,6 @@ public class TipView extends LinearLayout {
         if (result == null) return;
         mResult = result;
         initView(isShowFavoriteButton,result);
-        addListener(result);
 
         setQuery(result.getQuery());
         setPhonetic(result.getPhAm());
@@ -97,6 +96,7 @@ public class TipView extends LinearLayout {
         }
 
         if (!temp.isEmpty()) {
+            addListener(result);
             Observable.from(temp).subscribe((s) -> addExplain(s));
         } else {
             error(getContext().getString(R.string.tip_explain_empty));
