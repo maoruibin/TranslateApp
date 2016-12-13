@@ -287,7 +287,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
     public static void jumpMainActivityFromClickTipView(Context context,Result result){
         Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(KEY_RESULT,result);
         context.startActivity(intent);
     }
