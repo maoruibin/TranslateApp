@@ -26,9 +26,9 @@ package name.gudong.translate.mvp.model.type;
  */
 public enum  ETranslateFrom {
 
-    BAI_DU(0,"百度","http://api.fanyi.baidu.com/api/trans/vip/translate"),
-    YOU_DAO(1,"有道","http://fanyi.youdao.com/openapi.do"),
-    JIN_SHAN(2,"金山","http://dict-co.iciba.com/api/dictionary.php");
+    BAI_DU(0,"百度","http://api.fanyi.baidu.com/api/trans/vip/"),
+    YOU_DAO(1,"有道","http://fanyi.youdao.com/"),
+    JIN_SHAN(2,"金山","http://dict-co.iciba.com/api/");
 
     private int index;
     private String name;

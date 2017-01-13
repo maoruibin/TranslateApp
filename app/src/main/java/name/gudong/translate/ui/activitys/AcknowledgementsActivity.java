@@ -21,7 +21,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.Acknowledgement;
 import name.gudong.translate.mvp.presenters.AcknowledgementPresenter;
 import name.gudong.translate.injection.components.AppComponent;

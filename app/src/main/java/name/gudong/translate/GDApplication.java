@@ -32,7 +32,6 @@ import im.fir.sdk.FIR;
 import jonathanfinerty.once.Once;
 import me.drakeet.library.CrashWoodpecker;
 import me.drakeet.library.PatchMode;
-import me.gudong.translate.BuildConfig;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerAppComponent;
 import name.gudong.translate.injection.modules.ApiServiceModel;
@@ -54,12 +53,13 @@ public class GDApplication extends Application {
         setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
         FIR.init(this);
         Once.initialise(this);
-        Stetho.initializeWithDefaults(this);
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .apiServiceModel(new ApiServiceModel())
                 .build();
         initCrashWoodpecker();
+
+        Stetho.initializeWithDefaults(this);
     }
 
     private void initCrashWoodpecker() {
@@ -73,9 +73,9 @@ public class GDApplication extends Application {
 
     private void setUpSomethingsByDevMode(boolean isDebug) {
         if(isDebug){
-            Logger.init("gdt").hideThreadInfo().setMethodCount(1);
+            Logger.init("gdt").hideThreadInfo().methodCount(1).logLevel(LogLevel.FULL);
         }else{
-            Logger.init("gdt").hideThreadInfo().setMethodCount(1).setLogLevel(LogLevel.FULL);
+            Logger.init("gdt").hideThreadInfo().methodCount(1).logLevel(LogLevel.FULL);
         }
     }
 

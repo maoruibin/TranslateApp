@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import me.gudong.translate.BuildConfig;
+import name.gudong.translate.BuildConfig;
 
 /**
  * Created by GuDong on 4/5/16 20:20.

@@ -38,7 +38,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BookPresenter;
 import name.gudong.translate.mvp.views.IBookView;

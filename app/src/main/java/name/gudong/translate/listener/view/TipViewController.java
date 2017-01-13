@@ -40,11 +40,10 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
-import me.gudong.translate.R;
-import name.gudong.translate.GDApplication;
+import name.gudong.translate.R;
+import name.gudong.translate.manager.ReciteModulePreference;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.ui.activitys.MainActivity;
-import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -60,13 +59,17 @@ public class TipViewController{
 
     private Observable mHideTipTask;
 
+    private ReciteModulePreference mRecitePreference;
+
     public TipViewController(Context application) {
         mContext = application;
         mWindowManager = (WindowManager) application.getSystemService(Context.WINDOW_SERVICE);
+        mRecitePreference = new ReciteModulePreference(mContext);
     }
 
     public void showErrorInfo(String error,TipView.ITipViewListener mListener){
         TipView tipView = new TipView(mContext);
+        tipView.setListener(mListener);
         mWindowManager.addView(tipView, getPopViewParams());
         tipView.startWithAnim();
         tipView.error(error);
@@ -74,7 +77,8 @@ public class TipViewController{
     }
 
     private void closeTipViewCountdown(final TipView tipView, TipView.ITipViewListener mListener) {
-        int duration = SpUtils.getDurationTimeWay(GDApplication.mContext).getDurationTime();
+        int duration = mRecitePreference.getDurationTimeWay().getDurationTime();
+        Logger.t("recite").d(duration+"秒消失");
         mHideTipTask = Observable.timer(duration, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .map(new Func1<Long, Object>() {
                     @Override

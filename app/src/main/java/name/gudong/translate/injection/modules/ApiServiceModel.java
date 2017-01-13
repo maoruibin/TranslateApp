@@ -20,22 +20,23 @@
 
 package name.gudong.translate.injection.modules;
 
-import com.facebook.stetho.okhttp.StethoInterceptor;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
+
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.ApiService;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.util.SpUtils;
-import retrofit.BaseUrl;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -47,38 +48,31 @@ public class ApiServiceModel {
     @Provides
     @Singleton
     ApiService provideApiService(){
-        OkHttpClient client = new OkHttpClient();
-        client.networkInterceptors().add(new StethoInterceptor());
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(new BaseUrl() {
-                    @Override
-                    public HttpUrl url() {
-                        return HttpUrl.parse(SpUtils.getUrlByLocalSetting());
-                    }
-                })
-                // for RxJava
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(HttpUrl.parse(SpUtils.getUrlByLocalSetting()))
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
 
 
-        return retrofit.create(ApiService.class);
+        if (BuildConfig.DEBUG) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addNetworkInterceptor(new StethoInterceptor())
+                    .build();
+            builder.client(client);
+        }
+
+        return builder.build().create(ApiService.class);
     }
 
     @Provides
     @Singleton
     SingleRequestService provideDownloadService(){
-        OkHttpClient client = new OkHttpClient();
-        client.networkInterceptors().add(new StethoInterceptor());
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.baidu.com/")
                 // for RxJava
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
                 .build();
         return retrofit.create(SingleRequestService.class);
     }

@@ -61,6 +61,10 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 
 ## 更新日志
 
+### V1.3.5
+
+* 增加每日一句
+
 ### V1.0.0
 
 * 设计: 首页大改版，使用 MaterialDesign 样式重新设计了首页。Thanks @TonyLOfficial(03-05)

@@ -51,8 +51,8 @@ import java.net.UnknownHostException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.gudong.translate.BuildConfig;
-import me.gudong.translate.R;
+import name.gudong.translate.BuildConfig;
+import name.gudong.translate.R;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerActivityComponent;
 import name.gudong.translate.injection.modules.ActivityModule;
@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     private void checkIntent() {
         mPresenter.checkIntentFromClickTipView(getIntent());
         //每日一句
-        if(getIntent().getIntExtra("flag",-1) == 1){
+        if(getIntent().getBooleanExtra("from_dayline_remind",false)){
             onClickBottomSheet();
             MobclickAgent.onEvent(getApplicationContext(),"enter_mainactivity_by_click_notification_dayline");
             mIvSoundDayline.postDelayed(new Runnable() {
@@ -149,8 +149,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     @Override
     public void onResume() {
         super.onResume();
-        //补丁  这不是一好现象
-        resetTranslateResultArea();
         //检查粘贴板和 intent
         checkSomething();
         if(BuildConfig.DEBUG){
@@ -180,7 +178,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     }
     private void checkSomething() {
-        if(!mPresenter.hasExtraResult(getIntent())){
+        if(!mPresenter.hasExtraResult(getIntent()) && SpUtils.isAutoPasteWords(this)){
             //检查粘贴板有没有英文单词 如果有就查询一次 并且显示给用户
             mPresenter.checkClipboard();
         }

@@ -25,8 +25,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import name.gudong.translate.GDApplication;
-import name.gudong.translate.mvp.model.type.EDurationTipTime;
-import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 
 /**
@@ -48,10 +46,7 @@ public class SpUtils {
     private static final String KEY_TRANSLATE_FROM = "TRANSLATE_FROM";
     //every tip's interval time
     public static final String KEY_INTERVAL_TIP_TIME = "INTERVAL_TIP_TIME";
-    //duration of tip
-    private static final String KEY_DURATION_TIP_TIME = "DURATION_TIP_TIME";
 
-    private static final String KEY_RECITE_OPEN = "preference_use_recite_or_not";
 
     //is open JIT translate or not
     private static final String KEY_OPEN_JIT = "preference_recite_open_jit";
@@ -59,11 +54,11 @@ public class SpUtils {
     //is open JIT translate or not
     private static final String KEY_PREFERENCE_SHOW_ICON_IN_NOTIFICATION = "preference_show_icon_in_notification";
 
-    //is play mp3 auto
-    private static final String KEY_PREFERENCE_AUTO_PLAY_SOUND = "preference_auto_play_sound";
-
     //is notify dayline
     private static final String KEY_PREFERENCE_NOTIFY_DAYLINE = "preference_notify_dayline";
+
+    //is notify dayline
+    private static final String KEY_PREFERENCE_AUTO_PASTE = "preference_auto_paste_words";
 
     //App 是否在前台
     private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";
@@ -80,40 +75,6 @@ public class SpUtils {
         return ETranslateFrom.valueOf(getTranslateEngine(context));
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static void setIntervalTipTime(Context context, String duration) {
-        putStringPreference(context, KEY_INTERVAL_TIP_TIME,duration);
-    }
-
-    public static String getIntervalTipTime(Context context) {
-        return getStringPreference(context, KEY_INTERVAL_TIP_TIME, EIntervalTipTime.THREE_MINUTE.name());
-    }
-
-    public static EIntervalTipTime getIntervalTimeWay(Context context) {
-        String name = getIntervalTipTime(context);
-        return EIntervalTipTime.valueOf(name);
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static void setDurationTipTime(Context context, String duration) {
-        putStringPreference(context, KEY_DURATION_TIP_TIME,duration);
-    }
-
-    public static String getDurationTipTime(Context context) {
-        return getStringPreference(context, KEY_DURATION_TIP_TIME, EDurationTipTime.FOUR_SECOND.name());
-    }
-
-    public static EDurationTipTime getDurationTimeWay(Context context) {
-        return EDurationTipTime.valueOf(getDurationTipTime(context));
-    }
-
-    //是否开启背单词
-    public static boolean getReciteOpenOrNot(Context context){
-        return getBooleanPreference(context,KEY_RECITE_OPEN,true);
-    }
-
     //是否开启划词翻译
     public static void setOpenJITOrNot(Context context,boolean isOpen){
         putBooleanPreference(context,KEY_OPEN_JIT,isOpen);
@@ -123,12 +84,13 @@ public class SpUtils {
         return getBooleanPreference(context,KEY_PREFERENCE_SHOW_ICON_IN_NOTIFICATION,false);
     }
 
-    public static boolean isPlaySoundAuto(Context context){
-        return getBooleanPreference(context,KEY_PREFERENCE_AUTO_PLAY_SOUND,false);
-    }
 
     public static boolean isNotifyDayline(Context context){
         return getBooleanPreference(context,KEY_PREFERENCE_NOTIFY_DAYLINE,true);
+    }
+
+    public static boolean isAutoPasteWords(Context context){
+        return getBooleanPreference(context,KEY_PREFERENCE_AUTO_PASTE,false);
     }
 
     public static boolean getOpenJITOrNot(Context context){

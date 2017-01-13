@@ -33,7 +33,6 @@ import android.view.View;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
-import com.squareup.okhttp.ResponseBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,10 +44,10 @@ import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.views.IBaseView;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -135,8 +134,8 @@ public class BasePresenter<V extends IBaseView> {
                         Call<ResponseBody> call = mSingleRequestService.downloadSoundFile(mp3Url);
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
-                            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
-                                if (response.isSuccess()) {
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
                                     try {
                                         cacheAndPlaySound(getContext(), fileName, response.body().bytes());
                                     } catch (IOException e) {
@@ -146,7 +145,7 @@ public class BasePresenter<V extends IBaseView> {
                             }
 
                             @Override
-                            public void onFailure(Throwable t) {
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 Logger.e(t.getMessage());
                                 t.printStackTrace();
                             }

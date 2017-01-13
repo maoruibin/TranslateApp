@@ -15,9 +15,9 @@ public class AlarmManagers {
         Calendar today = Calendar.getInstance();
         Calendar now = Calendar.getInstance();
 
-        today.set(Calendar.HOUR_OF_DAY, 8);
+        today.set(Calendar.HOUR_OF_DAY, 7);
         today.set(Calendar.MINUTE, 30);
-        today.set(Calendar.SECOND, 50);
+        today.set(Calendar.SECOND, 30);
 
         if (now.after(today)) {
             return;
@@ -25,27 +25,6 @@ public class AlarmManagers {
 
         Intent intent = new Intent("name.gudong.translate.alarm");
         intent.setClass(context, AlarmReceiver.class);
-        PendingIntent broadcast = PendingIntent.getBroadcast(context, 520, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        manager.set(AlarmManager.RTC_WAKEUP, today.getTimeInMillis(), broadcast);
-    }
-
-    public static void registerCheckWords(Context context) {
-        Calendar today = Calendar.getInstance();
-        Calendar now = Calendar.getInstance();
-
-        today.set(Calendar.HOUR_OF_DAY, 8);
-        today.set(Calendar.MINUTE, 30);
-        today.set(Calendar.SECOND, 50);
-
-        if (now.after(today)) {
-            return;
-        }
-
-        Intent intent = new Intent("name.gudong.translate.alarm");
-        intent.setClass(context, AlarmReceiver.class);
-        intent.putExtra("checkWords",true);
         PendingIntent broadcast = PendingIntent.getBroadcast(context, 520, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

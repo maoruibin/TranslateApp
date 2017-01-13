@@ -41,15 +41,14 @@ import com.umeng.analytics.MobclickAgent;
 import javax.inject.Inject;
 
 import name.gudong.translate.GDApplication;
+import name.gudong.translate.injection.components.DaggerActivityComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.listener.view.TipView;
 import name.gudong.translate.listener.view.TipViewController;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;
 import name.gudong.translate.mvp.views.ITipFloatView;
-import name.gudong.translate.injection.components.DaggerActivityComponent;
-import name.gudong.translate.injection.modules.ActivityModule;
-import name.gudong.translate.util.SpUtils;
 
 
 public final class ListenClipboardService extends Service implements ITipFloatView, TipView.ITipViewListener {
@@ -61,11 +60,13 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
 
     BroadcastReceiver mScreenStatusReceive;
 
+
+
     @Override
     public void onCreate() {
         setUpInject();
-        addListener();
-        attachView();
+        mPresenter.addListener();
+        mPresenter.attachView(this);
         mPresenter.onCreate();
     }
 
@@ -77,6 +78,10 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
             mScreenStatusReceive = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
+                    //如果用户没有开启背单词 那么就无需 care 锁屏
+                    if(!mPresenter.isOpenReciteWords()){
+                        return;
+                    }
                     if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                         Logger.i("锁屏了");
                         closeTipCyclic();
@@ -96,13 +101,6 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
         }
     }
 
-    private void attachView() {
-        mPresenter.attachView(this);
-    }
-
-    private void addListener() {
-        mPresenter.addListener();
-    }
 
     private void setUpInject() {
         DaggerActivityComponent.builder()
@@ -119,11 +117,13 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
                 BootCompletedReceiver.completeWakefulIntent(intent);
             }
         }
-        boolean isOpen = SpUtils.getReciteOpenOrNot(this);
-        if(isOpen){
+        Logger.t("ClipService").i("on onStartCommand");
+        if(mPresenter.isOpenReciteWords()){
+            Logger.t("ClipService").i("open onStartCommand");
             openTipCyclic();
             registerScreenReceiver();
         }else {
+            Logger.t("ClipService").i("close onStartCommand");
             closeTipCyclic();
             unregisterScreenReceiver();
         }
@@ -180,8 +180,8 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
 
     @Override
     public void showResult(Result result, boolean isShowFavorite) {
-        mTipViewController.show(result, isShowFavorite,!result.isMake_done_once(), this);
-        if(SpUtils.isPlaySoundAuto(this)){
+        mTipViewController.show(result, isShowFavorite, false,this);
+        if(mPresenter.isPlaySoundsAuto()){
             mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         }
     }
