@@ -121,6 +121,17 @@ public class MainPresenter extends BasePresenter<IMainView> {
         if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
             DialogUtil.showChangelog((AppCompatActivity) getContext());
             Once.markDone(showWhatsNew);
+            trigDbUpdate();
+        }
+    }
+
+    public void trigDbUpdate(){
+        List<Result>results = mLiteOrm.query(Result.class);
+        for (Result result:results) {
+            if(!result.isMake_done_once()){
+                result.setMake_done_once(false);
+                mLiteOrm.update(result);
+            }
         }
     }
 
@@ -151,7 +162,8 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     public List<String> call(AbsResult absResult) {
                         Result result = absResult.getResult();
                         if (result == null) return null;
-
+                        result.setCreate_time(System.currentTimeMillis());
+                        result.setUpdate_time(System.currentTimeMillis());
                         mView.addTagForView(result);
 
                         if (!TextUtils.isEmpty(result.getEnMp3())) {

@@ -21,6 +21,9 @@
 package name.gudong.translate.listener;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -177,7 +180,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
 
     @Override
     public void showResult(Result result, boolean isShowFavorite) {
-        mTipViewController.show(result, isShowFavorite, this);
+        mTipViewController.show(result, isShowFavorite, false,this);
         if(mPresenter.isPlaySoundsAuto()){
             mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         }
@@ -210,6 +213,43 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
         mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         mPresenter.startSoundAnim(view);
     }
+
+    @Override
+    public void onClickDone(View view, Result result) {
+        MobclickAgent.onEvent(this, "click_done");
+        mPresenter.markDone(result);
+        startMarkDoneAnim(view);
+
+    }
+
+    public void startMarkDoneAnim(View view){
+        addScaleAlphaAnim(view, 500, new BasePresenter.AnimationEndListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void addScaleAlphaAnim(View view, long duration, BasePresenter.AnimationEndListener listener) {
+        ObjectAnimator animY = ObjectAnimator.ofFloat(view, "scaleY", 1f,0.0f);
+        ObjectAnimator animX = ObjectAnimator.ofFloat(view, "scaleX", 1f,0.0f);
+        ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(view, "alpha", 1f,0.0f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animX,animY,alphaAnim);
+        animatorSet.setDuration(duration);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if(listener != null){
+                    listener.onAnimationEnd(animation);
+                }
+            }
+        });
+        animatorSet.start();
+    }
+
 
     @Override
     public void onClickTipFrame(View view, Result result) {

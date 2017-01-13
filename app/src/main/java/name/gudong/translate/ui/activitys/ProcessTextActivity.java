@@ -80,7 +80,7 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
 
     @Override
     public void showResult(Result result, boolean isShowFavorite) {
-        mTipViewController.show(result, isShowFavorite, this);
+        mTipViewController.show(result, isShowFavorite,false, this);
     }
 
     @Override
@@ -109,6 +109,11 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
         MobclickAgent.onEvent(this, "sound_service");
         mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         mPresenter.startSoundAnim(view);
+    }
+
+    @Override
+    public void onClickDone(View view, Result result) {
+
     }
 
     @Override

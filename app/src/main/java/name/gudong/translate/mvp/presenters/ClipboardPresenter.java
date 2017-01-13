@@ -23,6 +23,7 @@ package name.gudong.translate.mvp.presenters;
 import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -63,14 +64,6 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
     private int currentIndex = -1;
 
-    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> {
-        CharSequence content = mClipboardWatcher.getText();
-        if(content != null){
-            performClipboardCheck(content.toString());
-        }
-    };
-
-
     /**
      * 定时显示 Tip 事件源
      */
@@ -80,11 +73,20 @@ public class ClipboardPresenter extends TipFloatPresenter {
      */
     private static Action1 mActionShowTip;
 
+    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> {
+        CharSequence content = mClipboardWatcher.getText();
+        if(content != null){
+            performClipboardCheck(content.toString());
+        }
+    };
 
     @Inject
     ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         super(liteOrm, apiService, singleRequestService, context);
-        results = mLiteOrm.query(Result.class);
+        QueryBuilder queryBuilder = new QueryBuilder(Result.class);
+        queryBuilder = queryBuilder.whereNoEquals(Result.COL_MARK_DONE_ONCE, true);
+        results = mLiteOrm.query(queryBuilder);
+        Logger.i("result size is "+results.size());
     }
 
     @Override
@@ -205,5 +207,20 @@ public class ClipboardPresenter extends TipFloatPresenter {
             return results.size()-1;
         }
         return currentIndex;
+    }
+
+    /**
+     * 标记已背
+     * @param result
+     */
+    public void markDone(Result result) {
+        result.setMake_done_once(true);
+        result.setMake_done_once_time(System.currentTimeMillis());
+        Logger.i("size "+results.size());
+        if(results.remove(result)){
+            Logger.i("remove suc");
+        }
+        Logger.i("size "+results.size());
+        mLiteOrm.update(result);
     }
 }

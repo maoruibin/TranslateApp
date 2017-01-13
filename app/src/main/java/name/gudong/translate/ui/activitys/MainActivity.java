@@ -136,6 +136,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         //每日一句
         if(getIntent().getBooleanExtra("from_dayline_remind",false)){
             onClickBottomSheet();
+            MobclickAgent.onEvent(getApplicationContext(),"enter_mainactivity_by_click_notification_dayline");
+            mIvSoundDayline.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onClickDaylineSound(findViewById(R.id.iv_sound_dayline));
+                }
+            },1000);
         }
     }
 

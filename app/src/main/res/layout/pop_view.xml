@@ -37,9 +37,21 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="@dimen/normal_margin"
-            android:layout_toLeftOf="@+id/iv_sound"
+            android:layout_toLeftOf="@+id/iv_done"
             android:clickable="true"
             app:srcCompat="@drawable/ic_favorite_border_white_24dp"/>
+
+        <ImageView
+            android:id="@+id/iv_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/normal_margin"
+            android:layout_toLeftOf="@+id/iv_sound"
+            android:clickable="true"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:src="@drawable/ic_done_white_24dp"/>
 
 
         <ImageView

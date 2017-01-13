@@ -21,15 +21,19 @@
 package name.gudong.translate.injection.modules;
 
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.ApiService;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.util.SpUtils;
 import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -44,13 +48,21 @@ public class ApiServiceModel {
     @Provides
     @Singleton
     ApiService provideApiService(){
-        Retrofit retrofit = new Retrofit.Builder()
+
+        Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(HttpUrl.parse(SpUtils.getUrlByLocalSetting()))
-                // for RxJava
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        return retrofit.create(ApiService.class);
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+
+
+        if (BuildConfig.DEBUG) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addNetworkInterceptor(new StethoInterceptor())
+                    .build();
+            builder.client(client);
+        }
+
+        return builder.build().create(ApiService.class);
     }
 
     @Provides

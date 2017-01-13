@@ -24,6 +24,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
@@ -57,6 +58,8 @@ public class GDApplication extends Application {
                 .apiServiceModel(new ApiServiceModel())
                 .build();
         initCrashWoodpecker();
+
+        Stetho.initializeWithDefaults(this);
     }
 
     private void initCrashWoodpecker() {
