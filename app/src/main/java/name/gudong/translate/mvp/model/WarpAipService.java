@@ -20,6 +20,8 @@
 
 package name.gudong.translate.mvp.model;
 
+import javax.inject.Inject;
+
 import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
 import name.gudong.translate.mvp.model.entity.translate.BaiDuResult;
@@ -36,10 +38,15 @@ import rx.functions.Func1;
  */
 public class WarpAipService {
 
-    private static ApiService mApiService;
+    private  ApiBaidu mApiBaidu;
+    private  ApiYouDao mApiYouDao;
+    private  ApiJinShan mApiJinShan;
 
-    public WarpAipService(ApiService apiService) {
-        mApiService = apiService;
+    @Inject
+    public WarpAipService(ApiBaidu mApiBaidu, ApiJinShan mApiJinShan, ApiYouDao mApiYouDao) {
+        this.mApiBaidu = mApiBaidu;
+        this.mApiJinShan = mApiJinShan;
+        this.mApiYouDao = mApiYouDao;
     }
 
     public Observable<AbsResult> translate(ETranslateFrom way, String query) {
@@ -47,7 +54,7 @@ public class WarpAipService {
         query = query.toLowerCase();
         switch (way){
             case YOU_DAO:
-                resultObservable = mApiService.translateYouDao(
+                resultObservable = mApiYouDao.translateYouDao(
                         query,
                         BuildConfig.YOUDAO_USERNAME,
                         BuildConfig.YOUDAO_KEY,
@@ -62,7 +69,7 @@ public class WarpAipService {
                         });
                 break;
             case JIN_SHAN:
-                resultObservable = mApiService.translateJinShan(
+                resultObservable = mApiJinShan.translateJinShan(
                         query,
                         //JINSHAN_FANYI_KEY
                         BuildConfig.ICIBA_KEY,
@@ -77,7 +84,7 @@ public class WarpAipService {
             case BAI_DU:
                 String salt = SignUtils.getRandomInt(10);
                 String sign = SignUtils.getSign(BuildConfig.BAIDU_APP_ID, query, salt, BuildConfig.BAIDU_SCREAT_KEY);
-                resultObservable = mApiService.translateBaiDu(
+                resultObservable = mApiBaidu.translateBaiDu(
                         query,
                         BuildConfig.LANGUAGE_AUTO,
                         BuildConfig.LANGUAGE_AUTO,

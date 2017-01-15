@@ -20,24 +20,30 @@
 
 package name.gudong.translate.mvp.model.type;
 
+import name.gudong.translate.mvp.model.ApiBaidu;
+import name.gudong.translate.mvp.model.ApiJinShan;
+import name.gudong.translate.mvp.model.ApiYouDao;
+
 /**
  * Created by GuDong on 1/22/16 18:12.
  * Contact with gudong.name@gmail.com.
  */
 public enum  ETranslateFrom {
 
-    BAI_DU(0,"百度","http://api.fanyi.baidu.com/api/trans/vip/"),
-    YOU_DAO(1,"有道","http://fanyi.youdao.com/"),
-    JIN_SHAN(2,"金山","http://dict-co.iciba.com/api/");
+    BAI_DU(0,"百度","http://api.fanyi.baidu.com/", ApiBaidu.class),
+    YOU_DAO(1,"有道","http://fanyi.youdao.com/",ApiYouDao.class),
+    JIN_SHAN(2,"金山","http://dict-co.iciba.com/",ApiJinShan.class);
 
     private int index;
     private String name;
     private String url;
+    private Class aqiClass;
 
-    ETranslateFrom(int index,String name,String url) {
+    ETranslateFrom(int index,String name,String url, Class aqiClass) {
         this.index = index;
         this.name = name;
         this.url = url;
+        this.aqiClass = aqiClass;
     }
 
     public int getIndex() {
@@ -50,5 +56,9 @@ public enum  ETranslateFrom {
 
     public String getUrl() {
         return url;
+    }
+
+    public Class getAqiClass() {
+        return aqiClass;
     }
 }

@@ -60,16 +60,15 @@ android {
             resValue "string", "tray__authority", "${cfg.package}.debug.tray"
         }
         release {
-            //如果签名配置不为空 则设置签名信息
             if (signingConfigs.releaseConfig != null) {
                 signingConfig signingConfigs.releaseConfig
             }
             //设置是否混淆
-            minifyEnabled false
+            minifyEnabled true
             //设置压缩对齐
             zipAlignEnabled true
             //移除无用的资源文件
-            shrinkResources false
+            shrinkResources true
             //设置混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //指定签名包得输入文件名称
@@ -178,7 +177,6 @@ dependencies {
     }
     compile project(":headsupcompat")
 
-    //compile "net.grandcentrix.tray:tray:${libs.tray}'"
     compile 'net.grandcentrix.tray:tray:0.11.0'
 
     compile 'com.facebook.stetho:stetho:1.4.2'

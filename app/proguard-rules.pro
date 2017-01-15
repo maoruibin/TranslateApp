@@ -118,4 +118,6 @@
 # http://www.jayfeng.com/2015/12/29/APK%E7%98%A6%E8%BA%AB%E5%AE%9E%E8%B7%B5/
 -keepattributes SourceFile,LineNumberTable
 
+-keep class name.gudong.translate.mvp.model.entity.** {*;}
+
 

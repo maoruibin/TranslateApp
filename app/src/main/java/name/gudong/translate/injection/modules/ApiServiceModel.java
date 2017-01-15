@@ -28,10 +28,11 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import name.gudong.translate.BuildConfig;
-import name.gudong.translate.mvp.model.ApiService;
+import name.gudong.translate.mvp.model.ApiBaidu;
+import name.gudong.translate.mvp.model.ApiJinShan;
+import name.gudong.translate.mvp.model.ApiYouDao;
 import name.gudong.translate.mvp.model.SingleRequestService;
-import name.gudong.translate.mvp.model.WarpAipService;
-import name.gudong.translate.util.SpUtils;
+import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -45,32 +46,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @Module
 public class ApiServiceModel {
-    @Provides
-    @Singleton
-    ApiService provideApiService(){
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(HttpUrl.parse(SpUtils.getUrlByLocalSetting()))
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
-
-
-        if (BuildConfig.DEBUG) {
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addNetworkInterceptor(new StethoInterceptor())
-                    .build();
-            builder.client(client);
-        }
-
-        return builder.build().create(ApiService.class);
-    }
 
     @Provides
     @Singleton
-    SingleRequestService provideDownloadService(){
+    SingleRequestService provideDownloadService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.baidu.com/")
-                // for RxJava
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -79,9 +60,39 @@ public class ApiServiceModel {
 
     @Provides
     @Singleton
-    WarpAipService provideWarpApiService(ApiService apiService){
-        return new WarpAipService(apiService);
+    ApiBaidu provideApiBaidu() {
+        return createService(ETranslateFrom.BAI_DU);
     }
 
+    @Provides
+    @Singleton
+    ApiYouDao provideApiYouDao() {
+        return createService(ETranslateFrom.YOU_DAO);
+    }
 
+    @Provides
+    @Singleton
+    ApiJinShan provideApiJinShan() {
+        return createService(ETranslateFrom.JIN_SHAN);
+    }
+
+    private <S> S createService(ETranslateFrom type) {
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(HttpUrl.parse(type.getUrl()))
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+
+        builder.client(provideOkHttpClient());
+        return (S) builder.build().create(type.getAqiClass());
+    }
+
+    @Provides
+    @Singleton
+    OkHttpClient provideOkHttpClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        if (BuildConfig.DEBUG) {
+            builder.addNetworkInterceptor(new StethoInterceptor());
+        }
+        return builder.build();
+    }
 }

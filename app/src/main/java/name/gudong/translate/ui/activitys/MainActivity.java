@@ -380,6 +380,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             msg = getString(R.string.tip_unknown_host)+ (BuildConfig.DEBUG ? "  "+e.getMessage():"");
         }else{
             msg = getString(R.string.tip_unknown)+ (BuildConfig.DEBUG ? "  "+e.getMessage():"");
+            e.printStackTrace();
         }
         mList.addView(ViewUtil.getWordsView(MainActivity.this, msg, android.R.color.holo_red_light,false));
         mBtTranslate.setEnabled(true);
