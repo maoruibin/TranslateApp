@@ -19,7 +19,7 @@
             android:id="@+id/tv_dayline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="2"
+            android:maxLines="3"
             android:layout_toLeftOf="@+id/iv_sound_dayline"
             android:layout_toStartOf="@+id/iv_sound_dayline"
             tools:text="Even miracles take a little time. —The Fairy Godmother"

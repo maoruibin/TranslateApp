@@ -30,6 +30,15 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
+    /**
+     * 是否是5.0以上系统
+     *
+     * @return
+     */
+    public static boolean isAndroidM() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+
     public static void showNormalNotification(Context context) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);

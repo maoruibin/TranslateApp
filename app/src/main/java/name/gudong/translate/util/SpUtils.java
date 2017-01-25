@@ -63,6 +63,9 @@ public class SpUtils {
     //App 是否在前台
     private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";
 
+    //是否授予 Android M 浮窗权限
+    private static final String KEY_DRAW_OVERLAYS_PERMISSION = "DRAW_OVERLAYS_PERMISSION";
+
     public static void setTranslateEngine(Context context, String version) {
         putStringPreference(context, KEY_TRANSLATE_FROM, version);
     }
@@ -104,6 +107,15 @@ public class SpUtils {
 
     public static boolean getAppFront(Context context){
         return getBooleanPreference(context, KEY_FLAG_APP_FRONT,false);
+    }
+
+    //设置是否匹配权限
+    public static void setDrawOverlays(Context context,boolean isOpen){
+        putBooleanPreference(context, KEY_DRAW_OVERLAYS_PERMISSION,isOpen);
+    }
+
+    public static boolean hasGrantDrawOverlays(Context context){
+        return getBooleanPreference(context, KEY_DRAW_OVERLAYS_PERMISSION,false);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////

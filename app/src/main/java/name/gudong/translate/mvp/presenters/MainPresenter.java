@@ -25,6 +25,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
@@ -53,6 +54,7 @@ import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.SpUtils;
+import name.gudong.translate.util.Utils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -302,6 +304,18 @@ public class MainPresenter extends BasePresenter<IMainView> {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(KEY_RESULT,result);
         context.startActivity(intent);
+    }
+
+    /**
+     * 触发 Android M 上的浮窗权限
+     */
+    public void triggerDrawOverlaysPermission(){
+        if(Utils.isAndroidM()){
+            if(!Settings.canDrawOverlays(getContext())) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                getContext().startActivity(intent);
+            }
+        }
     }
 }
 
