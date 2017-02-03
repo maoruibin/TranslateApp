@@ -36,20 +36,22 @@
             android:name="BUG_HD_SDK_GENERAL_KEY"
             android:value="60641333d73c37d9db66465ab8f78cc9" />
 
-        <!--android:theme="@android:style/Theme.NoDisplay"-->
-        <!--android:theme="@android:style/Theme.Dialog"-->
+        <!-- android:theme="@android:style/Theme.NoDisplay" -->
+        <!-- android:theme="@android:style/Theme.Dialog" -->
         <activity
             android:name=".ui.activitys.ProcessTextActivity"
             android:label="@string/app_process_text"
             android:theme="@style/myTransparent">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activitys.MainActivity"
+        <activity
+            android:name=".ui.activitys.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,7 +64,7 @@
             android:name=".listener.ListenClipboardService"
             android:enabled="true"
             android:label="@string/app_process_text"
-            android:process=":process"/>
+            android:process=":process" />
 
         <receiver
             android:name=".listener.BootCompletedReceiver"
@@ -74,21 +76,29 @@
         </receiver>
 
         <activity android:name=".ui.activitys.WordsBookActivity" />
-
         <activity android:name=".ui.activitys.SettingActivity" />
 
         <receiver android:name=".listener.AlarmReceiver">
             <intent-filter>
-                <action android:name="name.gudong.translate.alarm"/>
+                <action android:name="name.gudong.translate.alarm" />
             </intent-filter>
         </receiver>
 
-        <!--<receiver android:name=".service.KeepAlarmLiveReceiver">-->
-        <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
+        <!-- <receiver android:name=".service.KeepAlarmLiveReceiver"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.USER_PRESENT"/> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
 
+        <service
+            android:name=".service.QuickSettingService"
+            android:icon="@drawable/icon_notification"
+            android:label="@string/quick_setting"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

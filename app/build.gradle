@@ -5,8 +5,7 @@ apply plugin:'im.fir.plugin.gradle'
 
 fir{
     apiToken '15e5206706b555384608e449d6def6d3'
-    changeLog '* add upload plugin for fir\n' +
-            '* add changelog file'
+    changeLog 'adapter quick setting for Android N version'
 }
 
 bughd{
