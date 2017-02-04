@@ -1,11 +1,15 @@
 apply plugin: 'com.android.library'
 
+def cfg = rootProject.ext.configuration
+def libs = rootProject.ext.libraries;
+def test = rootProject.ext.testingLibraries;
+
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 22
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
         versionCode 1
         versionName "1.1.0"
     }
@@ -17,6 +21,5 @@ android {
 }
 
 dependencies {
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.android.support:support-v4:22.2.1'
+    compile "com.android.support:support-v4:${libs.supportVersion}"
 }

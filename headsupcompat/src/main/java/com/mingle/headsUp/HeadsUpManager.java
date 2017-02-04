@@ -1,14 +1,12 @@
 package com.mingle.headsUp;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.WindowManager;
-
-
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.util.HashMap;
 import java.util.LinkedList;
