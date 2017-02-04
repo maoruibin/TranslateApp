@@ -3,10 +3,6 @@ sudo: false
 language: android
 jdk: oraclejdk7
 
-env:
-  global:
-    - ADB_INSTALL_TIMEOUT=10
-
 android:
   components:
 
@@ -19,7 +15,7 @@ android:
     - extra-android-support
 
 script:
-  - gradlew clean assembleRelease
+  - ./gradlew clean assembleRelease
 
 before_install:
   - chmod +x gradlew
