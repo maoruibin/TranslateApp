@@ -44,6 +44,9 @@
     <string name="tip_unknown_host">网络异常，请检查后重试。</string>
     <string name="tip_unknown">未知的异常</string>
 
+    <string name="menu_sort">排序</string>
+    <string name="menu_export">导出</string>
+    <string name="menu_import">导入</string>
     <string name="sort_index_asc">按首字母正序</string>
     <string name="sort_index_desc">按首字母逆序</string>
     <string name="title_activity_settings">Settings</string>

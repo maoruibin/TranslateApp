@@ -21,13 +21,18 @@
 package name.gudong.translate.ui.activitys;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,13 +44,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import name.gudong.translate.R;
-import name.gudong.translate.mvp.model.entity.translate.Result;
-import name.gudong.translate.mvp.presenters.BookPresenter;
-import name.gudong.translate.mvp.views.IBookView;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerActivityComponent;
 import name.gudong.translate.injection.modules.ActivityModule;
+import name.gudong.translate.mvp.model.entity.translate.Result;
+import name.gudong.translate.mvp.presenters.BookPresenter;
+import name.gudong.translate.mvp.views.IBookView;
 import name.gudong.translate.ui.adapter.WordsListAdapter;
+import name.gudong.translate.util.Utils;
 
 public class WordsBookActivity extends BaseActivity<BookPresenter> implements WordsListAdapter.OnClick, IBookView {
 
@@ -55,7 +61,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
     @BindView(R.id.empty_tip_text)
     TextView emptyTipText;
 
-    private  List<Result> mResult = new ArrayList<>();
+    private List<Result> mResult = new ArrayList<>();
 
     WordsListAdapter mAdapter;
 
@@ -78,16 +84,16 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.book,menu);
+        getMenuInflater().inflate(R.menu.book, menu);
         mMenu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(mAdapter.getItemCount()<=0){
+        if (mAdapter.getItemCount() <= 0) {
             menu.findItem(R.id.menu_sort).setVisible(false);
-        }else{
+        } else {
             menu.findItem(R.id.menu_sort).setVisible(true);
         }
         return super.onPrepareOptionsMenu(menu);
@@ -95,7 +101,49 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
+            case R.id.menu_export:
+                String exportText = mPresenter.getWordsJsonString(mAdapter.getData());
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.menu_export)
+                        .setMessage(exportText)
+                        .setPositiveButton("发送", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Utils.shareText(getBaseContext(), exportText);
+                            }
+                        })
+                        .setNeutralButton("复制", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPresenter.copyText(exportText);
+                                Toast.makeText(WordsBookActivity.this, "拷贝成功", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .show();
+                break;
+            case R.id.menu_import:
+                View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.module_lite_input, null);
+                EditText editText = (EditText) view.findViewById(R.id.et_import);
+                new AlertDialog.Builder(this)
+                        .setView(view)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String text = editText.getText().toString();
+                                if(TextUtils.isEmpty(text)){
+                                    Toast.makeText(WordsBookActivity.this, "输入不能为空", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if(!Utils.isJSONFormat(text)){
+                                    Toast.makeText(WordsBookActivity.this, "不是 JSON 格式，请检查。", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                mPresenter.restoreWordsByText(mAdapter.getData(), text);
+                            }
+                        })
+                        .show();
+                break;
             case R.id.sort_index_asc:
                 item.setChecked(true);
                 Collections.sort(mResult, new Comparator<Result>() {
@@ -162,7 +210,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
     @Override
     public void deleteWordSuccess(Result entity) {
         mAdapter.removeItem(entity);
-        showDeleteTip("删除成功");
+        showTip("删除成功");
         if (mAdapter.getItemCount() == 0) {
             emptyTipText.setVisibility(View.VISIBLE);
         }
@@ -170,12 +218,23 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
 
     @Override
     public void deleteWordFail() {
-        showDeleteTip("删除失败");
+        showTip("删除失败");
     }
 
     @Override
     public void onError(Throwable error) {
-        showDeleteTip(error.getMessage());
+        showTip(error.getMessage());
+    }
+
+    @Override
+    public void restoreSuccess(int count) {
+        mPresenter.getWords();
+        showTip("成功恢复 "+count+ " 个单词。");
+    }
+
+    @Override
+    public void showTipDataHaveNoChange() {
+        showTip("数据没有任何变化");
     }
 
     /***
@@ -183,7 +242,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
      *
      * @param showText
      */
-    private void showDeleteTip(String showText) {
+    private void showTip(String showText) {
         Toast.makeText(WordsBookActivity.this, showText, Toast.LENGTH_SHORT).show();
     }
 }

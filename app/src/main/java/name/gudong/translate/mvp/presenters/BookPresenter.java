@@ -20,8 +20,11 @@
 
 package name.gudong.translate.mvp.presenters;
 
+import android.content.ClipData;
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
@@ -31,6 +34,7 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.Result;
@@ -40,11 +44,14 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
+
 /**
  * Created by GuDong on 2/28/16 17:02.
  * Contact with gudong.name@gmail.com.
  */
 public class BookPresenter extends BasePresenter<IBookView> {
+
     @Inject
     public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         super(liteOrm, apiService, singleRequestService,context);
@@ -104,4 +111,34 @@ public class BookPresenter extends BasePresenter<IBookView> {
         return () -> mLiteOrm.delete(entity);
     }
 
+    public String getWordsJsonString(List<Result>results){
+        Gson gson = new Gson();
+        return gson.toJson(results);
+    }
+
+    public void copyText(String text){
+        ClipData myClip = ClipData.newPlainText("text", text);
+        ClipboardManagerCompat.create(getContext()).setPrimaryClip(myClip);
+    }
+
+    public void restoreWordsByText(List<Result> oriList, String text) {
+        Gson gson = new Gson();
+        List<Result>results = gson.fromJson(text, new TypeToken<List<Result>>(){}.getType());
+        int hasExistCount = 0;
+        for(Result result:results){
+            if(oriList.contains(result)){
+                Logger.t(TAG).i(result.getQuery()+" has exist ");
+                hasExistCount ++;
+                continue;
+            }
+            mLiteOrm.insert(result);
+            Logger.t(TAG).i(result.getQuery()+" restore success ");
+        }
+        Logger.t(TAG).i("restore finish! total restore count is "+ (results.size()-hasExistCount));
+        if(results.size() == hasExistCount){
+            mView.showTipDataHaveNoChange();
+        }else{
+            mView.restoreSuccess(results.size()-hasExistCount);
+        }
+    }
 }

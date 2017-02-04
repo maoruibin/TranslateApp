@@ -20,6 +20,7 @@
 
 package name.gudong.translate.listener.clipboard;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,6 +45,11 @@ public class ClipboardManagerImpl9 extends ClipboardManagerCompat implements Run
 
     public ClipboardManagerImpl9(Context context) {
         mClipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    }
+
+    @Override
+    public void setPrimaryClip(ClipData clip) {
+        mClipboardManager.setText(clip.toString());
     }
 
     @Override

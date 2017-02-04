@@ -9,6 +9,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 import name.gudong.translate.R;
@@ -96,5 +100,30 @@ public class Utils {
         time[1] = now.get(Calendar.MINUTE);
         time[2] = now.get(Calendar.SECOND);
         return time;
+    }
+
+    public static void shareText(Context context, String text){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,text);
+        sendIntent.setType("text/plain");
+        context.startActivity(Intent.createChooser(sendIntent, "发送"));
+    }
+    /**
+     * check test string is json format or not
+     * @param test content
+     * @return true if it is format by json else return false
+     */
+    public static boolean isJSONFormat(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            try {
+                new JSONArray(test);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
     }
 }

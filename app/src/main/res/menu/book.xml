@@ -3,9 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_export"
+        app:showAsAction="never"
+        android:title="@string/menu_export"/>
+
+    <item
+        android:id="@+id/menu_import"
+        app:showAsAction="never"
+        android:title="@string/menu_import"/>
+    <item
         android:id="@+id/menu_sort"
-        android:icon="@drawable/ic_sort_white_24dp"
-        app:showAsAction="ifRoom">
+        app:showAsAction="never"
+        android:title="@string/menu_sort">
         <menu>
             <group
                 android:checkableBehavior="single">
@@ -17,6 +26,6 @@
                     android:title="@string/sort_index_desc"/>
             </group>
         </menu>
-
     </item>
+
 </menu>

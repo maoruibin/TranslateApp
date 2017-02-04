@@ -36,4 +36,15 @@ public interface IBookView extends IBaseView {
     void deleteWordFail();
 
     void onError(Throwable error);
+
+    /**
+     *
+     * @param count 恢复成功的数量
+     */
+    void restoreSuccess(int count);
+
+    /**
+     * 数据没有任何变化
+     */
+    void showTipDataHaveNoChange();
 }

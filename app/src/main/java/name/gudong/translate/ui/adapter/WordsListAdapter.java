@@ -137,4 +137,8 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
     public interface OnClick{
         void onClickItem(View view,Result entity);
     }
+
+    public List<Result> getData() {
+        return mList;
+    }
 }
