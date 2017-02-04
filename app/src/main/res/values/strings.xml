@@ -9,6 +9,7 @@
     <string name="menu_score">去评分</string>
     <string name="menu_support">支持作者</string>
 
+    <string name="quick_setting">recite words</string>
     <string name="use_recite_or_nor">开启定时单词提醒</string>
     <string name="open_jit_or_nor">开启划词翻译</string>
     <string name="notify_dayline">开启每日一句提醒</string>
