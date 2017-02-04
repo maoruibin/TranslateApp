@@ -17,5 +17,8 @@ android:
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-17
 
+script:
+  - "./gradlew clean assembleRelease"
+
 before_install:
   - chmod +x gradlew
