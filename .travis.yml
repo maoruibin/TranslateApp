@@ -1,6 +1,11 @@
-language: android
+sudo: false
 
+language: android
 jdk: oraclejdk7
+
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=10
 
 android:
   components:
