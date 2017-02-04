@@ -21,7 +21,6 @@ public class QuickSettingService extends TileService {
         mRecitePreference = new ReciteModulePreference(getBaseContext());
     }
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(getQsTile() == null){
@@ -51,7 +50,18 @@ public class QuickSettingService extends TileService {
     }
 
     private void shiftRecite() {
-        //利用 Service 生命周期巧妙控制开关
         ListenClipboardService.start(getBaseContext());
+    }
+
+    @Override
+    public void onStartListening() {
+        super.onStartListening();
+        Log.d(TAG, "onStartListening and status is " + Integer.toString(getQsTile().getState()));
+    }
+
+    @Override
+    public void onStopListening() {
+        super.onStopListening();
+        Log.d(TAG, "onStopListening and status is " + Integer.toString(getQsTile().getState()));
     }
 }

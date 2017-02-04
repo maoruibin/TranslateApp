@@ -71,6 +71,12 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onResume() {
+            super.onResume();
+            mUseReciteOrNot.setChecked(mRecitePreference.isReciteOpenOrNot());
+        }
+
+        @Override
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
@@ -102,16 +108,21 @@ public class SettingActivity extends AppCompatActivity {
                         .setTitle("新功能提示")
                         .setMessage("从 1.3.1 版本开始,咕咚翻译新增了定时提示生词的功能,。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，不一定那一次就记住了，当然这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
                         .setCancelable(false)
+                        .setNeutralButton("立即开启", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Once.markDone(KEY_TIP_OF_RECITE);
+                                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                                activity.findViewById(android.R.id.content).postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mUseReciteOrNot.setChecked(true);
+                                    }
+                                },500);
+                            }
+                        })
                         .setPositiveButton("知道了", ((dialog, which) -> {
                             Once.markDone(KEY_TIP_OF_RECITE);
-                            AppCompatActivity activity = (AppCompatActivity) getActivity();
-                            activity.findViewById(android.R.id.content).postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mUseReciteOrNot.setChecked(true);
-                                }
-                            },500);
-
                         }))
                         .show().setCanceledOnTouchOutside(false);
             }

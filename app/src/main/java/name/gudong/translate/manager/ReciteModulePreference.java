@@ -34,7 +34,7 @@ public class ReciteModulePreference extends TrayPreferences{
 
     //是否开启背单词
     public boolean isReciteOpenOrNot(){
-        return getBoolean(KEY_RECITE_OPEN,true);
+        return getBoolean(KEY_RECITE_OPEN,false);
     }
 
     public void setReciteOpenOrNot(boolean isRecite){

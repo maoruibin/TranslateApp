@@ -8,12 +8,6 @@
             android:defaultValue="true"/>
 
         <com.jenzz.materialpreference.SwitchPreference
-            android:key="preference_auto_play_sound"
-            android:title="@string/play_sound_auto"
-            android:summary="@string/play_sound_auto_summary"
-            android:defaultValue="false"/>
-
-        <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_notify_dayline"
             android:title="@string/notify_dayline"
             android:summary="@string/notify_dayline_summary"
@@ -38,6 +32,13 @@
             android:key="preference_recite_time"
             android:title="自动提示间隔时间"
             android:summary="背单词时两次显示的间隔时间"/>
+        <com.jenzz.materialpreference.SwitchPreference
+            android:dependency="preference_use_recite_or_not"
+            android:key="preference_auto_play_sound"
+            android:title="@string/play_sound_auto"
+            android:summary="@string/play_sound_auto_summary"
+            android:defaultValue="false"/>
+
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="高级">
