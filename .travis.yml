@@ -15,7 +15,7 @@ android:
     - extra-android-support
 
 script:
-  - ./gradlew clean assembleRelease
+  - ./gradlew clean assembleRelease  --stacktrace
 
 before_install:
   - chmod +x gradlew
