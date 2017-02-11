@@ -67,7 +67,7 @@ import rx.schedulers.Schedulers;
  * Contact with gudong.name@gmail.com.
  */
 public class MainPresenter extends BasePresenter<IMainView> {
-    private static final String KEY_RESULT = "RESULT";
+    public static final String KEY_RESULT = "RESULT";
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
@@ -78,17 +78,17 @@ public class MainPresenter extends BasePresenter<IMainView> {
         super(liteOrm, apiService, singleRequestService, context);
     }
 
-    public void checkIntentFromClickTipView(Intent intent){
-        if(hasExtraResult(intent)){
+    public void checkIntentFromClickTipView(Intent intent) {
+        if (hasExtraResult(intent)) {
             Result result = (Result) intent.getSerializableExtra(KEY_RESULT);
-            if(result != null){
+            if (result != null) {
                 mView.onInitSearchText(result.getQuery());
-                executeSearch(result.getQuery());
+                //executeSearch(result.getQuery());
             }
         }
     }
 
-    public boolean hasExtraResult(Intent intent){
+    public boolean hasExtraResult(Intent intent) {
         return intent.hasExtra(KEY_RESULT);
     }
 
@@ -104,7 +104,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
         Matcher m = r.matcher(text);
         if (m.matches()) {
             mView.onInitSearchText(text);
-            executeSearch(text);
+//            executeSearch(text);
             mView.closeKeyboard();
         }
     }
@@ -127,10 +127,10 @@ public class MainPresenter extends BasePresenter<IMainView> {
         }
     }
 
-    public void trigDbUpdate(){
-        List<Result>results = mLiteOrm.query(Result.class);
-        for (Result result:results) {
-            if(!result.isMake_done_once()){
+    public void trigDbUpdate() {
+        List<Result> results = mLiteOrm.query(Result.class);
+        for (Result result : results) {
+            if (!result.isMake_done_once()) {
                 result.setMake_done_once(false);
                 mLiteOrm.update(result);
             }
@@ -183,8 +183,8 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         List<String> temp = absResult.wrapExplains();
                         //增加音标显示
                         String phAm = absResult.getResult().getPhAm();
-                        if (!temp.isEmpty() && !TextUtils.isEmpty(phAm)){
-                            temp.add(0,"["+phAm+"]");
+                        if (!temp.isEmpty() && !TextUtils.isEmpty(phAm)) {
+                            temp.add(0, "[" + phAm + "]");
                             return temp;
                         }
                         return absResult.wrapTranslation();
@@ -232,7 +232,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
     public void unFavoriteWord(Result result) {
         //,Result.COL_QUERY,new String[]{result.getQuery()
-        WhereBuilder builder = WhereBuilder.create(Result.class).andEquals(Result.COL_QUERY,result.getQuery());
+        WhereBuilder builder = WhereBuilder.create(Result.class).andEquals(Result.COL_QUERY, result.getQuery());
         mLiteOrm.delete(builder);
     }
 
@@ -265,28 +265,28 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 return mFileManager.resetFileCache(getContext());
             }
         }).
-        subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<Boolean>() {
-            @Override
-            public void call(Boolean aBoolean) {
-                if(aBoolean){
-                    //Toast.makeText(getContext(), "清除缓存成功", Toast.LENGTH_SHORT).show();
-                }else{
-                    //Toast.makeText(getContext(), "无缓存需要清除", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        if (aBoolean) {
+                            //Toast.makeText(getContext(), "清除缓存成功", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //Toast.makeText(getContext(), "无缓存需要清除", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
-    public void dayline(){
+    public void dayline() {
         mSingleRequestService.dayline("http://open.iciba.com/dsapi/")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<JinshanDayLineEntity>() {
                     @Override
                     public void call(JinshanDayLineEntity jinshanDayLineEntity) {
-                        if(jinshanDayLineEntity != null){
+                        if (jinshanDayLineEntity != null) {
                             mView.fillDayline(jinshanDayLineEntity);
                         }
                     }
@@ -299,19 +299,19 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 });
     }
 
-    public static void jumpMainActivityFromClickTipView(Context context,Result result){
+    public static void jumpMainActivityFromClickTipView(Context context, Result result) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(KEY_RESULT,result);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(KEY_RESULT, result);
         context.startActivity(intent);
     }
 
     /**
      * 触发 Android M 上的浮窗权限
      */
-    public void triggerDrawOverlaysPermission(){
-        if(Utils.isAndroidM()){
-            if(!Settings.canDrawOverlays(getContext())) {
+    public void triggerDrawOverlaysPermission() {
+        if (Utils.isAndroidM()) {
+            if (!Settings.canDrawOverlays(getContext())) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                 getContext().startActivity(intent);
             }

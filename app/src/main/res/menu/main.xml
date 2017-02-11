@@ -26,13 +26,8 @@
 
     <item
         android:id="@+id/menu_book"
-        app:showAsAction="never"
-        android:title="@string/favorite_list"/>
-
-    <item
-        android:id="@+id/menu_setting"
         app:showAsAction="ifRoom"
-        android:title="@string/menu_setting"/>
+        android:title="@string/favorite_list"/>
 
     <item
         android:id="@+id/menu_support"
@@ -48,4 +43,10 @@
         android:id="@+id/menu_about"
         app:showAsAction="never"
         android:title="@string/menu_about"/>
+
+    <item
+        android:id="@+id/menu_setting"
+        app:showAsAction="never"
+        android:title="@string/menu_setting"/>
+
 </menu>

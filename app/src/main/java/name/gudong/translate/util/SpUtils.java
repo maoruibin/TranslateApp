@@ -44,6 +44,7 @@ public class SpUtils {
     }
 
     private static final String KEY_TRANSLATE_FROM = "TRANSLATE_FROM";
+    private static final String KEY_WORDBOOK_RECITE_MODE = "WORDBOOK_RECITE_MODE";
     //every tip's interval time
     public static final String KEY_INTERVAL_TIP_TIME = "INTERVAL_TIP_TIME";
 
@@ -87,9 +88,8 @@ public class SpUtils {
         return getBooleanPreference(context,KEY_PREFERENCE_SHOW_ICON_IN_NOTIFICATION,false);
     }
 
-
     public static boolean isNotifyDayline(Context context){
-        return getBooleanPreference(context,KEY_PREFERENCE_NOTIFY_DAYLINE,true);
+        return getBooleanPreference(context,KEY_PREFERENCE_NOTIFY_DAYLINE,false);
     }
 
     public static boolean isAutoPasteWords(Context context){
@@ -116,6 +116,15 @@ public class SpUtils {
 
     public static boolean hasGrantDrawOverlays(Context context){
         return getBooleanPreference(context, KEY_DRAW_OVERLAYS_PERMISSION,false);
+    }
+
+
+    public static void setWordBookReciteMode(Context context,boolean isReciteMode){
+        putBooleanPreference(context,KEY_WORDBOOK_RECITE_MODE,isReciteMode);
+    }
+
+    public static boolean isWordBookReciteMode(Context context){
+        return getBooleanPreference(context,KEY_WORDBOOK_RECITE_MODE,false);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////

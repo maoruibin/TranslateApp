@@ -49,11 +49,16 @@ import name.gudong.translate.injection.components.DaggerActivityComponent;
 import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BookPresenter;
+import name.gudong.translate.mvp.presenters.MainPresenter;
 import name.gudong.translate.mvp.views.IBookView;
 import name.gudong.translate.ui.adapter.WordsListAdapter;
+import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
+import name.gudong.translate.widget.DividerItemDecoration;
 
-public class WordsBookActivity extends BaseActivity<BookPresenter> implements WordsListAdapter.OnClick, IBookView {
+import static name.gudong.translate.util.SpUtils.isWordBookReciteMode;
+
+public class WordsBookActivity extends BaseActivity<BookPresenter> implements IBookView {
 
     @BindView(R.id.rv_words_list)
     RecyclerView mRvWordsList;
@@ -80,6 +85,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
         initActionBar(true, "单词本");
         initListView();
         initData();
+
     }
 
     @Override
@@ -93,15 +99,39 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mAdapter.getItemCount() <= 0) {
             menu.findItem(R.id.menu_sort).setVisible(false);
+            menu.findItem(R.id.menu_recite_mode).setVisible(false);
         } else {
             menu.findItem(R.id.menu_sort).setVisible(true);
+            menu.findItem(R.id.menu_recite_mode).setVisible(true);
         }
+        menu.findItem(R.id.menu_recite_mode).setChecked(isWordBookReciteMode(this));
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_recite_mode:
+                if (!mPresenter.hasShowReciteModeIntroduce()) {
+                    mPresenter.makeReciteDone();
+                    new AlertDialog.Builder(this)
+                            .setMessage("开启背单词模式后，单词本的单词列表将隐藏单词释义，点击才可以查看。")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mRvWordsList.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            switchReciteMode(item);
+                                        }
+                                    }, 300);
+                                }
+                            })
+                            .show();
+                }else{
+                    switchReciteMode(item);
+                }
+                break;
             case R.id.menu_export:
                 String exportText = mPresenter.getWordsJsonString(mAdapter.getData());
                 new AlertDialog.Builder(this)
@@ -113,6 +143,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
                                 Utils.shareText(getBaseContext(), exportText);
                             }
                         })
+                        .setNegativeButton("取消", null)
                         .setNeutralButton("复制", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -131,11 +162,11 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String text = editText.getText().toString();
-                                if(TextUtils.isEmpty(text)){
+                                if (TextUtils.isEmpty(text)) {
                                     Toast.makeText(WordsBookActivity.this, "输入不能为空", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                if(!Utils.isJSONFormat(text)){
+                                if (!Utils.isJSONFormat(text)) {
                                     Toast.makeText(WordsBookActivity.this, "不是 JSON 格式，请检查。", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
@@ -154,6 +185,10 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
                 });
                 mAdapter.update(mResult);
                 break;
+            case R.id.sort_default:
+                item.setChecked(true);
+                mPresenter.getWords();
+                break;
             case R.id.sort_index_desc:
                 item.setChecked(true);
                 Collections.sort(mResult, new Comparator<Result>() {
@@ -168,15 +203,46 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
         return super.onOptionsItemSelected(item);
     }
 
+    private void switchReciteMode(MenuItem item) {
+        item.setChecked(!item.isChecked());
+        mAdapter.updateReciteMode(item.isChecked());
+        SpUtils.setWordBookReciteMode(this, item.isChecked());
+    }
+
     private void initData() {
+        mPresenter.initStatus();
         mPresenter.getWords();
     }
 
     private void initListView() {
         mAdapter = new WordsListAdapter(this);
-        mAdapter.setOnClickListener(this);
+        mAdapter.setOnClickListener(new WordsListAdapter.IClickPopupMenuItem() {
+            @Override
+            public void onClickMenuItem(int itemId, Result entity) {
+                switch (itemId) {
+                    case R.id.pop_delete:
+                        new AlertDialog.Builder(WordsBookActivity.this)
+                                .setMessage("确定要删除吗？")
+                                .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mPresenter.deleteWords(entity);
+                                    }
+                                })
+                                .setNegativeButton("取消", null)
+                                .show();
+                        break;
+                    case R.id.pop_research:
+                        MainPresenter.jumpMainActivityFromClickTipView(WordsBookActivity.this,entity);
+                        finish();
+                        break;
+                }
+
+            }
+        });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRvWordsList.setLayoutManager(mLayoutManager);
+        mRvWordsList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRvWordsList.setAdapter(mAdapter);
     }
 
@@ -189,22 +255,22 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
                 .inject(this);
     }
 
-    @Override
-    public void onClickItem(View view, Result entity) {
-        mPresenter.deleteWords(entity);
-    }
 
     @Override
-    public void fillData(List<Result> transResultEntities) {
+    public void fillData(List<Result> transResultEntities, boolean isReciteMode) {
+        if (transResultEntities == null) {
+            return;
+        }
         //如果查出来的结果为空,那么提示用户没有收藏的单词
-        if (transResultEntities == null || transResultEntities.size() == 0) {
+        if (transResultEntities.size() == 0) {
             emptyTipText.setVisibility(View.VISIBLE);
         } else {
             emptyTipText.setVisibility(View.GONE);
-            mAdapter.update(transResultEntities);
+            mAdapter.update(transResultEntities, isReciteMode);
             mResult = transResultEntities;
-
         }
+        //提示开启背单词开关
+        mPresenter.checkPointRecite(transResultEntities.size());
     }
 
     @Override
@@ -229,7 +295,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements Wo
     @Override
     public void restoreSuccess(int count) {
         mPresenter.getWords();
-        showTip("成功恢复 "+count+ " 个单词。");
+        showTip("成功恢复 " + count + " 个单词。");
     }
 
     @Override

@@ -125,13 +125,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         checkTranslateWay();
         checkVersion();
         initConfig();
-        setUpDayline();
+        setUpDayline(false);
         checkIntent();
         checkOverPermission();
     }
 
-    private void setUpDayline() {
+    private void setUpDayline(boolean isOpenDayLine) {
         View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet_view);
+        if(!isOpenDayLine){
+            bottomSheet.setVisibility(View.GONE);
+            return;
+        }
         //点击 和拖拽都可以打开bottom sheet
         bottomSheet.setOnClickListener(v -> onClickBottomSheet());
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -595,6 +599,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     public void onClickBottomSheet() {
+        if(mBottomSheetBehavior == null){
+            return;
+        }
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         } else {
@@ -613,6 +620,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
      * @return
      */
     private boolean checkBottomSheetIsExpandedAndReset() {
+        if(mBottomSheetBehavior == null){
+            return false;
+        }
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             return true;

@@ -15,6 +15,7 @@ import static name.gudong.translate.util.SpUtils.KEY_INTERVAL_TIP_TIME;
  */
 
 public class ReciteModulePreference extends TrayPreferences{
+    private static final boolean DEFAULT_IS_RECITE = false;
     //is open JIT translate or not
     private static final String KEY_OPEN_JIT = "preference_recite_open_jit";
 
@@ -34,7 +35,7 @@ public class ReciteModulePreference extends TrayPreferences{
 
     //是否开启背单词
     public boolean isReciteOpenOrNot(){
-        return getBoolean(KEY_RECITE_OPEN,true);
+        return getBoolean(KEY_RECITE_OPEN, DEFAULT_IS_RECITE);
     }
 
     public void setReciteOpenOrNot(boolean isRecite){

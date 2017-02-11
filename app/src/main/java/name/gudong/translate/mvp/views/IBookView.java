@@ -29,7 +29,7 @@ import name.gudong.translate.mvp.model.entity.translate.Result;
  * Contact with gudong.name@gmail.com.
  */
 public interface IBookView extends IBaseView {
-    void fillData(List<Result> transResultEntities);
+    void fillData(List<Result> transResultEntities, boolean isReciteMode );
 
     void deleteWordSuccess(Result entity);
 

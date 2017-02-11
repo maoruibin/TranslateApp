@@ -13,11 +13,11 @@
             android:summary="@string/play_sound_auto_summary"
             android:defaultValue="false"/>
 
-        <com.jenzz.materialpreference.SwitchPreference
-            android:key="preference_notify_dayline"
-            android:title="@string/notify_dayline"
-            android:summary="@string/notify_dayline_summary"
-            android:defaultValue="true"/>
+        <!--<com.jenzz.materialpreference.SwitchPreference-->
+            <!--android:key="preference_notify_dayline"-->
+            <!--android:title="@string/notify_dayline"-->
+            <!--android:summary="@string/notify_dayline_summary"-->
+            <!--android:defaultValue="true"/>-->
 
         <com.jenzz.materialpreference.SwitchPreference
             android:key="preference_auto_paste_words"

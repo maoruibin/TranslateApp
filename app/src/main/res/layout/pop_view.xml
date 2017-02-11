@@ -51,7 +51,7 @@
             android:clickable="true"
             android:visibility="gone"
             tools:visibility="visible"
-            android:src="@drawable/ic_done_white_24dp"/>
+            app:srcCompat="@drawable/ic_done_white_24dp"/>
 
 
         <ImageView
@@ -107,7 +107,6 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/ll_pop_src"
             android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@id/bt_action"
             android:orientation="vertical"
             android:visibility="visible" />
 
