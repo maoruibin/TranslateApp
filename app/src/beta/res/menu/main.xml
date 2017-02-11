@@ -102,6 +102,13 @@
         android:id="@+id/menu_score"
         app:showAsAction="never"
         android:title="@string/menu_score"/>
+
+    <item
+        android:id="@+id/menu_setting"
+        app:showAsAction="never"
+        android:title="@string/menu_setting"/>
+
+
     <item
         android:id="@+id/menu_about"
         app:showAsAction="never"

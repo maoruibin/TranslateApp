@@ -1,0 +1,74 @@
+[
+  {
+    "name": "RxJava",
+    "url": "https://github.com/ReactiveX/RxJava",
+    "description": "Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
+    "icon": "http://reactivex.io/assets/Rx_Logo_S.png",
+    "license_name": "Apache 2.0",
+    "license": "license/RxJava.txt"
+  },
+  {
+    "name": "RxAndroid",
+    "url": "https://github.com/ReactiveX/RxAndroid",
+    "description": "RxJava bindings for Android.",
+    "icon": "http://reactivex.io/assets/Rx_Logo_S.png",
+    "license_name": "Apache 2.0",
+    "license": "license/RxAndroid.txt"
+  },
+  {
+    "name": "Gson",
+    "url": "https://github.com/google/gson",
+    "description": "A Java serialization/deserialization library that can convert Java Objects into JSON and back.",
+    "icon": null,
+    "license_name": "Apache 2.0",
+    "license": "license/Gson.txt"
+  },
+  {
+    "name": "Retrofit 2",
+    "url": "https://github.com/square/retrofit",
+    "description": "Type-safe HTTP client for Android and Java by Square, Inc.",
+    "icon": null,
+    "license_name": "Apache 2.0",
+    "license": "license/Retrofit.txt"
+  },
+  {
+    "name": "Glide",
+    "url": "https://github.com/bumptech/glide",
+    "description": "An image loading and caching library for Android focused on smooth scrolling",
+    "icon": "file:///android_asset/thirdparty/images/glide_logo.png",
+    "license_name": "BSD, part MIT and Apache 2.0",
+    "license": "license/Glide.txt"
+  },
+  {
+    "name": "Butter Knife",
+    "url": "https://github.com/JakeWharton/butterknife",
+    "description": "Bind Android views and callbacks to fields and methods",
+    "icon": "http://jakewharton.github.io/butterknife/static/logo.png",
+    "license_name": "Apache 2.0",
+    "license": "license/ButterKnife.txt"
+  },
+  {
+    "name": "SQLBrite",
+    "url": "https://github.com/square/sqlbrite",
+    "description": "A lightweight wrapper around SQLiteOpenHelper which introduces reactive stream semantics to SQL operations.",
+    "icon": null,
+    "license_name": "Apache 2.0",
+    "license": "license/SQLBrite.txt"
+  },
+  {
+    "name": "Stetho",
+    "url": "http://github.com/facebook/stetho",
+    "description": "Stetho is a debug bridge for Android applications, enabling the powerful Chrome Developer Tools and much more.",
+    "icon": "http://facebook.github.io/stetho/static/logo.png",
+    "license_name": "BSD, Additional Grant of Patent Rights",
+    "license": "license/Stetho.txt"
+  },
+  {
+    "name": "Calligraphy",
+    "url": "https://github.com/chrisjenx/Calligraphy",
+    "description": "Custom fonts in Android the easy way...",
+    "icon": null,
+    "license_name": "Apache 2.0",
+    "license": "license/Calligraphy.txt"
+  }
+]

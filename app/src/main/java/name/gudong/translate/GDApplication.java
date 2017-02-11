@@ -22,17 +22,20 @@ package name.gudong.translate;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v7.app.AppCompatDelegate;
 
+import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
 import im.fir.sdk.FIR;
 import jonathanfinerty.once.Once;
-import me.gudong.translate.BuildConfig;
-import name.gudong.translate.reject.components.AppComponent;
-import name.gudong.translate.reject.components.DaggerAppComponent;
-import name.gudong.translate.reject.modules.ApiServiceModel;
-import name.gudong.translate.reject.modules.AppModule;
+import me.drakeet.library.CrashWoodpecker;
+import me.drakeet.library.PatchMode;
+import name.gudong.translate.injection.components.AppComponent;
+import name.gudong.translate.injection.components.DaggerAppComponent;
+import name.gudong.translate.injection.modules.ApiServiceModel;
+import name.gudong.translate.injection.modules.AppModule;
 
 /**
  * Created by GuDong on 12/27/15 16:46.
@@ -45,21 +48,34 @@ public class GDApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         mContext = this;
-        setUpLog();
+        setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
         FIR.init(this);
         Once.initialise(this);
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .apiServiceModel(new ApiServiceModel())
                 .build();
+        initCrashWoodpecker();
+
+        Stetho.initializeWithDefaults(this);
     }
 
-    private void setUpLog() {
-        if(BuildConfig.DEBUG){
-            Logger.init("gdt").hideThreadInfo().setMethodCount(0);
+    private void initCrashWoodpecker() {
+        CrashWoodpecker.instance()
+                .withKeys("widget", "me.drakeet")
+                .setPatchMode(PatchMode.SHOW_LOG_PAGE)
+                    .setPatchDialogUrlToOpen("http://gudong.name")
+                .setPassToOriginalDefaultHandler(true)
+                .flyTo(this);
+    }
+
+    private void setUpSomethingsByDevMode(boolean isDebug) {
+        if(isDebug){
+            Logger.init("gdt").hideThreadInfo().methodCount(1).logLevel(LogLevel.FULL);
         }else{
-            Logger.init("gdt").hideThreadInfo().setMethodCount(0).setLogLevel(LogLevel.FULL);
+            Logger.init("gdt").hideThreadInfo().methodCount(1).logLevel(LogLevel.FULL);
         }
     }
 

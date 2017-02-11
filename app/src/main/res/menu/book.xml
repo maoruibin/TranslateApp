@@ -1,22 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/menu_sort"
-        android:icon="@drawable/ic_sort_white_24dp"
-        app:showAsAction="ifRoom">
+        android:id="@+id/menu_recite_mode"
+        android:checkable="true"
+        android:title="背单词模式"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_backup"
+        android:title="导入导出"
+        app:showAsAction="never">
         <menu>
-            <group
-                android:checkableBehavior="single">
+            <group android:checkableBehavior="none">
                 <item
-                    android:id="@+id/sort_index_asc"
-                    android:title="@string/sort_index_asc"/>
+                    android:id="@+id/menu_export"
+                    android:title="@string/menu_export"
+                    app:showAsAction="never" />
+
                 <item
-                    android:id="@+id/sort_index_desc"
-                    android:title="@string/sort_index_desc"/>
+                    android:id="@+id/menu_import"
+                    android:title="@string/menu_import"
+                    app:showAsAction="never" />
             </group>
         </menu>
-
     </item>
+    <item
+        android:id="@+id/menu_sort"
+        android:title="@string/menu_sort"
+        app:showAsAction="never">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_default"
+                    android:title="默认排序(时间)"
+                    android:checked="true"/>
+                <item
+                    android:id="@+id/sort_index_asc"
+                    android:title="@string/sort_index_asc" />
+                <item
+                    android:id="@+id/sort_index_desc"
+                    android:title="@string/sort_index_desc" />
+            </group>
+        </menu>
+    </item>
+
 </menu>

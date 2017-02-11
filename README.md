@@ -1,6 +1,8 @@
 #咕咚翻译
 ![icon](/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png "")
 
+[![Build Status](https://travis-ci.org/maoruibin/TranslateApp.svg?branch=master)](https://travis-ci.org/maoruibin/TranslateApp)
+
 ##介绍
 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。
 
@@ -60,6 +62,10 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 `Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)，感谢~
 
 ## 更新日志
+
+### V1.3.5
+
+* 增加每日一句
 
 ### V1.0.0
 

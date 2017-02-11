@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="me.gudong.translate"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="name.gudong.translate">
 
     <!-- for search result -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- for listen clipboard better -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- for umeng-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- for umeng -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name="name.gudong.translate.GDApplication"
+        android:name=".GDApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -28,38 +27,68 @@
         <!-- begin umeng -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="56a45cd9e0f55add0d002d49"/>
+            android:value="56a45cd9e0f55add0d002d49" />
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />
         <!-- bug hd -->
-        <meta-data android:value="60641333d73c37d9db66465ab8f78cc9" android:name="BUG_HD_SDK_GENERAL_KEY" />
+        <meta-data
+            android:name="BUG_HD_SDK_GENERAL_KEY"
+            android:value="60641333d73c37d9db66465ab8f78cc9" />
 
-        <activity android:name="name.gudong.translate.ui.activitys.MainActivity">
+        <!--android:theme="@android:style/Theme.NoDisplay"-->
+        <!--android:theme="@android:style/Theme.Dialog"-->
+        <activity
+            android:name=".ui.activitys.ProcessTextActivity"
+            android:label="咕咚翻译"
+            android:theme="@style/myTransparent">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+        <activity android:name=".ui.activitys.MainActivity"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <service
-            android:name="name.gudong.translate.listener.ListenClipboardService"
+            android:name=".listener.ListenClipboardService"
             android:enabled="true"
-            android:exported="true"
+            android:label="@string/app_process_text"
             android:process=":process"/>
 
         <receiver
-            android:name="name.gudong.translate.listener.BootCompletedReceiver"
+            android:name=".listener.BootCompletedReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <activity android:name="name.gudong.translate.ui.activitys.WordsBookActivity">
-        </activity>
+        <activity android:name=".ui.activitys.WordsBookActivity" />
+
+        <activity android:name=".ui.activitys.SettingActivity" />
+
+        <receiver android:name=".listener.AlarmReceiver">
+            <intent-filter>
+                <action android:name="name.gudong.translate.alarm"/>
+            </intent-filter>
+        </receiver>
+
+        <!--<receiver android:name=".service.KeepAlarmLiveReceiver">-->
+        <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+
     </application>
 
 </manifest>

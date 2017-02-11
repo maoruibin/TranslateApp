@@ -25,17 +25,23 @@ package name.gudong.translate.mvp.model.type;
  * Contact with gudong.name@gmail.com.
  */
 public enum EDurationTipTime {
-    ONE_SECOND(2),
-    FOUR_SECOND(4),
-    SIX_SECOND(6);
+    ONE_SECOND(0,2),
+    FOUR_SECOND(1,4),
+    SIX_SECOND(2,6),
+    TEN_SECOND(3,10);
 
+    private int mIndex;
     private int mDurationTime;
 
-    EDurationTipTime(int time) {
+    EDurationTipTime(int index,int time) {
+        this.mIndex = index;
         this.mDurationTime = time;
     }
 
     public int getDurationTime() {
         return mDurationTime;
+    }
+    public int getIndex() {
+        return mIndex;
     }
 }

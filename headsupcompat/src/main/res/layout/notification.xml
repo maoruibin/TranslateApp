@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+
+    <ImageView
+        android:id="@+id/iconIM"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:paddingBottom="13dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingTop="8dp"
+        android:contentDescription="@string/image_icon_dec"/>
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_toLeftOf="@+id/timeTV"
+        android:layout_toRightOf="@+id/iconIM"
+        android:text="title"
+        android:textColor="@android:color/black"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/timeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/titleTV"
+        android:layout_marginRight="6dp"
+        android:text="19:00"
+        android:textSize="12sp"
+        android:textColor="@color/gray"/>
+
+
+    <TextView
+        android:id="@+id/messageTV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleTV"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@+id/iconIM"
+        android:maxLines="2"
+        android:text="message"
+        android:textColor="@color/gray"
+        android:textSize="14dp"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="wrap_content"
+        android:layout_height="1px"
+        android:layout_below="@+id/iconIM"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/iconIM"
+        android:background="@color/gray"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/menuL"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/line"
+        android:layout_toRightOf="@+id/iconIM"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/menu1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_transparency_to_grey"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/menuIM1"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:padding="6dp"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/menuText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:duplicateParentState="true"
+                android:text="1212"
+                android:textSize="18dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_transparency_to_grey"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/menuIM2"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:padding="6dp"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/menuText2"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:duplicateParentState="true"
+                android:text="1212"
+                android:textSize="18dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_transparency_to_grey"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/menuIM3"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:padding="6dp"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/menuText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:duplicateParentState="true"
+                android:text="1212"
+                android:textSize="18dp"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

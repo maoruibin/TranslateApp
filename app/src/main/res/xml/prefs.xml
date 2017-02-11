@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.jenzz.materialpreference.PreferenceCategory android:title="通用">
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_recite_open_jit"
+            android:title="@string/open_jit_or_nor"
+            android:defaultValue="true"/>
+
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_auto_play_sound"
+            android:title="@string/play_sound_auto"
+            android:summary="@string/play_sound_auto_summary"
+            android:defaultValue="false"/>
+
+        <!--<com.jenzz.materialpreference.SwitchPreference-->
+            <!--android:key="preference_notify_dayline"-->
+            <!--android:title="@string/notify_dayline"-->
+            <!--android:summary="@string/notify_dayline_summary"-->
+            <!--android:defaultValue="true"/>-->
+
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_auto_paste_words"
+           android:title="@string/open_auto_paste"
+            android:summary="@string/open_auto_paste_summary"
+            android:defaultValue="false"/>
+
+    </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.PreferenceCategory android:title="背单词">
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_use_recite_or_not"
+            android:title="@string/use_recite_or_nor"
+            android:summary="@string/use_recite_or_nor_summary"
+            android:defaultValue="false"/>
+        <com.jenzz.materialpreference.Preference
+            android:dependency="preference_use_recite_or_not"
+            android:key="preference_recite_time"
+            android:title="自动提示间隔时间"
+            android:summary="背单词时两次显示的间隔时间"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.PreferenceCategory android:title="高级">
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_show_icon_in_notification"
+            android:title="通知栏图标"
+            android:summary="开启后，通知栏将会常驻图标，方便快速打开 App。"
+            android:defaultValue="false" />
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="preference_show_float_view_use_system"
+            android:title="Android 5.0 设备使用系统通知显示结果"
+            android:summary="开启后，在 5.0 设备上以系统中会以系统通知的方式显示翻译结果。"
+            android:defaultValue="false"/>
+        <com.jenzz.materialpreference.Preference
+            android:key="preference_show_time"
+            android:title="@string/tip_time_duration"
+            android:summary="提示显示时的停留时长"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+</PreferenceScreen>

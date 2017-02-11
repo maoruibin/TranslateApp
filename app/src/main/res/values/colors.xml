@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#795548</color>
+    <color name="colorPrimaryTran">#FF694A3F</color>
     <color name="colorPrimaryWhite">#A1887F</color>
     <color name="colorPrimaryDark">#3E2723</color>
     <color name="colorAccent">#E91E63</color>
 
-    <color name="gray">#c4c4c4</color>
+    <color name="grey">#FFcccccc</color>
+
     <color name="gray_deep">#707070</color>
 
     <color name="bg_app">#e2e2e2</color>
+    <color name="bg_app_dayline">#795548</color>
 
     <color name="bg_input">#fafafa</color>
 
     <color name="color_explain">#a2a2a2</color>
 
     <color name="bg_pop">#607D8B</color>
-    <color name="bg_pop_deep">#455A64</color>
-    <color name="bg_pop_shadow">#90A4AE</color>
+    <color name="bg_pop_tran">#be607d8b</color>
+    <color name="bg_pop_tran_pressed">#be4d636e</color>
     <color name="bg_pop_white">#b8bec1</color>
     <color name="pop_phonetic">#ECEFF1</color>
 
-    <color name="error">#ECEFF1</color>
-
     <color name="shadow_blackcolor">#88000000</color>
 
+    <color name="ff.textColor.title">#666666</color>
+    <color name="ff.textColor.text">#727272</color>
+    <color name="ff.textColor.tips">#4A4A4A</color>
+
+    <color name="ff.white">#ffffff</color>
+    <color name="ff.divider">#7AB6B6B6</color>
 </resources>

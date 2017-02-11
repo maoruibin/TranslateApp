@@ -30,66 +30,6 @@
         android:title="@string/favorite_list"/>
 
     <item
-        android:id="@+id/menu_open_jit_or_nor"
-        app:showAsAction="never"
-        android:title="@string/open_jit_or_nor"
-        android:checked="true"
-        android:checkable="true"/>
-
-    <item
-        android:id="@+id/menu_use_recite_or_not"
-        app:showAsAction="never"
-        android:title="@string/use_recite_or_nor"
-        android:checked="false"
-        android:checkable="true"/>
-    <item
-        android:id="@+id/menu_interval_tip_time"
-        app:showAsAction="never"
-        android:visible="false"
-        android:title="@string/tip_time_interval">
-        <menu>
-            <group
-                android:checkableBehavior="single">
-                <item
-                    android:id="@+id/interval_one_minute"
-                    android:title="@string/interval_one_minute"/>
-                <item
-                    android:id="@+id/interval_three_minute"
-                    android:title="@string/interval_three_minute"/>
-                <item
-                    android:id="@+id/interval_five_minute"
-                    android:title="@string/interval_five_minute"/>
-                <item
-                    android:id="@+id/interval_ten_minute"
-                    android:title="@string/interval_ten_minute"/>
-                <item
-                    android:id="@+id/interval_thirty_minute"
-                    android:title="@string/interval_thirty_minute"/>
-
-            </group>
-        </menu>
-    </item>
-    <item
-        android:id="@+id/menu_duration_tip_time"
-        app:showAsAction="never"
-        android:title="@string/tip_time_duration">
-        <menu>
-            <group
-                android:checkableBehavior="single">
-                <item
-                    android:id="@+id/duration_two_second"
-                    android:title="@string/duration_two_second"/>
-                <item
-                    android:id="@+id/duration_four_second"
-                    android:title="@string/duration_four_second"/>
-                <item
-                    android:id="@+id/duration_six_second"
-                    android:title="@string/duration_six_second"/>
-            </group>
-        </menu>
-    </item>
-
-    <item
         android:id="@+id/menu_support"
         app:showAsAction="never"
         android:title="@string/menu_support"/>
@@ -98,8 +38,15 @@
         android:id="@+id/menu_score"
         app:showAsAction="never"
         android:title="@string/menu_score"/>
+
     <item
         android:id="@+id/menu_about"
         app:showAsAction="never"
         android:title="@string/menu_about"/>
+
+    <item
+        android:id="@+id/menu_setting"
+        app:showAsAction="never"
+        android:title="@string/menu_setting"/>
+
 </menu>

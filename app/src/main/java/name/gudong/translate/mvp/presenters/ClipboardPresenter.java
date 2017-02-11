@@ -20,244 +20,207 @@
 
 package name.gudong.translate.mvp.presenters;
 
-import android.app.Service;
-import android.text.TextUtils;
+import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
 
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import me.gudong.translate.BuildConfig;
-import name.gudong.translate.GDApplication;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
-import name.gudong.translate.listener.view.TipViewController;
+import name.gudong.translate.manager.ReciteWordManager;
+import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
-import name.gudong.translate.mvp.model.entity.AbsResult;
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
-import name.gudong.translate.mvp.views.IClipboardService;
 import name.gudong.translate.util.SpUtils;
-import name.gudong.translate.util.StringUtils;
+import name.gudong.translate.util.Utils;
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+
 
 /**
  * Created by GuDong on 2/28/16 20:48.
  * Contact with gudong.name@gmail.com.
  */
-public class ClipboardPresenter extends BasePresenter<IClipboardService> {
+public class ClipboardPresenter extends TipFloatPresenter {
     private static final String KEY_TAG = "clipboard";
+    private static final String KEY_TAG_COUNT_DOWN = "Countdown";
+    private static final ReciteWordManager mReciteManger = ReciteWordManager.getInstance();
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
-    @Inject
-    TipViewController mTipViewController;
 
-    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> performClipboardCheck();
+    /**
+     * 循环展示单词结果
+     */
+    private List<Result> results;
+
+    private int currentIndex = -1;
 
     /**
      * 定时显示 Tip 事件源
      */
-    Subscription mSubscription;
+    private static Subscription mSubscription;
     /**
      * 显示 Tip 的动作
      */
-    Action1 mActionShowTip;
+    private static Action1 mActionShowTip;
+
+    private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> {
+        CharSequence content = mClipboardWatcher.getText();
+        if(content != null){
+            performClipboardCheck(content.toString());
+        }
+    };
 
     @Inject
-    public ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, Service service) {
-        super(liteOrm, apiService, service);
+    ClipboardPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
+        super(liteOrm, apiService, singleRequestService, context);
+        QueryBuilder queryBuilder = new QueryBuilder(Result.class);
+        queryBuilder = queryBuilder.whereNoEquals(Result.COL_MARK_DONE_ONCE, true);
+        results = mLiteOrm.query(queryBuilder);
+        Logger.i("result size is "+results.size());
     }
 
     @Override
     public void onCreate(){
         super.onCreate();
         initCountdownSetting();
+        if(SpUtils.isShowIconInNotification(getContext())){
+            Utils.showNormalNotification(getContext());
+        }
+    }
+
+    public boolean isOpenReciteWords(){
+        return mReciteManger.isReciteOpenOrNot();
+    }
+
+    public boolean isPlaySoundsAuto(){
+        return mReciteManger.isPlaySoundAuto();
     }
 
     private void initCountdownSetting(){
         mActionShowTip = (t)->{
-            Result result = getResult();
-            if(result == null)return;
-            showResult(getResult(),false);
+            if(isOpenReciteWords()){
+                Logger.t(KEY_TAG_COUNT_DOWN).i("time is to show words");
+                Result result = getResult();
+                if(result == null)return;
+                mView.showResult(result,false);
+            }else{
+                Logger.t(KEY_TAG_COUNT_DOWN).i("time is to show words but was close");
+            }
         };
     }
 
     /**
-     * 根据用户设置 循环显示生词本中的内容 逻辑写的稍负责
+     * 开启背单词
      */
-    public void controlShowTipCyclic(){
-        EIntervalTipTime tipTime = SpUtils.getIntervalTimeWay(GDApplication.mContext);
+    public void openTipCyclic(){
+        EIntervalTipTime tipTime = mReciteManger.getIntervalTimeWay();
         int time = tipTime.getIntervalTime();
-        Logger.i(KEY_TAG,"time is "+time +" minute");
+        boolean isSecond = tipTime == EIntervalTipTime.THIRTY_SECOND;
+        TimeUnit unit = isSecond? TimeUnit.SECONDS:TimeUnit.MINUTES;
 
-        boolean reciteFlag = SpUtils.getReciteOpenOrNot(mService);
-        //用户设置了开启背单词 或者 时间隔时间变化了 下面的判断代码写的有点复杂
-        //但是这是错了好多次，试出来可以成功运行的代码，尼玛，多条件动态配置选项死去活来啊 ~
-        if((mSubscription == null && reciteFlag) || (mSubscription != null && reciteFlag && !mSubscription.isUnsubscribed())){
-            if(mSubscription != null && !mSubscription.isUnsubscribed()){
-                mSubscription.unsubscribe();
-            }
-            Logger.i(KEY_TAG,"用户设置了开启背单词 此时实例化 mSubscription 也可能是时间间隔值变化了 time is "+time);
-            mSubscription = Observable.interval(time, TimeUnit.MINUTES)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(mActionShowTip);
+        if(mSubscription != null && !mSubscription.isUnsubscribed()){
+            mSubscription.unsubscribe();
         }
 
-        //外界关闭 背单词 功能 并设置 mSubscription null
-        if(mSubscription != null && !reciteFlag && !mSubscription.isUnsubscribed()){
+        mSubscription = Observable.interval(time,unit)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mActionShowTip);
+
+
+        Logger.i(KEY_TAG,"开启背单词任务 间隔 "+tipTime.getIntervalTime());
+    }
+
+    public void removeTipCyclic(){
+        if(mSubscription != null && !mSubscription.isUnsubscribed()){
             mSubscription.unsubscribe();
             mSubscription = null;
-            Logger.i(KEY_TAG,"用户关闭背单词");
+            Logger.i(KEY_TAG,"移除背单词服务");
         }
     }
 
-    private Result getResult(){
-        List<Result> results = mLiteOrm.query(Result.class);
-        if(results.isEmpty()){
-            return null;
-        }
-        int index = new Random().nextInt(results.size());
-        return results.get(index);
-    }
-
-    public void search(final String content) {
-        mWarpApiService.translate(SpUtils.getTranslateEngineWay(mService), content)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter((result)->{return result.wrapErrorCode() == 0;})
-                .subscribe(new Subscriber<AbsResult>() {
-                    @Override
-                    public void onCompleted() {
-                        //清空缓存
-                        listQuery.clear();
-                        Logger.i("---------- onCompleted ");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if(e instanceof SocketTimeoutException){
-                            errorPoint("网络请求超时，请稍后重试。");
-                        }else{
-                            if(BuildConfig.DEBUG){
-                                errorPoint("请求数据异常，您可以试试切换其他引擎。"+e.getMessage());
-                                e.printStackTrace();
-                            }else{
-                                errorPoint("请求数据异常，您可以试试切换其他引擎。");
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onNext(AbsResult result) {
-                        //prepareShow(result.getResult());
-                        showResult(result.getResult(),true);
-                        Logger.i("---------- onNext ");
-                    }
-                });
-    }
-
-    private void errorPoint(String error){
-        mTipViewController.showErrorInfo(error);
-    }
-
-    private void showResult(Result result, boolean isShowFavorite) {
-        mTipViewController.show(result,isShowFavorite);
-    }
     /**
      * 添加粘贴板变化监听方法
      */
     public void addListener() {
-        //添加粘贴板变化监听方法
         mClipboardWatcher.addPrimaryClipChangedListener(mListener);
     }
 
-    /**
-     * 首先说明一个情况，这里的系统粘贴板在监听到粘贴板内容发生变化时
-     * 对应的监听方法会被执行多次 也就是说用户的复制操作 会引起这里发送多次数据请求
-     * 这是不合理的，所以设置一个缓存用于解决c重复请求问题
-     */
 
-    /**
-     * 定义一个查询集合，用于缓存当前的查询队列，当队列中存在已经复制的关键字就不会继续去发起查询操作了
-     * 注意要在合适的时候清空它
-     */
-    private List<String> listQuery = new ArrayList<>();
-
-    private void performClipboardCheck() {
-        CharSequence content = mClipboardWatcher.getText();
-
+    private void performClipboardCheck(String queryText) {
         //处理缓存 因为粘贴板的回调操作可能触发多次
-        String query = content.toString();
-        Logger.i("粘贴板的单词为 "+query);
-        if (listQuery.contains(query)) return;
-        listQuery.add(query);
+        Logger.i("粘贴板的单词为 "+queryText);
+        if (listQuery.contains(queryText)) {
+            return;
+        }
+        listQuery.add(queryText);
 
         //只有用户在打开了 划词翻译的情况下 划词翻译才能正常工作
-        if(!SpUtils.getOpenJITOrNot(mService))return;
+        if(!SpUtils.getOpenJITOrNot(getContext()))return;
 
-        //如果当前界面是 咕咚翻译的主界面 那么也不对粘贴板做监听
-        if(SpUtils.getAppFront(mService))return;
+        //如果当前界面是 咕咚翻译的主界面 那么也不对粘贴板做监听( Debug 时开启)
+        if(!BuildConfig.DEBUG){
+            if(SpUtils.getAppFront(getContext()))return;
+        }
 
         // 检查粘贴板的内容是不是单词 以及是不是为空
-        if(!checkInput(content.toString()))return;
-
+        if(!checkInput(queryText)){
+            Logger.i("粘贴板为空");
+            return;
+        }
         //查询数据
-        search(query);
-    }
-
-    private boolean checkInput(String input){
-        // empty check
-        if (TextUtils.isEmpty(input)) {
-            Logger.e("剪贴板为空了");
-            return false;
-        }
-
-        if(StringUtils.isChinese(input)){
-            Logger.e(input+" 中包含中文字符");
-            return false;
-        }
-
-        if(StringUtils.isValidEmailAddress(input)){
-            Logger.e(input+" 是一个邮箱");
-            return false;
-        }
-
-        if(StringUtils.isValidUrl(input)){
-            Logger.e(input+" 是一个网址");
-            return false;
-        }
-
-        if(StringUtils.isValidNumeric(input)){
-            Logger.e(input+" 是一串数字");
-            return false;
-        }
-
-        // length check
-        if(StringUtils.isMoreThanOneWord(input)){
-            errorPoint("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
-            return false;
-        }
-
-        return true;
+        search(queryText);
     }
 
     public void onDestroy() {
         super.onDestroy();
         mClipboardWatcher.removePrimaryClipChangedListener(mListener);
-        if (mTipViewController != null) {
-            mTipViewController = null;
+    }
+
+
+    private Result getResult(){
+        int index = getResultIndex();
+        Logger.i("index is "+index);
+        if(index>=0){
+            return results.get(index);
+        } else{
+            return null;
         }
     }
 
+    private int getResultIndex(){
+        if(results.isEmpty()){
+            return -1;
+        }
+        currentIndex = currentIndex+1;
+        if(currentIndex == results.size()-1){
+            currentIndex = -1;
+            return results.size()-1;
+        }
+        return currentIndex;
+    }
+
+    /**
+     * 标记已背
+     * @param result
+     */
+    public void markDone(Result result) {
+        result.setMake_done_once(true);
+        result.setMake_done_once_time(System.currentTimeMillis());
+        Logger.i("size "+results.size());
+        if(results.remove(result)){
+            Logger.i("remove suc");
+        }
+        Logger.i("size "+results.size());
+        mLiteOrm.update(result);
+    }
 }

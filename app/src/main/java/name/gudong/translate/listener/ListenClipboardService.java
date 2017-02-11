@@ -20,50 +20,92 @@
 
 package name.gudong.translate.listener;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
+import android.content.IntentFilter;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;
 
 import name.gudong.translate.GDApplication;
+import name.gudong.translate.injection.components.DaggerActivityComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
+import name.gudong.translate.listener.view.TipView;
+import name.gudong.translate.listener.view.TipViewController;
+import name.gudong.translate.mvp.model.entity.translate.Result;
+import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;
-import name.gudong.translate.mvp.views.IClipboardService;
-import name.gudong.translate.reject.components.DaggerServiceComponent;
-import name.gudong.translate.reject.modules.ServiceModule;
+import name.gudong.translate.mvp.views.ITipFloatView;
 
 
-public final class ListenClipboardService extends Service implements IClipboardService{
+public final class ListenClipboardService extends Service implements ITipFloatView, TipView.ITipViewListener {
     private static final String KEY_FOR_WEAK_LOCK = "weak-lock";
     @Inject
     ClipboardPresenter mPresenter;
+    @Inject
+    TipViewController mTipViewController;
+
+    BroadcastReceiver mScreenStatusReceive;
+
+
 
     @Override
     public void onCreate() {
         setUpInject();
-        addListener();
-        attachView();
-        mPresenter.onCreate();
-
-    }
-
-    private void attachView() {
-        mPresenter.attachView(this);
-    }
-
-    private void addListener() {
         mPresenter.addListener();
-
+        mPresenter.attachView(this);
+        mPresenter.onCreate();
     }
+
+    private void registerScreenReceiver() {
+        IntentFilter screenStateFilter = new IntentFilter();
+        screenStateFilter.addAction(Intent.ACTION_USER_PRESENT);
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        if(mScreenStatusReceive == null){
+            mScreenStatusReceive = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    //如果用户没有开启背单词 那么就无需 care 锁屏
+                    if(!mPresenter.isOpenReciteWords()){
+                        return;
+                    }
+                    if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                        Logger.i("锁屏了");
+                        closeTipCyclic();
+                    } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
+                        Logger.i("开屏了 解锁");
+                        openTipCyclic();
+                    }
+                }
+            };
+        }
+        registerReceiver(mScreenStatusReceive, screenStateFilter);
+    }
+
+    private void unregisterScreenReceiver(){
+        if(mScreenStatusReceive != null){
+            unregisterReceiver(mScreenStatusReceive);
+        }
+    }
+
 
     private void setUpInject() {
-        DaggerServiceComponent.builder()
-                .serviceModule(new ServiceModule(this))
+        DaggerActivityComponent.builder()
                 .appComponent(GDApplication.getAppComponent())
+                .activityModule(new ActivityModule(this))
                 .build()
                 .inject(this);
     }
@@ -75,27 +117,45 @@ public final class ListenClipboardService extends Service implements IClipboardS
                 BootCompletedReceiver.completeWakefulIntent(intent);
             }
         }
-        //设置定时显示任务
-        mPresenter.controlShowTipCyclic();
+        Logger.t("ClipService").i("on onStartCommand");
+        if(mPresenter.isOpenReciteWords()){
+            Logger.t("ClipService").i("open onStartCommand");
+            openTipCyclic();
+            registerScreenReceiver();
+        }else {
+            Logger.t("ClipService").i("close onStartCommand");
+            closeTipCyclic();
+            unregisterScreenReceiver();
+        }
         return START_STICKY;
+    }
+
+    //设置定时显示任务
+    private void openTipCyclic(){
+        mPresenter.openTipCyclic();
+    }
+
+    //取消定时显示任务
+    private void closeTipCyclic(){
+        mPresenter.removeTipCyclic();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new ProcessBinder();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onDestroy();
+        unregisterScreenReceiver();
     }
 
     public static void start(Context context) {
         Intent serviceIntent = new Intent(context, ListenClipboardService.class);
         context.startService(serviceIntent);
     }
-
 
     public static void startForWeakLock(Context context, Intent intent) {
         Intent serviceIntent = new Intent(context, ListenClipboardService.class);
@@ -109,13 +169,116 @@ public final class ListenClipboardService extends Service implements IClipboardS
     }
 
     @Override
-    public void showTipToast(String msg) {
-        Handler h = new Handler(getApplicationContext().getMainLooper());
-        h.post(new Runnable() {
+    public void onComplete() {
+
+    }
+
+    @Override
+    public void errorPoint(String error) {
+        mTipViewController.showErrorInfo(error,this);
+    }
+
+    @Override
+    public void showResult(Result result, boolean isShowFavorite) {
+        mTipViewController.show(result, isShowFavorite, false,this);
+        if(mPresenter.isPlaySoundsAuto()){
+            mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
+        }
+    }
+
+    @Override
+    public void initWithFavorite(Result result) {
+        mTipViewController.setWithFavorite(result);
+    }
+
+    @Override
+    public void initWithNotFavorite(Result result) {
+        mTipViewController.setWithNotFavorite(result);
+    }
+
+    @Override
+    public void onClickFavorite(View view, Result result) {
+        MobclickAgent.onEvent(this, "favorite_service");
+        mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
             @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            public void onAnimationEnd(Animator animation) {
+                mPresenter.clickFavorite(view,result);
             }
         });
+    }
+
+    @Override
+    public void onClickPlaySound(View view, Result result) {
+        MobclickAgent.onEvent(this, "sound_service");
+        mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
+        mPresenter.startSoundAnim(view);
+    }
+
+    @Override
+    public void onClickDone(View view, Result result) {
+        MobclickAgent.onEvent(this, "click_done");
+        mPresenter.markDone(result);
+        startMarkDoneAnim(view);
+
+    }
+
+    public void startMarkDoneAnim(View view){
+        addScaleAlphaAnim(view, 500, new BasePresenter.AnimationEndListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void addScaleAlphaAnim(View view, long duration, BasePresenter.AnimationEndListener listener) {
+        ObjectAnimator animY = ObjectAnimator.ofFloat(view, "scaleY", 1f,0.0f);
+        ObjectAnimator animX = ObjectAnimator.ofFloat(view, "scaleX", 1f,0.0f);
+        ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(view, "alpha", 1f,0.0f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animX,animY,alphaAnim);
+        animatorSet.setDuration(duration);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if(listener != null){
+                    listener.onAnimationEnd(animation);
+                }
+            }
+        });
+        animatorSet.start();
+    }
+
+
+    @Override
+    public void onClickTipFrame(View view, Result result) {
+        mPresenter.jumpMainActivity(result);
+        removeTipView(result);
+    }
+
+    @Override
+    public void onInitFavorite(ImageView mIvFavorite, Result result) {
+        mPresenter.initFavoriteStatus(result);
+    }
+
+    @Override
+    public void removeTipView(Result result) {
+        mTipViewController.removeTipView(result);
+    }
+
+    @Override
+    public void onRemove() {
+
+    }
+
+    public class ProcessBinder extends Binder {
+        /**
+         * 获取当前Service的实例
+         * @return
+         */
+        public ListenClipboardService getService(){
+            return ListenClipboardService.this;
+        }
     }
 }

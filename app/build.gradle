@@ -1,6 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin:'im.fir.plugin.gradle'
+
+fir{
+    apiToken '15e5206706b555384608e449d6def6d3'
+    changeLog '* add upload plugin for fir\n' +
+            '* add changelog file'
+}
+
+bughd{
+    projectId '56d30214a1de52062800000e'
+    apiToken 'e244dc781dd8455c9e6e04b62e1328a0'
+}
 
 //格式化打完完成后APK名称中的时间
 def releaseTime() {
@@ -10,6 +22,7 @@ def releaseTime() {
 def cfg = rootProject.ext.configuration
 def libs = rootProject.ext.libraries;
 def test = rootProject.ext.testingLibraries;
+
 
 android {
     compileSdkVersion cfg.compileVersion
@@ -37,12 +50,14 @@ android {
         buildConfigField "String", "YOUDAO_KEY", '"1235023502"'
         buildConfigField "String", "YOUDAO_TYPE", '"data"'
         buildConfigField "String", "YOUDAO_DOC_TYPE", '"json"'
-        buildConfigField "String", "YOUDAO_VERSION", '"1.1"'
+        buildConfigField "String", "YOUDAO_VERSION", '"1.2"'
 
         //common value
         buildConfigField "String", "RESULT_JSON", '"json"'
         buildConfigField "String", "LANGUAGE_AUTO", '"auto"'
+        buildConfigField "Boolean", "IS_DEBUG", 'true'
 
+        resValue "string", "tray__authority", "${cfg.package}.tray"
     }
 
     signingConfigs {
@@ -51,43 +66,25 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+            resValue "string", "tray__authority", "${cfg.package}.debug.tray"
+        }
         release {
-            //如果签名配置不为空 则设置签名信息
             if (signingConfigs.releaseConfig != null) {
                 signingConfig signingConfigs.releaseConfig
             }
             //设置是否混淆
-            minifyEnabled false
-            //设置压缩对齐
-            zipAlignEnabled true
-            //移除无用的资源文件
-            shrinkResources false
-            //设置混淆配置文件
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //指定签名包得输入文件名称
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        def fileName = "GdTranslate_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_release.apk"
-                        output.outputFile = new File(outputFile.parent, fileName)
-                    }
-                }
-            }
-        }
-
-        debug{
-            if (signingConfigs.releaseConfig != null) {
-                signingConfig signingConfigs.releaseConfig
-            }
+            minifyEnabled true
             //设置压缩对齐
             zipAlignEnabled true
             //移除无用的资源文件
             shrinkResources true
-            //设置是否混淆
-            minifyEnabled false
             //设置混淆配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //指定签名包得输入文件名称
+            buildConfigField "Boolean", "IS_DEBUG", 'false'
         }
     }
 
@@ -96,14 +93,14 @@ android {
     }
 
     productFlavors {
-        beta{
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
+        beta {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "beta"]
         }
         xiaomi {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
         }
         m360 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"m360"]
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "m360"]
         }
         wandoujia {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
@@ -113,6 +110,13 @@ android {
         }
         play {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
+        }
+        coolapk {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "coolapk"]
+        }
+        dev21 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dev21"]
+            minSdkVersion cfg.minSdk21
         }
     }
 
@@ -125,7 +129,7 @@ android {
 //set release sign info synchronously
 def Properties props = new Properties()
 def propFile = file('../gradle.properties')
-if (propFile.canRead()) {
+if (propFile.exists()) {
     props.load(new FileInputStream(propFile))
     if (props != null &&
             props.containsKey('SIGN_FILE') && props.containsKey('SIGN_KEYSTORE_PASS') &&
@@ -152,6 +156,7 @@ dependencies {
     // Android
     compile "com.android.support:recyclerview-v7:${libs.supportVersion}"
     compile "com.android.support:appcompat-v7:${libs.supportVersion}"
+    compile "com.android.support:design:${libs.supportVersion}"
 
     // Google
     compile "com.google.dagger:dagger:${libs.dagger}"
@@ -159,14 +164,33 @@ dependencies {
     provided "org.glassfish:javax.annotation:${libs.javax_annotation}"
     // Square
     compile "com.jakewharton:butterknife:${libs.butterknife}"
-    compile "com.squareup.retrofit:retrofit:${libs.retrofit}"
-    compile "com.squareup.retrofit:converter-gson:${libs.retrofit}"
-    compile "com.squareup.retrofit:adapter-rxjava:${libs.retrofit}"
+    apt "com.jakewharton:butterknife-compiler:${libs.butterknife}"
+    compile "com.squareup.retrofit2:retrofit:${libs.retrofit}"
+    compile "com.squareup.retrofit2:converter-gson:${libs.retrofit}"
+    compile "com.squareup.retrofit2:adapter-rxjava:${libs.retrofit}"
     // Reactive
     compile "io.reactivex:rxandroid:${libs.rxandroid}"
     // Other
     compile "com.orhanobut:logger:${libs.logger}"
-    compile "com.umeng.analytics:analytics:latest.integration"
     retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:${libs.retrolambda}"
     compile "com.jonathanfinerty.once:once:${libs.once}"
+
+    compile "com.android.support:preference-v7:${libs.supportVersion}"
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile "com.android.support:support-v4:${libs.supportVersion}"
+
+    compile "moe.feng:AlipayZeroSdk:${libs.alipay_zero_sdk}"
+
+    compile "com.jenzz:materialpreference:${libs.materialpreference}"
+    compile "com.github.bumptech.glide:glide:${libs.glide}"
+
+    compile ("me.drakeet.library:crashwoodpecker:${libs.crashwoodpecker}"){
+        exclude module: 'recyclerview-v7'
+    }
+    compile project(":headsupcompat")
+
+    compile 'net.grandcentrix.tray:tray:0.11.0'
+
+    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
 }

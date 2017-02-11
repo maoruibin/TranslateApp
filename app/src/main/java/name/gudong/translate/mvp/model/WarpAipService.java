@@ -20,12 +20,13 @@
 
 package name.gudong.translate.mvp.model;
 
-import com.orhanobut.logger.Logger;
-import me.gudong.translate.BuildConfig;
-import name.gudong.translate.mvp.model.entity.AbsResult;
-import name.gudong.translate.mvp.model.entity.BaiDuResult;
-import name.gudong.translate.mvp.model.entity.JinShanResult;
-import name.gudong.translate.mvp.model.entity.YouDaoResult;
+import javax.inject.Inject;
+
+import name.gudong.translate.BuildConfig;
+import name.gudong.translate.mvp.model.entity.translate.AbsResult;
+import name.gudong.translate.mvp.model.entity.translate.BaiDuResult;
+import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
+import name.gudong.translate.mvp.model.entity.translate.YouDaoResult;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.util.SignUtils;
 import rx.Observable;
@@ -37,10 +38,15 @@ import rx.functions.Func1;
  */
 public class WarpAipService {
 
-    static ApiService mApiService;
+    private  ApiBaidu mApiBaidu;
+    private  ApiYouDao mApiYouDao;
+    private  ApiJinShan mApiJinShan;
 
-    public WarpAipService(ApiService apiService) {
-        mApiService = apiService;
+    @Inject
+    public WarpAipService(ApiBaidu mApiBaidu, ApiJinShan mApiJinShan, ApiYouDao mApiYouDao) {
+        this.mApiBaidu = mApiBaidu;
+        this.mApiJinShan = mApiJinShan;
+        this.mApiYouDao = mApiYouDao;
     }
 
     public Observable<AbsResult> translate(ETranslateFrom way, String query) {
@@ -48,7 +54,7 @@ public class WarpAipService {
         query = query.toLowerCase();
         switch (way){
             case YOU_DAO:
-                resultObservable = mApiService.translateYouDao(
+                resultObservable = mApiYouDao.translateYouDao(
                         query,
                         BuildConfig.YOUDAO_USERNAME,
                         BuildConfig.YOUDAO_KEY,
@@ -63,7 +69,7 @@ public class WarpAipService {
                         });
                 break;
             case JIN_SHAN:
-                resultObservable = mApiService.translateJinShan(
+                resultObservable = mApiJinShan.translateJinShan(
                         query,
                         //JINSHAN_FANYI_KEY
                         BuildConfig.ICIBA_KEY,
@@ -78,9 +84,7 @@ public class WarpAipService {
             case BAI_DU:
                 String salt = SignUtils.getRandomInt(10);
                 String sign = SignUtils.getSign(BuildConfig.BAIDU_APP_ID, query, salt, BuildConfig.BAIDU_SCREAT_KEY);
-                Logger.i(salt);
-                Logger.i(sign);
-                resultObservable = mApiService.translateBaiDu(
+                resultObservable = mApiBaidu.translateBaiDu(
                         query,
                         BuildConfig.LANGUAGE_AUTO,
                         BuildConfig.LANGUAGE_AUTO,

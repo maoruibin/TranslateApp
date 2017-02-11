@@ -20,6 +20,7 @@
 
 package name.gudong.translate.listener.clipboard;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.os.Build;
 
@@ -39,6 +40,9 @@ public abstract class ClipboardManagerCompat {
             return new ClipboardManagerImpl9(context);
         }
     }
+
+
+    public abstract void setPrimaryClip(ClipData clip);
 
     public void addPrimaryClipChangedListener(OnPrimaryClipChangedListener listener) {
         synchronized (mPrimaryClipChangedListeners) {

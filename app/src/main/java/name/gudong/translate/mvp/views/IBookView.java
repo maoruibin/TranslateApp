@@ -22,18 +22,29 @@ package name.gudong.translate.mvp.views;
 
 import java.util.List;
 
-import name.gudong.translate.mvp.model.entity.Result;
+import name.gudong.translate.mvp.model.entity.translate.Result;
 
 /**
  * Created by GuDong on 2/28/16 17:03.
  * Contact with gudong.name@gmail.com.
  */
 public interface IBookView extends IBaseView {
-    void fillData(List<Result> transResultEntities);
+    void fillData(List<Result> transResultEntities, boolean isReciteMode );
 
     void deleteWordSuccess(Result entity);
 
     void deleteWordFail();
 
     void onError(Throwable error);
+
+    /**
+     *
+     * @param count 恢复成功的数量
+     */
+    void restoreSuccess(int count);
+
+    /**
+     * 数据没有任何变化
+     */
+    void showTipDataHaveNoChange();
 }

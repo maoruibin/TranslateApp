@@ -43,7 +43,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import me.gudong.translate.R;
+import name.gudong.translate.R;
 import name.gudong.translate.util.DialogUtil;
 
 public class WebDialog extends DialogFragment {

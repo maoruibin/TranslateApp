@@ -1,26 +1,29 @@
 <resources>
-    <string name="app_name">咕咚翻译</string>
-    <string name="action_favorite">收藏</string>
+    <string name="app_name">GuDong Translate</string>
+    <string name="app_process_text">TranslateFloat</string>
     <string name="action_delete">删除</string>
 
     <string name="favorite_list">单词本</string>
     <string name="menu_about">关于</string>
+    <string name="menu_setting">设置</string>
     <string name="menu_score">去评分</string>
-    <string name="menu_opinion">反馈</string>
     <string name="menu_support">支持作者</string>
-    <string name="copy_success">支付宝账号已复制到粘贴板</string>
-    <string name="support_fail">你可能没有安装支付宝或者出现了别的问题，不能进行打赏，但还是谢谢你的好意 ^_^</string>
 
-    <string name="translate_from">翻译引擎</string>
+    <string name="quick_setting">recite words</string>
     <string name="use_recite_or_nor">开启定时单词提醒</string>
     <string name="open_jit_or_nor">开启划词翻译</string>
+    <string name="notify_dayline">开启每日一句提醒</string>
+    <string name="open_auto_paste">打开 App 自动翻译粘贴板单词</string>
+    <string name="play_sound_auto">开启自动发音</string>
     <string name="tip_time_interval">提示间隔时间</string>
     <string name="tip_time_duration">提示显示时间</string>
 
-    <string name="translate_from_baidu">百度</string>
-    <string name="translate_from_youdao">有道</string>
-    <string name="translate_from_jinshan">金山</string>
+    <string name="play_sound_auto_summary">开启后,划词翻译显示结果时会自动播放单词发音。</string>
+    <string name="use_recite_or_nor_summary">开启后,咕咚翻译将会自动的在手机山循环浮动显示已收藏的单词,帮助你更好的记忆这些单词。</string>
+    <string name="notify_dayline_summary">开启后,每天早晨8点,手机会为你提示学习每日一句。</string>
+    <string name="open_auto_paste_summary">开启后,每次打开 App 时将会自动检测粘贴板是否有单词并翻译。</string>
 
+    <string name="interval_thirty_second">半分钟</string>
     <string name="interval_one_minute">1分钟</string>
     <string name="interval_three_minute">3分钟</string>
     <string name="interval_five_minute">5分钟</string>
@@ -30,22 +33,86 @@
     <string name="duration_two_second">2秒钟</string>
     <string name="duration_four_second">4秒钟</string>
     <string name="duration_six_second">6秒钟</string>
-    <string name="empty_tip">您还没有收藏过单词</string>
+    <string name="duration_ten_second">10秒钟</string>
+    <string name="empty_tip">您还没有收藏过任何单词</string>
     <string name="action_clear">清除</string>
     <string name="action_translate">翻译</string>
     <string name="action_translating">翻译中...</string>
     <string name="point_input_key">输入关键字</string>
-    <string name="msg_not_support_sentence">检测到你输入的单词超过了一个，咕咚翻译目前不支持段落、句子或短语翻译。\n\n 因为翻译接口调用的是第三方接口，三方对每月的翻译字符数有数量限制，所以咕咚翻译现在只支持单词翻译。谢谢你的理解。</string>
-    <string name="msg_not_support_sentence_in_service">咕咚翻译现在只支持单词翻译。谢谢理解。</string>
-    <string name="action_know">知道了</string>
     <string name="tip_input_words">请输入要查询的关键字</string>
-    <string name="tip_clipboard_empty">复制的单词为空</string>
     <string name="tip_explain_empty">没有查询到释义</string>
     <string name="tip_fail_translate">不支持的查询操作，你可以切换到别的翻译方式碰碰运气，Good luck.</string>
     <string name="tip_unknown_host">网络异常，请检查后重试。</string>
     <string name="tip_unknown">未知的异常</string>
 
+    <string name="menu_sort">排序</string>
+    <string name="menu_export">导出</string>
+    <string name="menu_import">导入</string>
     <string name="sort_index_asc">按首字母正序</string>
     <string name="sort_index_desc">按首字母逆序</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="copy_success">复制成功</string>
+    <string name="support_fail">打开支付宝失败</string>
+    <string name="support_fail_because_not_install">检测到您尚未安装支付宝，所以打赏失败，再次感谢你的支持。</string>
+    <string name="close">Close</string>
+    <string name="ipsum">test jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjj</string>
 
 </resources>
