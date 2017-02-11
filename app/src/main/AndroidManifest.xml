@@ -40,7 +40,7 @@
         <!--android:theme="@android:style/Theme.Dialog"-->
         <activity
             android:name=".ui.activitys.ProcessTextActivity"
-            android:label="@string/app_process_text"
+            android:label="@string/app_name"
             android:theme="@style/myTransparent">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
