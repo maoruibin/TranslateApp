@@ -1,21 +1,35 @@
-sudo: false
-
 language: android
 jdk: oraclejdk8
 
 android:
   components:
-
-    - tools
-
+    - tools # to get the new `repository-11.xml`
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
+    - platform-tools
     - build-tools-23.0.2
     - android-24
-    # support lib
+    - extra-google-m2repository
     - extra-android-m2repository
-    - extra-android-support
+  licenses:
+    - android-sdk-license-.+
+    - android-sdk-preview-license-.+
+    - google-gdk-license-.+
+
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test -t android-18 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - touch bintray.properties
 
 script:
-  - ./gradlew clean assembleRelease  --stacktrace
+  - android-wait-for-emulator
+  - adb shell input keyevent 82
 
-before_install:
-  - chmod +x gradlew
+notifications:
+  email:
+    - gudong.name@gmail.com
+#
+#cache:
+#  directories:
+#    - $HOME/.m2
+#    - $HOME/.gradle

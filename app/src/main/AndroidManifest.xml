@@ -38,16 +38,16 @@
 
         <!--android:theme="@android:style/Theme.NoDisplay"-->
         <!--android:theme="@android:style/Theme.Dialog"-->
-        <activity
-            android:name=".ui.activitys.ProcessTextActivity"
-            android:label="咕咚翻译"
-            android:theme="@style/myTransparent">
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
+<activity
+    android:name=".ui.activitys.ProcessTextActivity"
+    android:label="咕咚翻译"
+    android:theme="@style/myTransparent">
+    <intent-filter>
+        <action android:name="android.intent.action.PROCESS_TEXT" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="text/plain" />
+    </intent-filter>
+</activity>
 
         <activity android:name=".ui.activitys.MainActivity"
             android:windowSoftInputMode="stateHidden">
