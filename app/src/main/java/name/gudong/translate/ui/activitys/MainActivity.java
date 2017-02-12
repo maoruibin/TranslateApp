@@ -34,6 +34,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -165,7 +166,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     public void onResume() {
         super.onResume();
         //检查粘贴板和 intent
-        checkSomething();
+        checkClipboard();
+        addTranslateWaySelectListener();
         if (BuildConfig.DEBUG) {
             SpUtils.setAppFront(this, false);
         } else {
@@ -216,7 +218,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     }
 
-    private void checkSomething() {
+    private void checkClipboard() {
         if (!mPresenter.hasExtraResult(getIntent()) && SpUtils.isAutoPasteWords(this)) {
             //检查粘贴板有没有英文单词 如果有就查询一次 并且显示给用户
             mPresenter.checkClipboard();
@@ -330,7 +332,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 mTvClear.setVisibility(mTemp.isEmpty() ? View.INVISIBLE : View.VISIBLE);
             }
         });
+    }
 
+    private void addTranslateWaySelectListener() {
         mSpTranslateWay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -379,6 +383,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void translate() {
+        Log.i(TAG,"execute translate");
         closeKeyboard();
         final String input = mInput.getText().toString().trim();
         if (checkInput(input)) {
@@ -434,7 +439,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Override
     public void initTranslateEngineSetting(ETranslateFrom from) {
-        mSpTranslateWay.setSelection(from.getIndex());
+        mSpTranslateWay.setSelection(from.getIndex(), true);
     }
 
     @OnClick(R.id.bt_translate)

@@ -83,7 +83,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
             Result result = (Result) intent.getSerializableExtra(KEY_RESULT);
             if (result != null) {
                 mView.onInitSearchText(result.getQuery());
-                //executeSearch(result.getQuery());
+                executeSearch(result.getQuery());
             }
         }
     }
@@ -104,7 +104,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
         Matcher m = r.matcher(text);
         if (m.matches()) {
             mView.onInitSearchText(text);
-//            executeSearch(text);
+            executeSearch(text);
             mView.closeKeyboard();
         }
     }

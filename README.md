@@ -7,12 +7,13 @@
 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。
 
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
+![shot_M](http://upload-images.jianshu.io/upload_images/588640-bdab7b4a53812073.gif?imageMogr2/auto-orient/strip)
 
 ## 待完成功能
 * 单词显示框支持沉浸式，覆盖状态栏显示。
-* 单词发音
 * 使用 Github 做自动更新
 * 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
+* ~~单词发音~~
 * ~~显示单词信息时增加音标~~
 * ~~生词本为空时的提示信息~~
 
@@ -43,58 +44,23 @@ V2EX 上对 App 的讨论 [咕咚翻译](https://www.v2ex.com/t/259288#reply69)
 
 Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/111919086388322816251)
 
-## 已知 Bug 
-* ~~查词时，输入框下面应该会显示"查词中...",目前不能显示出来~~
-* 连续两次复制单词，程序奔溃。
-* 在本应用外收藏成功单词后，没有成功提示
 
 ## 技术点
 
 * 1、全程使用 [Dagger2](https://github.com/google/dagger) 对项目进行类依赖管理
 * 2、项目使用标准的 MVP 架构，[关于 MVP 的一篇博客](http://gudong.name/advanced/2015/11/23/gank_mvp_introduce.html)
 * 3、实现对粘贴板的监听以及访问
-* 4、无需权限显示悬浮窗
-* 5、[RxJava](https://github.com/ReactiveX/RxJava) 的使用
+* 4、无需权限显示悬浮窗（6.0悬浮窗权限适配）
+* 5、使用 [RxJava](https://github.com/ReactiveX/RxJava) 探索函数式编程
 * 6、使用 [Retrofit2](https://github.com/square/retrofit) 进行网络请求
 * 7、开机自启动
-* 8、泛型
+* 8、Android 6.0 [自定义文本操作栏](http://www.jianshu.com/p/40e84359d683)
+
 
 `Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)，感谢~
 
 ## 更新日志
-
-### V1.3.5
-
-* 增加每日一句
-
-### V1.0.0
-
-* 设计: 首页大改版，使用 MaterialDesign 样式重新设计了首页。Thanks @TonyLOfficial(03-05)
-* 新增: 划词翻译开关，你可以关闭划词翻译功能了。(03-04)
-* 新增: 首页支持灵活的翻译引擎切换(03-07)
-* 新增: 长按翻译结果区域，可以选择复制(03-07)
-* 更新: 关闭长按句子可以翻译长句的功能。但是主界面支持句子翻译，仅限百度翻译。(03-07)
-* 优化: 点击翻译按钮后，让翻译按钮不可用(03-09)
-* 优化: 在咕咚翻译主界面，长按复制文本，不再会弹出顶部提示框(03-07)
-* 优化: 单词本被移动到了 Toolbar 上面展示。(03-05)
-* 更新: 支持 Android 4.1及以上的版本 (03-05)
-* 修复: 翻译时不显示 "翻译中" 的提示问题，Thanks @leizhiyuan。(03-04)
-* 优化: 单词本为空时显示一个为空提示语，Thanks @leizhiyuan。(03-04)
-* 修复: 点击清除按钮后，还可以点击收藏 (03-05)
-
-### V0.6.3
-
-* 新增: 划词翻译开关，你可以关闭划词翻译功能了。(03-04)
-* 优化: 单词本被移动到了 Toolbar 上面展示。(03-05)
-* 修复: 翻译时不显示 "翻译中" 的提示问题，Thanks @leizhiyuan。(03-04)
-
-### V0.6
-
-* 大幅提高定时设置的稳定性，可以在首页灵活设置显示开关,以及显示间隔时间等。
-* 加入 [Once](https://github.com/jonfinerty/Once) 库用于简化一些一次性操作
-* 加入了 BugHd 作为 bug 统计工具
-* 使用 MVP 对项目进行重构
-* 使用 Dagger2 进行依赖管理
+[日志列表](./doc/Changelog.md)
 
 ## 关于作者
 
