@@ -7,12 +7,13 @@
 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。
 
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
+![shot_M](http://upload-images.jianshu.io/upload_images/588640-bdab7b4a53812073.gif?imageMogr2/auto-orient/strip)
 
 ## 待完成功能
 * 单词显示框支持沉浸式，覆盖状态栏显示。
-* 单词发音
 * 使用 Github 做自动更新
 * 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
+* ~~单词发音~~
 * ~~显示单词信息时增加音标~~
 * ~~生词本为空时的提示信息~~
 
@@ -43,21 +44,18 @@ V2EX 上对 App 的讨论 [咕咚翻译](https://www.v2ex.com/t/259288#reply69)
 
 Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/111919086388322816251)
 
-## 已知 Bug 
-* ~~查词时，输入框下面应该会显示"查词中...",目前不能显示出来~~
-* 连续两次复制单词，程序奔溃。
-* 在本应用外收藏成功单词后，没有成功提示
 
 ## 技术点
 
 * 1、全程使用 [Dagger2](https://github.com/google/dagger) 对项目进行类依赖管理
 * 2、项目使用标准的 MVP 架构，[关于 MVP 的一篇博客](http://gudong.name/advanced/2015/11/23/gank_mvp_introduce.html)
 * 3、实现对粘贴板的监听以及访问
-* 4、无需权限显示悬浮窗
-* 5、[RxJava](https://github.com/ReactiveX/RxJava) 的使用
+* 4、无需权限显示悬浮窗（6.0悬浮窗权限适配）
+* 5、使用 [RxJava](https://github.com/ReactiveX/RxJava) 探索函数式编程
 * 6、使用 [Retrofit2](https://github.com/square/retrofit) 进行网络请求
 * 7、开机自启动
-* 8、泛型
+* 8、Android 6.0 自定义文本操作栏
+
 
 `Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)，感谢~
 
