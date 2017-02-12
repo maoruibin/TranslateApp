@@ -54,7 +54,7 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 * 5、使用 [RxJava](https://github.com/ReactiveX/RxJava) 探索函数式编程
 * 6、使用 [Retrofit2](https://github.com/square/retrofit) 进行网络请求
 * 7、开机自启动
-* 8、Android 6.0 自定义文本操作栏
+* 8、Android 6.0 [自定义文本操作栏](http://www.jianshu.com/p/40e84359d683)
 
 
 `Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)，感谢~
