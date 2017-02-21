@@ -216,6 +216,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
 
     private void initListView() {
         mAdapter = new WordsListAdapter(this);
+        mAdapter.setPresenter(mPresenter);
         mAdapter.setOnClickListener(new WordsListAdapter.IClickPopupMenuItem() {
             @Override
             public void onClickMenuItem(int itemId, Result entity) {
