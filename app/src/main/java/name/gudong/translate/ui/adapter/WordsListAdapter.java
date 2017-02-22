@@ -41,6 +41,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import name.gudong.translate.R;
 import name.gudong.translate.mvp.model.entity.translate.Result;
+import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.util.ViewUtil;
 import rx.Observable;
 import rx.functions.Action0;
@@ -58,15 +59,21 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
 
     private IClickPopupMenuItem mOnClickListener;
     private boolean isReciteMode = false;
+    private BasePresenter presenter;
 
     public WordsListAdapter(Context context) {
         mContext = context;
         mList = new ArrayList<>();
     }
 
+    public void setPresenter(BasePresenter presenter){
+        this.presenter=presenter;
+    }
     public void setOnClickListener(IClickPopupMenuItem onClickListener) {
         mOnClickListener = onClickListener;
     }
+
+
 
     public void update(List<Result> list) {
         update(list, false);
@@ -92,6 +99,14 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Result entity = mList.get(position);
+
+        String mp3Url=entity.getEnMp3();
+        if(TextUtils.isEmpty(mp3Url)){
+           holder.ivSound.setVisibility(View.INVISIBLE);
+        }else {
+            holder.ivSound.setVisibility(View.VISIBLE);
+        }
+
         holder.tvSrc.setText(entity.getQuery());
         if (!TextUtils.isEmpty(entity.getPhAm())) {
             holder.tvPhonetic.setText("[" + entity.getPhAm() + "]");
@@ -124,6 +139,16 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
                 }
             }
         });
+
+        holder.ivSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String fileName = entity.getMp3FileName();
+                String mp3Url = entity.getEnMp3();
+                presenter.playSound(fileName, mp3Url);
+               // Toast.makeText(mContext,"sound",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -145,6 +170,8 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
         private TextView tvPhonetic;
         private LinearLayout llDst;
         private ImageView ivMore;
+        private ImageView ivSound;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -153,6 +180,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
             tvPhonetic = ButterKnife.findById(itemView, R.id.tv_pop_phonetic);
             tvSrc = ButterKnife.findById(itemView, R.id.tv_pop_src);
             ivMore = ButterKnife.findById(itemView, R.id.iv_over_flow);
+            ivSound=ButterKnife.findById(itemView,R.id.iv_sound);
         }
     }
 
