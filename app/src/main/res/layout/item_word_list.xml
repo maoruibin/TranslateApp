@@ -60,7 +60,7 @@
             android:maxLength="26"
             android:maxLines="1"
             android:layout_alignParentLeft="true"
-            tools:text="fuck dakjsasjaldjddddddssssssa"
+            tools:text="words"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
         <TextView
@@ -71,6 +71,15 @@
             android:layout_marginLeft="6dp"
             android:layout_toRightOf="@+id/tv_pop_src"
             tools:text="[wɑ:t]" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tv_pop_phonetic"
+            app:srcCompat="@drawable/ic_volume_up_black_24dp" />
 
         <LinearLayout
             android:id="@+id/ll_pop_dst"
