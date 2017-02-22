@@ -51,6 +51,10 @@ android {
         buildConfigField "String", "YOUDAO_DOC_TYPE", '"json"'
         buildConfigField "String", "YOUDAO_VERSION", '"1.2"'
 
+        //google config
+        buildConfigField "String", "GOOGLE_LANGUAGE_ENGLISH", '"en"'
+        buildConfigField "String", "GOOGLE_LANGUAGE_CHINEASE", '"zh-CN"'
+
         //common value
         buildConfigField "String", "RESULT_JSON", '"json"'
         buildConfigField "String", "LANGUAGE_AUTO", '"auto"'

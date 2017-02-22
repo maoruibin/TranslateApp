@@ -21,18 +21,23 @@
 package name.gudong.translate.mvp.model.type;
 
 import name.gudong.translate.mvp.model.ApiBaidu;
+import name.gudong.translate.mvp.model.ApiGoogle;
 import name.gudong.translate.mvp.model.ApiJinShan;
 import name.gudong.translate.mvp.model.ApiYouDao;
 
 /**
  * Created by GuDong on 1/22/16 18:12.
  * Contact with gudong.name@gmail.com.
+ *
+ * updated by Levine on 2/21/17
  */
 public enum  ETranslateFrom {
 
     BAI_DU(0,"百度","http://api.fanyi.baidu.com/", ApiBaidu.class),
     YOU_DAO(1,"有道","http://fanyi.youdao.com/",ApiYouDao.class),
-    JIN_SHAN(2,"金山","http://dict-co.iciba.com/",ApiJinShan.class);
+    JIN_SHAN(2,"金山","http://dict-co.iciba.com/",ApiJinShan.class),
+    GOOGLE(3, "谷歌", "http://translate.google.cn/",ApiGoogle.class);
+
 
     private int index;
     private String name;

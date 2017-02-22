@@ -351,6 +351,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                         selectEngine(ETranslateFrom.JIN_SHAN);
                         MobclickAgent.onEvent(getApplicationContext(), "way_jinshan");
                         break;
+                    case 3:
+                        selectEngine(ETranslateFrom.GOOGLE);
+                        MobclickAgent.onEvent(getApplicationContext(), "way_google");
+                        break;
                 }
             }
 

@@ -27,6 +27,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.model.ApiBaidu;
+import name.gudong.translate.mvp.model.ApiGoogle;
 import name.gudong.translate.mvp.model.ApiJinShan;
 import name.gudong.translate.mvp.model.ApiYouDao;
 import name.gudong.translate.mvp.model.SingleRequestService;
@@ -37,6 +38,8 @@ import name.gudong.translate.injection.modules.AppModule;
 /**
  * Created by GuDong on 12/27/15 16:41.
  * Contact with gudong.name@gmail.com.
+ *
+ * Updated by Levine on 2/21/17 add google api
  */
 @Singleton
 @Component(modules = {AppModule.class,ApiServiceModel.class})
@@ -53,6 +56,8 @@ public interface AppComponent {
     ApiYouDao getApiYoudao();
 
     ApiBaidu getApiBaidu();
+
+    ApiGoogle getApiGoogle();
 
     SingleRequestService getDwnloadService();
 
