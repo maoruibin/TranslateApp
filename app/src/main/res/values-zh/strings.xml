@@ -19,7 +19,7 @@
     <string name="tip_time_duration">提示显示时间</string>
 
     <string name="play_sound_auto_summary">开启后,划词翻译显示结果时会自动播放单词发音。</string>
-    <string name="use_recite_or_nor_summary">开启后,咕咚翻译将会自动的在手机山循环浮动显示已收藏的单词,帮助你更好的记忆这些单词。</string>
+    <string name="use_recite_or_nor_summary">开启后,咕咚翻译将会自动的在手机上循环浮动显示已收藏的单词,帮助你更好的记忆这些单词。</string>
     <string name="notify_dayline_summary">开启后,每天早晨8点,手机会为你提示学习每日一句。</string>
     <string name="open_auto_paste_summary">开启后,每次打开 App 时将会自动检测粘贴板是否有单词并翻译。</string>
 
