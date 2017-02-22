@@ -1,5 +1,10 @@
 # Changelog
 
+## V1.5.3
+* 重要: 增加谷歌翻译的支持(by <a href="https://github.com/LevineLiu">LevineLiu</a> 2017-02-23)
+* 重要: 单词本增加发音功能(by <a href="https://github.com/LostKe">LostKe</a> 2017-02-22)
+* 修复: 插耳机情况下仍使用扬声器发音问题（2017-02-22）
+    
 ## V1.5.0
 * 重要: 大幅优化单词本的使用体验，提供单词导入导出等功能(2017-02-11)
 * 优化: 为 Android 6.0 设备增加悬浮窗权限申请，解决 MIUI 等部分设备需要手动开启权限的问题

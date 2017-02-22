@@ -22,8 +22,18 @@ public class GoogleResult extends AbsResult{
     private List<String> getTranslation(){
         List<String> translationList = new ArrayList<>(1);
         String[] translation = translationResult.replace("[", "").split("\",");
-        translationList.add(translation[0].replace("\"", ""));
+        if(translation.length > 0){
+            translationList.add(translation[0].replace("\"", ""));
+        }
         return translationList;
+    }
+
+    private String getQuery(){
+        String[] translation = translationResult.replace("[", "").split("\",");
+        if(translation.length >1){
+            return translation[1].replace("\"", "");
+        }
+        return "";
     }
 
     @Override
@@ -38,7 +48,7 @@ public class GoogleResult extends AbsResult{
 
     @Override
     public String wrapQuery() {
-        return translationResult;
+        return getQuery();
     }
 
     @Override
