@@ -201,7 +201,7 @@ public class BasePresenter<V extends IBaseView> {
         Uri myUri = Uri.fromFile(file);
         Logger.i("播放 "+file.getAbsolutePath());
         MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(getContext(), myUri);
             mediaPlayer.prepare();
@@ -210,6 +210,8 @@ public class BasePresenter<V extends IBaseView> {
         }
         mediaPlayer.start();
     }
+
+
 
     private Callable<File> cacheFileObservable(Context context, String fileName, byte[] data) {
         return new Callable<File>() {
