@@ -29,6 +29,7 @@ import dagger.Module;
 import dagger.Provides;
 import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.ApiBaidu;
+import name.gudong.translate.mvp.model.ApiGoogle;
 import name.gudong.translate.mvp.model.ApiJinShan;
 import name.gudong.translate.mvp.model.ApiYouDao;
 import name.gudong.translate.mvp.model.SingleRequestService;
@@ -43,6 +44,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by GuDong on 12/27/15 16:17.
  * Contact with gudong.name@gmail.com.
+ *
+ * Updated by Levine on 2/21/17 add google api
  */
 @Module
 public class ApiServiceModel {
@@ -75,6 +78,10 @@ public class ApiServiceModel {
     ApiJinShan provideApiJinShan() {
         return createService(ETranslateFrom.JIN_SHAN);
     }
+
+    @Provides
+    @Singleton
+    ApiGoogle provideApiGoogle(){return createService(ETranslateFrom.GOOGLE);}
 
     private <S> S createService(ETranslateFrom type) {
         Retrofit.Builder builder = new Retrofit.Builder()
