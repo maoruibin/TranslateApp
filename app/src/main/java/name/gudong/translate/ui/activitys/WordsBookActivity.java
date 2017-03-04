@@ -140,7 +140,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
                         .setPositiveButton("发送", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Utils.shareText(getBaseContext(), exportText);
+                                Utils.shareText(WordsBookActivity.this, exportText);
                             }
                         })
                         .setNegativeButton("取消", null)

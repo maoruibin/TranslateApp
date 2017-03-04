@@ -6,8 +6,8 @@ ext {
             minSdk              : 16,
             minSdk21            : 21,
             targetSdk           : 24,
-            version_code        : 153,
-            version_name        : "1.5.3"
+            version_code        : 154,
+            version_name        : "1.5.4"
     ]
 
     libraries = [
@@ -41,7 +41,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
