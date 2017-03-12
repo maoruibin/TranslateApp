@@ -60,8 +60,6 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
 
     BroadcastReceiver mScreenStatusReceive;
 
-
-
     @Override
     public void onCreate() {
         setUpInject();

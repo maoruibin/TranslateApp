@@ -46,6 +46,7 @@
         android:background="@drawable/selector_over_flow"/>
 
     <RelativeLayout
+        android:id="@+id/rl_words"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/iv_over_flow"
@@ -75,8 +76,8 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_sound"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_alignBottom="@+id/tv_pop_src"
             android:layout_alignTop="@+id/tv_pop_src"
             android:layout_marginLeft="6dp"

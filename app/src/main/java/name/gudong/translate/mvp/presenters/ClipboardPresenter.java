@@ -21,6 +21,7 @@
 package name.gudong.translate.mvp.presenters;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
@@ -33,6 +34,7 @@ import javax.inject.Inject;
 
 import name.gudong.translate.BuildConfig;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
+import name.gudong.translate.manager.ReciteModulePreference;
 import name.gudong.translate.manager.ReciteWordManager;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
@@ -57,6 +59,8 @@ public class ClipboardPresenter extends TipFloatPresenter {
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
+    ReciteModulePreference mRecitePreference;
+
     /**
      * 循环展示单词结果
      */
@@ -75,7 +79,7 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
     private ClipboardManagerCompat.OnPrimaryClipChangedListener mListener = () -> {
         CharSequence content = mClipboardWatcher.getText();
-        if(content != null){
+        if (content != null) {
             performClipboardCheck(content.toString());
         }
     };
@@ -86,34 +90,48 @@ public class ClipboardPresenter extends TipFloatPresenter {
         QueryBuilder queryBuilder = new QueryBuilder(Result.class);
         queryBuilder = queryBuilder.whereNoEquals(Result.COL_MARK_DONE_ONCE, true);
         results = mLiteOrm.query(queryBuilder);
-        Logger.i("result size is "+results.size());
+        mRecitePreference = new ReciteModulePreference(getContext());
     }
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         initCountdownSetting();
-        if(SpUtils.isShowIconInNotification(getContext())){
+        if (SpUtils.isShowIconInNotification(getContext())) {
             Utils.showNormalNotification(getContext());
         }
     }
 
-    public boolean isOpenReciteWords(){
+    public boolean isOpenReciteWords() {
         return mReciteManger.isReciteOpenOrNot();
     }
 
-    public boolean isPlaySoundsAuto(){
+    public boolean isPlaySoundsAuto() {
         return mReciteManger.isPlaySoundAuto();
     }
 
-    private void initCountdownSetting(){
-        mActionShowTip = (t)->{
-            if(isOpenReciteWords()){
+    private void initCountdownSetting() {
+        mActionShowTip = (t) -> {
+            if (isOpenReciteWords()) {
                 Logger.t(KEY_TAG_COUNT_DOWN).i("time is to show words");
-                Result result = getResult();
-                if(result == null)return;
-                mView.showResult(result,false);
-            }else{
+                Result result = null;
+                int index = getResultIndex();
+                if (index >= 0) {
+                    result =  results.get(index);
+                }else{
+                    return;
+                }
+                if (result == null) return;
+                mView.showResult(result, false);
+
+                //设置下次显示的单词
+                if(index != results.size()-1){
+                    index ++;
+                }
+                Result afterResult = results.get(index);
+                mRecitePreference.setCurrentCyclicWord(afterResult.getQuery());
+
+            } else {
                 Logger.t(KEY_TAG_COUNT_DOWN).i("time is to show words but was close");
             }
         };
@@ -122,29 +140,29 @@ public class ClipboardPresenter extends TipFloatPresenter {
     /**
      * 开启背单词
      */
-    public void openTipCyclic(){
+    public void openTipCyclic() {
         EIntervalTipTime tipTime = mReciteManger.getIntervalTimeWay();
         int time = tipTime.getIntervalTime();
         boolean isSecond = tipTime == EIntervalTipTime.THIRTY_SECOND;
-        TimeUnit unit = isSecond? TimeUnit.SECONDS:TimeUnit.MINUTES;
+        TimeUnit unit = isSecond ? TimeUnit.SECONDS : TimeUnit.MINUTES;
 
-        if(mSubscription != null && !mSubscription.isUnsubscribed()){
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
 
-        mSubscription = Observable.interval(time,unit)
+        mSubscription = Observable.interval(time, unit)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mActionShowTip);
 
 
-        Logger.i(KEY_TAG,"开启背单词任务 间隔 "+tipTime.getIntervalTime());
+        Logger.i(KEY_TAG, "开启背单词任务 间隔 " + tipTime.getIntervalTime());
     }
 
-    public void removeTipCyclic(){
-        if(mSubscription != null && !mSubscription.isUnsubscribed()){
+    public void removeTipCyclic() {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
             mSubscription = null;
-            Logger.i(KEY_TAG,"移除背单词服务");
+            Logger.i(KEY_TAG, "移除背单词服务");
         }
     }
 
@@ -158,22 +176,22 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
     private void performClipboardCheck(String queryText) {
         //处理缓存 因为粘贴板的回调操作可能触发多次
-        Logger.i("粘贴板的单词为 "+queryText);
+        Logger.i("粘贴板的单词为 " + queryText);
         if (listQuery.contains(queryText)) {
             return;
         }
         listQuery.add(queryText);
 
         //只有用户在打开了 划词翻译的情况下 划词翻译才能正常工作
-        if(!SpUtils.getOpenJITOrNot(getContext()))return;
+        if (!SpUtils.getOpenJITOrNot(getContext())) return;
 
         //如果当前界面是 咕咚翻译的主界面 那么也不对粘贴板做监听( Debug 时开启)
-        if(!BuildConfig.DEBUG){
-            if(SpUtils.getAppFront(getContext()))return;
+        if (!BuildConfig.DEBUG) {
+            if (SpUtils.getAppFront(getContext())) return;
         }
 
         // 检查粘贴板的内容是不是单词 以及是不是为空
-        if(!checkInput(queryText)){
+        if (!checkInput(queryText)) {
             Logger.i("粘贴板为空");
             return;
         }
@@ -187,40 +205,42 @@ public class ClipboardPresenter extends TipFloatPresenter {
     }
 
 
-    private Result getResult(){
-        int index = getResultIndex();
-        Logger.i("index is "+index);
-        if(index>=0){
-            return results.get(index);
-        } else{
-            return null;
-        }
-    }
 
-    private int getResultIndex(){
-        if(results.isEmpty()){
-            return -1;
+    private int getResultIndex() {
+        int index = -1;
+        if (results.isEmpty()) {
+            return index;
         }
-        currentIndex = currentIndex+1;
-        if(currentIndex == results.size()-1){
-            currentIndex = -1;
-            return results.size()-1;
+        /**
+         * 上次背单词时的最后一个单词
+         */
+        String lastQuery = mRecitePreference.getCurrentCyclicWord();
+        if (!TextUtils.isEmpty(lastQuery)) {
+            Result result = new Result();
+            result.setQuery(lastQuery);
+            int indexQuery = results.indexOf(result);
+            if (indexQuery >= 0) {
+                index = indexQuery;
+            }
+        }else{
+            index = 0;
         }
-        return currentIndex;
+        return index;
     }
 
     /**
      * 标记已背
+     *
      * @param result
      */
     public void markDone(Result result) {
         result.setMake_done_once(true);
         result.setMake_done_once_time(System.currentTimeMillis());
-        Logger.i("size "+results.size());
-        if(results.remove(result)){
+        Logger.i("size " + results.size());
+        if (results.remove(result)) {
             Logger.i("remove suc");
         }
-        Logger.i("size "+results.size());
+        Logger.i("size " + results.size());
         mLiteOrm.update(result);
     }
 }
