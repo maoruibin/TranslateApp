@@ -1,5 +1,10 @@
 # Changelog
 
+## V1.5.4
+* 优化: 扩大单词本发音点击响应区域（ 03-13)
+* 修复: 循环背单词次序混乱问题（03-13）
+* 修复: 导出单词失败的问题（03-03)
+
 ## V1.5.3
 * 重要: 增加谷歌翻译的支持(by <a href="https://github.com/LevineLiu">LevineLiu</a> 2017-02-23)
 * 重要: 单词本增加发音功能(by <a href="https://github.com/LostKe">LostKe</a> 2017-02-22)
