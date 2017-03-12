@@ -1,7 +1,7 @@
 ext {
     configuration = [
             package             : "name.gudong.translate",
-            buildToolsVersion   : "23.0.2",
+            buildToolsVersion   : "25.0.2",
             compileVersion      : 24,
             minSdk              : 16,
             minSdk21            : 21,
