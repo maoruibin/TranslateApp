@@ -22,6 +22,7 @@ package name.gudong.translate.mvp.presenters;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.QueryBuilder;
@@ -65,8 +66,6 @@ public class ClipboardPresenter extends TipFloatPresenter {
      * 循环展示单词结果
      */
     private List<Result> results;
-
-    private int currentIndex = -1;
 
     /**
      * 定时显示 Tip 事件源
@@ -117,16 +116,18 @@ public class ClipboardPresenter extends TipFloatPresenter {
                 Result result = null;
                 int index = getResultIndex();
                 if (index >= 0) {
-                    result =  results.get(index);
-                }else{
+                    result = results.get(index);
+                } else {
                     return;
                 }
                 if (result == null) return;
                 mView.showResult(result, false);
-
                 //设置下次显示的单词
-                if(index != results.size()-1){
-                    index ++;
+                if (index != results.size() - 1) {
+                    index++;
+                }else{
+                    //重新循环计数
+                    index = 0;
                 }
                 Result afterResult = results.get(index);
                 mRecitePreference.setCurrentCyclicWord(afterResult.getQuery());
@@ -205,7 +206,6 @@ public class ClipboardPresenter extends TipFloatPresenter {
     }
 
 
-
     private int getResultIndex() {
         int index = -1;
         if (results.isEmpty()) {
@@ -222,7 +222,7 @@ public class ClipboardPresenter extends TipFloatPresenter {
             if (indexQuery >= 0) {
                 index = indexQuery;
             }
-        }else{
+        } else {
             index = 0;
         }
         return index;

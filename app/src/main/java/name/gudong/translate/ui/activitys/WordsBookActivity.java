@@ -70,8 +70,6 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
 
     WordsListAdapter mAdapter;
 
-    private Menu mMenu;
-
     public static void gotoWordsBook(Context context) {
         Intent intent = new Intent(context, WordsBookActivity.class);
         context.startActivity(intent);
@@ -91,7 +89,6 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.book, menu);
-        mMenu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
