@@ -28,6 +28,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:textSize="@dimen/ff.textSize.text"
+                        android:textColor="@color/ff.textColor.shadowTitle"
                         android:text="@string/point_input_key" />
 
                     <TextView
@@ -47,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:gravity="top"
+                    android:textColor="@color/color_explain"
                     android:maxHeight="100dp"
                     android:minHeight="100dp"
                     tools:text="Make" />
@@ -101,7 +104,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="翻译结果"
-                        android:textColor="#999999" />
+                        android:textSize="@dimen/ff.textSize.text"
+                        android:textColor="@color/ff.textColor.shadowTitle" />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/iv_favorite"
