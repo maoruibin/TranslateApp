@@ -27,4 +27,5 @@
     <dimen name="ff.textSize.tips">12dp</dimen>
     <dimen name="ff.textSize.button">11dp</dimen>
     <dimen name="md_content_padding_top">8dp</dimen>
+    <dimen name="icon_size_pop">40dp</dimen>
 </resources>
