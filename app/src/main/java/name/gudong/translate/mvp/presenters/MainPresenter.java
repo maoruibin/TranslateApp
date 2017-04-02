@@ -216,7 +216,9 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (BuildConfig.DEBUG) {
                             e.printStackTrace();
                         }
-                        mView.onError(e);
+                        if(mView != null){
+                            mView.onError(e);
+                        }
                     }
 
                     @Override

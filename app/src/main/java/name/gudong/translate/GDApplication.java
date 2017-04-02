@@ -64,7 +64,7 @@ public class GDApplication extends Application {
 
     private void initCrashWoodpecker() {
         CrashWoodpecker.instance()
-                .withKeys("widget", "me.drakeet")
+                .withKeys("widget", "name.gudong")
                 .setPatchMode(PatchMode.SHOW_LOG_PAGE)
                     .setPatchDialogUrlToOpen("http://gudong.name")
                 .setPassToOriginalDefaultHandler(true)
