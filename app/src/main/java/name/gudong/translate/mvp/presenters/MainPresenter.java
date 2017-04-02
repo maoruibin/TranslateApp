@@ -70,6 +70,7 @@ import rx.schedulers.Schedulers;
  */
 public class MainPresenter extends BasePresenter<IMainView> {
     public static final String KEY_RESULT = "RESULT";
+    public static final int KEY_REQUEST_CODE_FOR_NOTI = 100;
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
