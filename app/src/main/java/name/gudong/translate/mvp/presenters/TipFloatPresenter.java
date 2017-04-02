@@ -38,6 +38,7 @@ import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
+import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.ITipFloatView;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.StringUtils;
@@ -65,7 +66,8 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
             return;
         }
 
-        mWarpApiService.translate(SpUtils.getTranslateEngineWay(getContext()), content)
+        ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
+        mWarpApiService.translate(from, content)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter((result) -> {
@@ -88,7 +90,7 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
                                 mView.errorPoint("请求数据异常，您可以试试切换其他引擎。" + e.getMessage());
                                 e.printStackTrace();
                             } else {
-                                mView.errorPoint("请求数据异常，您可以试试切换其他引擎。");
+                                mView.errorPoint("请求数据异常(source:"+from.getName()+")，您可以试试切换其他引擎。");
                             }
                         }
                     }
