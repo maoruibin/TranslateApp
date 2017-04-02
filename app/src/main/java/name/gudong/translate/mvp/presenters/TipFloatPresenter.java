@@ -95,6 +95,7 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
 
                     @Override
                     public void onNext(AbsResult result) {
+                        if (mView == null) return;
                         Result realResult = result.getResult();
                         realResult.setCreate_time(System.currentTimeMillis());
                         realResult.setUpdate_time(System.currentTimeMillis());

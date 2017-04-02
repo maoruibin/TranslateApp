@@ -8,24 +8,24 @@ package name.gudong.translate.ui.activitys;
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;
 
+import name.gudong.translate.injection.components.AppComponent;
+import name.gudong.translate.injection.components.DaggerActivityComponent;
+import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.listener.view.TipView;
 import name.gudong.translate.listener.view.TipViewController;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.TipFloatPresenter;
 import name.gudong.translate.mvp.views.ITipFloatView;
-import name.gudong.translate.injection.components.AppComponent;
-import name.gudong.translate.injection.components.DaggerActivityComponent;
-import name.gudong.translate.injection.modules.ActivityModule;
 
 public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> implements ITipFloatView, TipView.ITipViewListener {
     @Inject
@@ -52,11 +52,9 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
         CharSequence text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
         boolean readonly =
                 getIntent().getBooleanExtra(Intent.EXTRA_PROCESS_TEXT_READONLY, false);
-
-        Logger.i("result is " + text + " readonly is " + readonly);
-        // 检查粘贴板的内容是不是单词 以及是不是为空
-        //mTvPopSrc.setText("result is " + text);
-        mPresenter.search(text.toString());
+        if(!TextUtils.isEmpty(text)){
+            mPresenter.search(text.toString());
+        }
     }
 
     @Override
