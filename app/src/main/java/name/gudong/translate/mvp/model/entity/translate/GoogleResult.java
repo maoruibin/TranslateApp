@@ -1,7 +1,6 @@
 package name.gudong.translate.mvp.model.entity.translate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
@@ -43,7 +42,7 @@ public class GoogleResult extends AbsResult{
 
     @Override
     public List<String> wrapExplains() {
-        return Collections.emptyList();
+        return getTranslation();
     }
 
     @Override
