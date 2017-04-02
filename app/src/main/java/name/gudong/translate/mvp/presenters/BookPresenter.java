@@ -31,7 +31,9 @@ import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -73,6 +75,9 @@ public class BookPresenter extends BasePresenter<IBookView> {
                         boolean isReciteMode = SpUtils.isWordBookReciteMode(getContext());
                         mView.fillData(transResultEntities, isReciteMode);
                         MobclickAgent.onEvent(getContext(),"wordsCount",transResultEntities.size()+"");
+                        Map<String,String>param = new HashMap<>();
+                        param.put("wordsCount",transResultEntities.size()+"");
+                        MobclickAgent.onEventValue(getContext(), "wordpage", param, 100);
                     }
                 });
     }
