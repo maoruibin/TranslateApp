@@ -166,6 +166,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (result == null) return null;
                         result.setCreate_time(System.currentTimeMillis());
                         result.setUpdate_time(System.currentTimeMillis());
+                        if (mView == null) return null;
                         mView.addTagForView(result);
 
                         if (!TextUtils.isEmpty(result.getEnMp3())) {
@@ -216,7 +217,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (BuildConfig.DEBUG) {
                             e.printStackTrace();
                         }
-                        if(mView != null){
+                        if (mView != null) {
                             mView.onError(e);
                         }
                     }
