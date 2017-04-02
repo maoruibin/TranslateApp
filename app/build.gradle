@@ -190,7 +190,6 @@ dependencies {
     compile ("me.drakeet.library:crashwoodpecker:${libs.crashwoodpecker}"){
         exclude module: 'recyclerview-v7'
     }
-    compile project(":headsupcompat")
 
     compile 'net.grandcentrix.tray:tray:0.11.0'
 

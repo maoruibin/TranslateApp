@@ -62,7 +62,6 @@ import name.gudong.translate.R;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerActivityComponent;
 import name.gudong.translate.injection.modules.ActivityModule;
-import name.gudong.translate.manager.AlarmManagers;
 import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
@@ -596,7 +595,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void startListenService() {
         mPresenter.startListenClipboardService();
-        AlarmManagers.register(this);
     }
 
 
