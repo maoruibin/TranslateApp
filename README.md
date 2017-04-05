@@ -1,9 +1,9 @@
-#咕咚翻译
+# 咕咚翻译
 ![icon](/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png "")
 
 [![Build Status](https://travis-ci.org/maoruibin/TranslateApp.svg?branch=master)](https://travis-ci.org/maoruibin/TranslateApp)
 
-##介绍
+## 介绍
 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。
 
 ![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
@@ -11,14 +11,14 @@
 ## 待完成功能
 * 单词显示框支持沉浸式，覆盖状态栏显示。
 * 使用 Github 做自动更新
-* 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
+* ~~不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。~~
 * ~~单词发音~~
 * ~~显示单词信息时增加音标~~
 * ~~生词本为空时的提示信息~~
 
 `Note:`想要参与贡献代码的同学，请在 develop 分支上操作，欢迎参与，可以提前在 issue 中交流自己要修改的功能模块，同时也欢迎来[Google+社区](https://plus.google.com/u/1/communities/111919086388322816251)一起讨论 咕咚翻译。
 
-##下载
+## 下载
 
 <a href="https://play.google.com/store/apps/details?id=name.gudong.translate" target="_blank" alt="Google Paly"><img src="http://7xr9gx.com1.z0.glb.clouddn.com/icon_google_play_brand.png"/></a>
 
@@ -28,7 +28,7 @@
 
 如果想要帮助做内部测试，[欢迎来Google+社区](https://plus.google.com/u/1/communities/111919086388322816251)我会把最新的版本放在 Google+社区。
 
-##缘起
+## 缘起
 自己经常在手机上会阅读一些英文的技术 blog 或者文档，经常会遇到陌生的单词，想必大家都有类似的经历，一般的，如果是上班期间，我可能会打开谷歌翻译，然后查词，但是当你不在电脑旁，就只能通过手机上的翻译软件来翻译生词，所以这时我们通常遇到生词会这样操作，长按生词、选择复制、点击 Home 键、找到翻译 App,有道翻译或者谷歌翻译之类的，然后长按输入框，选择粘贴，此时你才可以看到那个生词的意思。其实这是一个非常考验用户耐性的事，连续操作几次，不烦才怪呢。
 
 我也是，自己以前在 Medium 上阅读文章时经常做这样的事，后来我想能不能简单点呢，所以就有了咕咚翻译这个 App,咕咚是我的网名呢~
@@ -71,7 +71,7 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 
 [微博](http://weibo.com/u/1874136301)
 
-##License
+## License
  
      Copyright (C) 2015 GuDong <gudong.name@gmail.com>
    
