@@ -62,7 +62,6 @@ import name.gudong.translate.R;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerActivityComponent;
 import name.gudong.translate.injection.modules.ActivityModule;
-import name.gudong.translate.manager.AlarmManagers;
 import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.JinShanResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
@@ -351,6 +350,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                         selectEngine(ETranslateFrom.JIN_SHAN);
                         MobclickAgent.onEvent(getApplicationContext(), "way_jinshan");
                         break;
+                    case 3:
+                        selectEngine(ETranslateFrom.GOOGLE);
+                        MobclickAgent.onEvent(getApplicationContext(), "way_google");
+                        break;
                 }
             }
 
@@ -485,7 +488,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @OnClick(R.id.iv_favorite)
     public void onClickFavorite(final View view) {
-        MobclickAgent.onEvent(getApplicationContext(), "favorite_main");
         mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -504,18 +506,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 }
             }
         });
+        MobclickAgent.onEvent(getApplicationContext(), "favorite_main");
     }
 
     @OnClick(R.id.iv_paste)
     public void onClickPaste(View view) {
-        MobclickAgent.onEvent(getApplicationContext(), "action_paste");
         closeKeyboard();
         Toast.makeText(MainActivity.this, "长按翻译结果可复制", Toast.LENGTH_SHORT).show();
+        MobclickAgent.onEvent(getApplicationContext(), "action_paste");
     }
 
     @OnClick(R.id.iv_sound)
     public void onClickSound(View view) {
-        MobclickAgent.onEvent(getApplicationContext(), "sound_main_activity");
         Object obj = view.getTag();
         if (obj != null && obj instanceof Result) {
             Result entity = (Result) obj;
@@ -524,6 +526,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             mPresenter.playSound(fileName, mp3Url);
         }
         mPresenter.startSoundAnim(view);
+        MobclickAgent.onEvent(getApplicationContext(), "sound_main_activity");
     }
 
     @Override
@@ -592,7 +595,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void startListenService() {
         mPresenter.startListenClipboardService();
-        AlarmManagers.register(this);
     }
 
 

@@ -4,6 +4,7 @@
         <item>百度</item>
         <item>有道</item>
         <item>金山</item>
+        <item>谷歌</item>
     </string-array>
 
     <string-array name="recipe_time">

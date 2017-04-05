@@ -49,13 +49,15 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 
-public class TipViewController{
+import static name.gudong.translate.mvp.presenters.MainPresenter.KEY_REQUEST_CODE_FOR_NOTI;
+
+public class TipViewController {
     private WindowManager mWindowManager;
     private Context mContext;
     /**
      * cache mul tip view
      */
-    private Map<Result,TipView>mMapTipView = new WeakHashMap<>();
+    private Map<Result, TipView> mMapTipView = new WeakHashMap<>();
 
     private Observable mHideTipTask;
 
@@ -67,7 +69,7 @@ public class TipViewController{
         mRecitePreference = new ReciteModulePreference(mContext);
     }
 
-    public void showErrorInfo(String error,TipView.ITipViewListener mListener){
+    public void showErrorInfo(String error, TipView.ITipViewListener mListener) {
         TipView tipView = new TipView(mContext);
         tipView.setListener(mListener);
         mWindowManager.addView(tipView, getPopViewParams());
@@ -78,7 +80,7 @@ public class TipViewController{
 
     private void closeTipViewCountdown(final TipView tipView, TipView.ITipViewListener mListener) {
         int duration = mRecitePreference.getDurationTimeWay().getDurationTime();
-        Logger.t("recite").d(duration+"秒消失");
+        Logger.t("recite").d(duration + "秒消失");
         mHideTipTask = Observable.timer(duration, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .map(new Func1<Long, Object>() {
                     @Override
@@ -96,18 +98,18 @@ public class TipViewController{
         mHideTipTask.subscribe();
     }
 
-    private void removeTipViewInner(TipView tipView){
-        if(tipView.getParent() != null){
+    private void removeTipViewInner(TipView tipView) {
+        if (tipView.getParent() != null) {
             mWindowManager.removeView(tipView);
         }
     }
 
-    public void show(Result result,boolean isShowFavoriteButton,boolean isShowDoneMark,TipView.ITipViewListener mListener) {
+    public void show(Result result, boolean isShowFavoriteButton, boolean isShowDoneMark, TipView.ITipViewListener mListener) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean isSettingUseSystemNotification = sharedPreferences.getBoolean("preference_show_float_view_use_system",false);
-        if(Utils.isSDKHigh5() && isSettingUseSystemNotification){
+        boolean isSettingUseSystemNotification = sharedPreferences.getBoolean("preference_show_float_view_use_system", false);
+        if (Utils.isSDKHigh5() && isSettingUseSystemNotification) {
             StringBuilder sb = new StringBuilder();
-            for(String string:result.getExplains()){
+            for (String string : result.getExplains()) {
                 sb.append(string).append("\n");
             }
 
@@ -124,49 +126,48 @@ public class TipViewController{
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
             // Moves events into the big view
-            for (String string:result.getExplains()) {
+            for (String string : result.getExplains()) {
                 inboxStyle.addLine(string);
             }
 
             mBuilder.setStyle(inboxStyle);
 
             Intent resultIntent = new Intent(mContext, MainActivity.class);
-            resultIntent.putExtra("data",result);
+            resultIntent.putExtra("data", result);
 
             PendingIntent resultPendingIntent = PendingIntent.getActivity(
-                            mContext,
-                            0,
-                            resultIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
+                    mContext,
+                    KEY_REQUEST_CODE_FOR_NOTI,
+                    resultIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
 
-
-            mBuilder.addAction(R.drawable.ic_favorite_border_grey_24dp,"收藏",resultPendingIntent);
+            mBuilder.addAction(R.drawable.ic_favorite_border_grey_24dp, "收藏", resultPendingIntent);
             NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification note = mBuilder.build();
             mNotificationManager.notify(result.getQuery().hashCode(), note);
 
-        }else{
+        } else {
             TipView tipView = new TipView(mContext);
-            mMapTipView.put(result,tipView);
+            mMapTipView.put(result, tipView);
             tipView.setListener(mListener);
             mWindowManager.addView(tipView, getPopViewParams());
             tipView.startWithAnim();
-            tipView.setContent(result, isShowFavoriteButton,isShowDoneMark);
-            closeTipViewCountdown(tipView,mListener);
+            tipView.setContent(result, isShowFavoriteButton, isShowDoneMark);
+            closeTipViewCountdown(tipView, mListener);
         }
     }
 
-    public void setWithFavorite(Result result){
+    public void setWithFavorite(Result result) {
         TipView tipView = mMapTipView.get(result);
-        if(tipView != null){
+        if (tipView != null) {
             tipView.setFavoriteBackground(R.drawable.ic_favorite_pink_24dp);
         }
     }
 
-    public void setWithNotFavorite(Result result){
+    public void setWithNotFavorite(Result result) {
         TipView tipView = mMapTipView.get(result);
-        if(tipView != null){
+        if (tipView != null) {
             tipView.setFavoriteBackground(R.drawable.ic_favorite_border_white_24dp);
         }
     }
@@ -196,13 +197,13 @@ public class TipViewController{
     }
 
     public void removeTipView(Result result) {
-        if(result == null)return;
+        if (result == null) return;
         TipView tipView = mMapTipView.get(result);
-        if(tipView != null){
+        if (tipView != null) {
             Logger.i("移除 tipView ");
             removeTipViewInner(tipView);
         }
-        if(mHideTipTask != null){
+        if (mHideTipTask != null) {
             Logger.i("移除 tipView 对应的 倒计时");
             mHideTipTask.unsubscribeOn(AndroidSchedulers.mainThread());
         }

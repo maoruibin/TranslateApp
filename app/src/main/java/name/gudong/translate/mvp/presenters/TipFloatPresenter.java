@@ -38,6 +38,7 @@ import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
+import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.ITipFloatView;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.StringUtils;
@@ -56,19 +57,22 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
 
     @Inject
     public TipFloatPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
-        super(liteOrm, apiService, singleRequestService,context);
+        super(liteOrm, apiService, singleRequestService, context);
     }
 
     public void search(final String content) {
-        if(!checkInput(content)){
+        if (!checkInput(content)) {
             mView.onComplete();
             return;
         }
 
-        mWarpApiService.translate(SpUtils.getTranslateEngineWay(getContext()), content)
+        ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
+        mWarpApiService.translate(from, content)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter((result)->{return result.wrapErrorCode() == 0;})
+                .filter((result) -> {
+                    return result.wrapErrorCode() == 0;
+                })
                 .subscribe(new Subscriber<AbsResult>() {
                     @Override
                     public void onCompleted() {
@@ -78,41 +82,43 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        if(e instanceof SocketTimeoutException){
+                        if (mView == null) return;
+                        if (e instanceof SocketTimeoutException) {
                             mView.errorPoint("网络请求超时，请稍后重试。");
-                        }else{
-                            if(BuildConfig.DEBUG){
-                                mView.errorPoint("请求数据异常，您可以试试切换其他引擎。"+e.getMessage());
+                        } else {
+                            if (BuildConfig.DEBUG) {
+                                mView.errorPoint("请求数据异常，您可以试试切换其他引擎。" + e.getMessage());
                                 e.printStackTrace();
-                            }else{
-                                mView.errorPoint("请求数据异常，您可以试试切换其他引擎。");
+                            } else {
+                                mView.errorPoint("请求数据异常(source:"+from.getName()+")，您可以试试切换其他引擎。");
                             }
                         }
                     }
 
                     @Override
                     public void onNext(AbsResult result) {
+                        if (mView == null) return;
                         Result realResult = result.getResult();
                         realResult.setCreate_time(System.currentTimeMillis());
                         realResult.setUpdate_time(System.currentTimeMillis());
-                        mView.showResult(realResult,true);
+                        mView.showResult(realResult, true);
                     }
                 });
     }
 
 
-    public void initFavoriteStatus(Result result){
-        Result localResult= isFavorite(result.getQuery());
-        if(localResult!=null){
+    public void initFavoriteStatus(Result result) {
+        Result localResult = isFavorite(result.getQuery());
+        if (localResult != null) {
             mView.initWithFavorite(result);
-        }else{
+        } else {
             mView.initWithNotFavorite(result);
         }
     }
 
-    public void clickFavorite(View view,Result result){
-        Result localResult= isFavorite(result.getQuery());
-        if (localResult!=null) {
+    public void clickFavorite(View view, Result result) {
+        Result localResult = isFavorite(result.getQuery());
+        if (localResult != null) {
             int index = deleteResultFromDb(localResult);
             if (index > 0) {
                 mView.initWithNotFavorite(result);
@@ -120,7 +126,7 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
             } else {
                 Logger.i("删除失败");
             }
-        }else{
+        } else {
             long index = insertResultToDb(result);
             if (index > 0) {
                 mView.initWithFavorite(result);
@@ -131,39 +137,39 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
         }
     }
 
-    public void jumpMainActivity(Result result){
-        MainPresenter.jumpMainActivityFromClickTipView(getContext(),result);
+    public void jumpMainActivity(Result result) {
+        MainPresenter.jumpMainActivityFromClickTipView(getContext(), result);
     }
 
-    protected boolean checkInput(String input){
+    protected boolean checkInput(String input) {
         // empty check
         if (TextUtils.isEmpty(input)) {
             Logger.e("剪贴板为空了");
             return false;
         }
 
-        if(StringUtils.isChinese(input)){
-            Logger.e(input+" 中包含中文字符");
+        if (StringUtils.isChinese(input)) {
+            Logger.e(input + " 中包含中文字符");
             return false;
         }
 
-        if(StringUtils.isValidEmailAddress(input)){
-            Logger.e(input+" 是一个邮箱");
+        if (StringUtils.isValidEmailAddress(input)) {
+            Logger.e(input + " 是一个邮箱");
             return false;
         }
 
-        if(StringUtils.isValidUrl(input)){
-            Logger.e(input+" 是一个网址");
+        if (StringUtils.isValidUrl(input)) {
+            Logger.e(input + " 是一个网址");
             return false;
         }
 
-        if(StringUtils.isValidNumeric(input)){
-            Logger.e(input+" 是一串数字");
+        if (StringUtils.isValidNumeric(input)) {
+            Logger.e(input + " 是一串数字");
             return false;
         }
 
         // length check
-        if(StringUtils.isMoreThanOneWord(input)){
+        if (StringUtils.isMoreThanOneWord(input)) {
             mView.errorPoint("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
             return false;
         }

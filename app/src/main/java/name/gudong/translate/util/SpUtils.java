@@ -67,6 +67,7 @@ public class SpUtils {
     //是否授予 Android M 浮窗权限
     private static final String KEY_DRAW_OVERLAYS_PERMISSION = "DRAW_OVERLAYS_PERMISSION";
 
+
     public static void setTranslateEngine(Context context, String version) {
         putStringPreference(context, KEY_TRANSLATE_FROM, version);
     }
@@ -126,6 +127,7 @@ public class SpUtils {
     public static boolean isWordBookReciteMode(Context context){
         return getBooleanPreference(context,KEY_WORDBOOK_RECITE_MODE,false);
     }
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 

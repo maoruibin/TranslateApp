@@ -40,7 +40,8 @@
         <!--android:theme="@android:style/Theme.Dialog"-->
 <activity
     android:name=".ui.activitys.ProcessTextActivity"
-    android:label="咕咚翻译"
+    android:label="@string/app_name"
+
     android:theme="@style/myTransparent">
     <intent-filter>
         <action android:name="android.intent.action.PROCESS_TEXT" />
@@ -76,12 +77,6 @@
         <activity android:name=".ui.activitys.WordsBookActivity" />
 
         <activity android:name=".ui.activitys.SettingActivity" />
-
-        <receiver android:name=".listener.AlarmReceiver">
-            <intent-filter>
-                <action android:name="name.gudong.translate.alarm"/>
-            </intent-filter>
-        </receiver>
 
         <!--<receiver android:name=".service.KeepAlarmLiveReceiver">-->
         <!--<intent-filter>-->

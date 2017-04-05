@@ -31,52 +31,54 @@
         android:background="@drawable/selector_pop_view"
         android:padding="15dp">
 
-        <ImageView
-            android:id="@+id/iv_favorite"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/normal_margin"
-            android:layout_toLeftOf="@+id/iv_done"
-            android:clickable="true"
-            app:srcCompat="@drawable/ic_favorite_border_white_24dp"/>
-
-        <ImageView
-            android:id="@+id/iv_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/normal_margin"
-            android:layout_toLeftOf="@+id/iv_sound"
-            android:clickable="true"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:srcCompat="@drawable/ic_done_white_24dp"/>
-
-
-        <ImageView
-            android:id="@+id/iv_sound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/view_gd"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:clickable="true"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:srcCompat="@drawable/ic_volume_up_white_24dp"/>
-
-        <View
-            android:id="@+id/view_gd"
             android:layout_alignParentRight="true"
-            android:layout_width="0dp"
-            android:layout_height="0dp"/>
+            android:gravity="right">
+            <ImageView
+                android:id="@+id/iv_favorite"
+                android:layout_width="@dimen/icon_size_pop"
+                android:layout_height="@dimen/icon_size_pop"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_toLeftOf="@+id/iv_done"
+                android:clickable="true"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_favorite_border_white_24dp"/>
+
+            <ImageView
+                android:id="@+id/iv_done"
+                android:layout_width="@dimen/icon_size_pop"
+                android:layout_height="@dimen/icon_size_pop"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/normal_margin"
+                android:layout_toLeftOf="@+id/iv_sound"
+                android:clickable="true"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_done_white_24dp"/>
+
+
+            <ImageView
+                android:id="@+id/iv_sound"
+                android:layout_width="@dimen/icon_size_pop"
+                android:layout_height="@dimen/icon_size_pop"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:clickable="true"
+                android:visibility="gone"
+                tools:visibility="gone"
+                app:srcCompat="@drawable/ic_volume_up_white_24dp"/>
+
+        </LinearLayout>
+
         <!-- 单词名称以及音标 -->
         <LinearLayout
             android:id="@+id/ll_pop_src"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/iv_favorite"
             android:orientation="horizontal"
             android:visibility="visible">
 

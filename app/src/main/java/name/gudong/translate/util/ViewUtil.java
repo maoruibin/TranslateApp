@@ -49,7 +49,7 @@ public class ViewUtil {
         TextView tv = new TextView(context);
         tv.setTextColor(ContextCompat.getColor(context, color));
         tv.setPadding(0,6,0,6);
-        tv.setTextSize(16);
+        tv.setTextSize(14);
         tv.setTextIsSelectable(isTextSelectable);
         tv.setGravity(Gravity.LEFT);
         tv.setText(word);

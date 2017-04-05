@@ -20,6 +20,7 @@
 
 package name.gudong.translate.mvp.presenters;
 
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.WhereBuilder;
@@ -68,6 +70,7 @@ import rx.schedulers.Schedulers;
  */
 public class MainPresenter extends BasePresenter<IMainView> {
     public static final String KEY_RESULT = "RESULT";
+    public static final int KEY_REQUEST_CODE_FOR_NOTI = 100;
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
@@ -166,6 +169,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (result == null) return null;
                         result.setCreate_time(System.currentTimeMillis());
                         result.setUpdate_time(System.currentTimeMillis());
+                        if (mView == null) return null;
                         mView.addTagForView(result);
 
                         if (!TextUtils.isEmpty(result.getEnMp3())) {
@@ -216,7 +220,9 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (BuildConfig.DEBUG) {
                             e.printStackTrace();
                         }
-                        mView.onError(e);
+                        if (mView != null) {
+                            mView.onError(e);
+                        }
                     }
 
                     @Override
@@ -244,10 +250,14 @@ public class MainPresenter extends BasePresenter<IMainView> {
      * 去评分
      */
     public void gotoMarket() {
-        Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(intent);
+        try {
+            Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            Toast.makeText(mContext, "没有找到合适的应用商店", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void prepareTranslateWay() {

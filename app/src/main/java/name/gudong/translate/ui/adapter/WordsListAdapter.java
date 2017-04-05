@@ -140,13 +140,12 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
             }
         });
 
-        holder.ivSound.setOnClickListener(new View.OnClickListener() {
+        holder.mRootWordLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String fileName = entity.getMp3FileName();
                 String mp3Url = entity.getEnMp3();
                 presenter.playSound(fileName, mp3Url);
-               // Toast.makeText(mContext,"sound",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -166,6 +165,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private RelativeLayout mRootView;
+        private RelativeLayout mRootWordLayout;
         private TextView tvSrc;
         private TextView tvPhonetic;
         private LinearLayout llDst;
@@ -176,6 +176,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
             mRootView = ButterKnife.findById(itemView, R.id.item_word_view);
+            mRootWordLayout = ButterKnife.findById(itemView, R.id.rl_words);
             llDst = ButterKnife.findById(itemView, ll_pop_dst);
             tvPhonetic = ButterKnife.findById(itemView, R.id.tv_pop_phonetic);
             tvSrc = ButterKnife.findById(itemView, R.id.tv_pop_src);
