@@ -96,10 +96,30 @@ public class ApiServiceModel {
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient() {
+        Cache cache = new Cache(GDApplication.get().getCacheDir(), 10240 * 1024);
+        
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(new StethoInterceptor());
         }
+        builder.addNetworkInterceptor(new CacheInterceptor())
+                .cache(cache)
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
         return builder.build();
+    }
+    
+    private class CacheInterceptor implements Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            Response response = chain.proceed(request);
+            return response.newBuilder()
+                    .removeHeader("Pragma")
+                    .removeHeader("Cache-Control")
+                    //cache for 30 days
+                    .header("Cache-Control", "max-age=" + 3600 * 24 * 30)
+                    .build();
+        }
     }
 }
