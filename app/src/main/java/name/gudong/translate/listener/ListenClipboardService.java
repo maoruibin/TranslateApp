@@ -93,9 +93,15 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
         registerReceiver(mScreenStatusReceive, screenStateFilter);
     }
 
-    private void unregisterScreenReceiver(){
-        if(mScreenStatusReceive != null){
-            unregisterReceiver(mScreenStatusReceive);
+    private void unregisterScreenReceiver() {
+        if (mScreenStatusReceive != null) {
+            try {
+                //反复开启背单词开关并关闭mainActivity，再快速打开mainActivity，打开背单词开关，再关闭mainActivity
+                //Service在onStart时，上一次的广播Receiver还没来得及注册，这一次就unRegister
+                //造成广播未注册就解注册，crash
+                unregisterReceiver(mScreenStatusReceive);
+            } catch (IllegalArgumentException e) {
+            }
         }
     }
 
