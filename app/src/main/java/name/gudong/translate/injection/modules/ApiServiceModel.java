@@ -105,7 +105,7 @@ public class ApiServiceModel {
         builder.addNetworkInterceptor(new CacheInterceptor())
                 .cache(cache)
                 .connectTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS);
         return builder.build();
     }
     
