@@ -23,19 +23,27 @@ package name.gudong.translate.injection.modules;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import name.gudong.translate.BuildConfig;
+import name.gudong.translate.GDApplication;
 import name.gudong.translate.mvp.model.ApiBaidu;
 import name.gudong.translate.mvp.model.ApiGoogle;
 import name.gudong.translate.mvp.model.ApiJinShan;
 import name.gudong.translate.mvp.model.ApiYouDao;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
+import okhttp3.Cache;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
