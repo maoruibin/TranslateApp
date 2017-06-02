@@ -77,11 +77,13 @@ public class YouDaoResult extends AbsResult{
 
     @Override
     public String wrapEnMp3() {
+        if(getBasic() == null)return "";
         return getBasic().getUkSpeech();
     }
 
     @Override
     public String wrapAmMp3() {
+        if(getBasic() == null)return "";
         return getBasic().getUsSpeech();
     }
 
