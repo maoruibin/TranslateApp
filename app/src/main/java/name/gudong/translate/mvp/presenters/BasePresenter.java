@@ -66,7 +66,7 @@ public class BasePresenter<V extends IBaseView> {
 
     protected FileManager mFileManager = new FileManager();
 
-    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService,Context context) {
+    public BasePresenter(LiteOrm liteOrm, WarpAipService apiService, Context context) {
         mLiteOrm = liteOrm;
         mWarpApiService = apiService;
         mContext = context;
@@ -79,21 +79,23 @@ public class BasePresenter<V extends IBaseView> {
         mContext = context;
     }
 
-    public void onCreate(){}
+    public void onCreate() {
+    }
 
     /**
      * attach IBaseView to Presenter
+     *
      * @param view view
      */
-    public void attachView(V view){
+    public void attachView(V view) {
         this.mView = view;
     }
 
-    public void onDestroy(){
+    public void onDestroy() {
         this.mView = null;
     }
 
-    protected Context getContext(){
+    protected Context getContext() {
         return mContext;
     }
 
@@ -106,73 +108,67 @@ public class BasePresenter<V extends IBaseView> {
     public Result isFavorite(String word) {
         QueryBuilder queryBuilder = new QueryBuilder(Result.class);
         queryBuilder = queryBuilder.whereEquals("query ", word);
-        List<Result>list = mLiteOrm.query(queryBuilder);
-        if(list.isEmpty()){
+        List<Result> list = mLiteOrm.query(queryBuilder);
+        if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
     }
 
-    protected long insertResultToDb(Result entity){
+    protected long insertResultToDb(Result entity) {
         return mLiteOrm.insert(entity);
     }
 
-    protected int deleteResultFromDb(Result entity){
+    protected int deleteResultFromDb(Result entity) {
         return mLiteOrm.delete(entity);
     }
 
-    public void playSound(String fileName,String mp3Url) {
-        Observable.just(mp3Url)
-               .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String entity) {
-                        File cacheFile = mFileManager.getCacheFileByUrl(getContext(), fileName);
-                        if (cacheFile != null && cacheFile.exists()) {
-                            playSound(cacheFile);
-                            return;
-                        }
-                        Call<ResponseBody> call = mSingleRequestService.downloadSoundFile(mp3Url);
-                        call.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if (response.isSuccessful()) {
-                                    try {
-                                        cacheAndPlaySound(getContext(), fileName, response.body().bytes());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                Logger.e(t.getMessage());
-                                t.printStackTrace();
-                            }
-                        });
+    public void playSound(String fileName, String mp3Url) {
+        File cacheFile = mFileManager.getCacheFileByUrl(getContext(), fileName);
+        if (cacheFile != null && cacheFile.exists()) {
+            playSound(cacheFile);
+            return;
+        }
+        Call<ResponseBody> call = mSingleRequestService.downloadSoundFile(mp3Url);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        cacheAndPlaySound(getContext(), fileName, response.body().bytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Logger.e(t.getMessage());
+                t.printStackTrace();
+            }
+        });
     }
 
-    public void startSoundAnim(View view){
-        addScaleAnim(view,1000,null);
+    public void startSoundAnim(View view) {
+        addScaleAnim(view, 1000, null);
     }
 
-    public void startFavoriteAnim(View view,AnimationEndListener listener){
-        addScaleAnim(view,500,listener);
+    public void startFavoriteAnim(View view, AnimationEndListener listener) {
+        addScaleAnim(view, 500, listener);
     }
 
     private void addScaleAnim(View view, long duration, AnimationEndListener listener) {
-        ObjectAnimator animY = ObjectAnimator.ofFloat(view, "scaleY", 1f,0.5f, 1f, 1.2f,1f);
-        ObjectAnimator animX = ObjectAnimator.ofFloat(view, "scaleX", 1f,0.5f, 1f, 1.2f,1f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 0.5f, 1f, 1.2f, 1f);
+        ObjectAnimator animX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 0.5f, 1f, 1.2f, 1f);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animX,animY);
+        animatorSet.playTogether(animX, animY);
         animatorSet.setDuration(duration);
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                if(listener != null){
+                if (listener != null) {
                     listener.onAnimationEnd(animation);
                 }
             }
@@ -180,7 +176,7 @@ public class BasePresenter<V extends IBaseView> {
         animatorSet.start();
     }
 
-    public interface AnimationEndListener{
+    public interface AnimationEndListener {
         void onAnimationEnd(Animator animation);
     }
 
@@ -197,9 +193,9 @@ public class BasePresenter<V extends IBaseView> {
     }
 
     private void playSound(File file) {
-        if(file == null)return;
+        if (file == null) return;
         Uri myUri = Uri.fromFile(file);
-        Logger.i("播放 "+file.getAbsolutePath());
+        Logger.i("播放 " + file.getAbsolutePath());
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -210,7 +206,6 @@ public class BasePresenter<V extends IBaseView> {
         }
         mediaPlayer.start();
     }
-
 
 
     private Callable<File> cacheFileObservable(Context context, String fileName, byte[] data) {
@@ -224,11 +219,12 @@ public class BasePresenter<V extends IBaseView> {
 
     /**
      * make a operation observable
+     *
      * @param func
      * @param <T>
      * @return the Observable
      */
-    protected  <T> Observable<T> makeObservable(final Callable<T> func) {
+    protected <T> Observable<T> makeObservable(final Callable<T> func) {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(Subscriber<? super T> subscriber) {
