@@ -307,6 +307,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mInput.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 MobclickAgent.onEvent(this, "action_translate_by_keyboard");
+                mInput.dismissDropDown();
                 translate();
                 return true;
             }
