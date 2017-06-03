@@ -51,7 +51,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 
 /**
  * Created by GuDong on 2/28/16 17:02.
@@ -60,6 +59,7 @@ import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 public class BookPresenter extends BasePresenter<IBookView> {
     private static final String KEY_TIP_OF_RECITE_OPEN = "TIP_OF_RECITE_OPEN";
     private static final String KEY_RECITE_MODE_SWITCH = "RECITE_MODE_SWITCH";
+    private static final String TAG = "BOOK_PRESENTER";
     @Inject
     public BookPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         super(liteOrm, apiService, singleRequestService,context);

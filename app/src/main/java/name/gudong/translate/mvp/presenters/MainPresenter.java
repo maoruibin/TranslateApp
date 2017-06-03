@@ -55,6 +55,7 @@ import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.DialogUtil;
+import name.gudong.translate.util.LocalDicHelper;
 import name.gudong.translate.util.SpUtils;
 import name.gudong.translate.util.Utils;
 import rx.Observable;
@@ -91,6 +92,21 @@ public class MainPresenter extends BasePresenter<IMainView> {
         }
     }
 
+    public void analysisLocalDic() {
+        makeObservable(new Callable<List<String>>() {
+            @Override
+            public List<String> call() throws Exception {
+                return LocalDicHelper.getLocalDic(mContext);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<String>>() {
+                    @Override
+                    public void call(List<String> strings) {
+                        mView.attachLocalDic(strings);
+                    }
+                });
+    }
     public boolean hasExtraResult(Intent intent) {
         return intent.hasExtra(KEY_RESULT);
     }
