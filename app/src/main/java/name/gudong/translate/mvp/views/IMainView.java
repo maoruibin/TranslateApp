@@ -20,6 +20,8 @@
 
 package name.gudong.translate.mvp.views;
 
+import java.util.List;
+
 import name.gudong.translate.mvp.model.entity.dayline.IDayLine;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
@@ -58,4 +60,7 @@ public interface IMainView extends IBaseView {
     void initWithNotFavorite();
 
     void fillDayline(IDayLine entity);
+
+    void attachLocalDic(List<String> dic);
+
 }

@@ -41,8 +41,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -53,6 +53,7 @@ import com.google.gson.JsonSyntaxException;
 import com.umeng.analytics.MobclickAgent;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,7 +80,7 @@ import name.gudong.translate.util.ViewUtil;
 public class MainActivity extends BaseActivity<MainPresenter> implements IMainView {
     private static final String TAG = "MainActivity";
     @BindView(android.R.id.input)
-    EditText mInput;
+    AutoCompleteTextView mInput;
     @BindView(R.id.list_result)
     LinearLayout mList;
     @BindView(R.id.sp_translate_way)
@@ -132,7 +133,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void setUpDayline(boolean isOpenDayLine) {
         View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet_view);
-        if(!isOpenDayLine){
+        if (!isOpenDayLine) {
             bottomSheet.setVisibility(View.GONE);
             return;
         }
@@ -143,7 +144,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
         mPresenter.dayline();
     }
-
 
 
     private void checkIntent() {
@@ -209,10 +209,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void initConfig() {
         //mPresenter.clearSoundCache();
+        mPresenter.analysisLocalDic();
     }
 
     private void checkVersion() {
-        if (BuildConfig.DEBUG) return;
+        //if (BuildConfig.DEBUG) return;
         mPresenter.checkVersionAndShowChangeLog();
 
     }
@@ -306,6 +307,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mInput.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 MobclickAgent.onEvent(this, "action_translate_by_keyboard");
+                mInput.dismissDropDown();
                 translate();
                 return true;
             }
@@ -386,7 +388,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void translate() {
-        Log.i(TAG,"execute translate");
+        Log.i(TAG, "execute translate");
         closeKeyboard();
         final String input = mInput.getText().toString().trim();
         if (checkInput(input)) {
@@ -569,6 +571,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mIvSoundDayline.setTag(entity);
     }
 
+    @Override
+    public void attachLocalDic(List<String> dic) {
+        ArrayAdapter<String> wordAdapter = new ArrayAdapter<>(MainActivity.this,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1,
+                dic);
+        mInput.setAdapter(wordAdapter);
+        mInput.setThreshold(1);
+        mInput.setOnItemClickListener((parent, view, position, id) -> translate());
+    }
+
     @OnClick(R.id.iv_sound_dayline)
     public void onClickDaylineSound(View view) {
         MobclickAgent.onEvent(getApplicationContext(), "sound_dayline_activity");
@@ -606,7 +619,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     public void onClickBottomSheet() {
-        if(mBottomSheetBehavior == null){
+        if (mBottomSheetBehavior == null) {
             return;
         }
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
@@ -627,7 +640,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
      * @return
      */
     private boolean checkBottomSheetIsExpandedAndReset() {
-        if(mBottomSheetBehavior == null){
+        if (mBottomSheetBehavior == null) {
             return false;
         }
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {

@@ -17,7 +17,6 @@ import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.manager.ReciteModulePreference;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
-import name.gudong.translate.util.Utils;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -56,7 +55,6 @@ public class SettingActivity extends AppCompatActivity {
 
         private com.jenzz.materialpreference.Preference mDurationPreference;
         private com.jenzz.materialpreference.Preference mIntervalPreference;
-        private com.jenzz.materialpreference.SwitchPreference mShowIconInNotification;
         private com.jenzz.materialpreference.SwitchPreference mUseReciteOrNot;
 
         ReciteModulePreference mRecitePreference;
@@ -74,7 +72,6 @@ public class SettingActivity extends AppCompatActivity {
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
-            mShowIconInNotification = (com.jenzz.materialpreference.SwitchPreference) findPreference("preference_show_icon_in_notification");
             mUseReciteOrNot = (com.jenzz.materialpreference.SwitchPreference) findPreference("preference_use_recite_or_not");
 
             mDurationPreference = (com.jenzz.materialpreference.Preference) findPreference("preference_show_time");
@@ -82,10 +79,7 @@ public class SettingActivity extends AppCompatActivity {
             mDurationPreference.setSummary(getArrayValue(R.array.tip_time,durationTime.getIndex()));
             mDurationPreference.setOnPreferenceClickListener(this);
 
-            mShowIconInNotification.setOnPreferenceChangeListener(this);
             mUseReciteOrNot.setOnPreferenceChangeListener(this);
-
-            findPreference("preference_show_float_view_use_system").setEnabled(Utils.isSDKHigh5());
 
             mIntervalPreference = (com.jenzz.materialpreference.Preference) findPreference("preference_recite_time");
             mIntervalPreference.setOnPreferenceClickListener(this);
@@ -207,13 +201,6 @@ public class SettingActivity extends AppCompatActivity {
                 case "preference_use_recite_or_not":
                     mRecitePreference.setReciteOpenOrNot((Boolean) newValue);
                     shiftRecite();
-                    break;
-                case "preference_show_icon_in_notification":
-                    if((Boolean) newValue){
-                        Utils.showNormalNotification(getActivity());
-                    }else{
-                        Utils.cancelNotification(getActivity());
-                    }
                     break;
                 case "preference_auto_play_sound":
                     mRecitePreference.setPlaySoundAuto((Boolean) newValue);
