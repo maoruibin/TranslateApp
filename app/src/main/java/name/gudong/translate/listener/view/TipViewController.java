@@ -94,8 +94,12 @@ public class TipViewController {
                         });
                         return null;
                     }
-                });
+                }).error(new ReciteException());
         mHideTipTask.subscribe();
+    }
+
+    protected class ReciteException extends Exception{
+
     }
 
     private void removeTipViewInner(TipView tipView) {

@@ -213,7 +213,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void checkVersion() {
-        if (BuildConfig.DEBUG) return;
+        //if (BuildConfig.DEBUG) return;
         mPresenter.checkVersionAndShowChangeLog();
 
     }
