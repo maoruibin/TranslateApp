@@ -47,6 +47,7 @@ import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.Utils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 import static name.gudong.translate.mvp.presenters.MainPresenter.KEY_REQUEST_CODE_FOR_NOTI;
@@ -94,8 +95,18 @@ public class TipViewController {
                         });
                         return null;
                     }
-                }).error(new ReciteException());
-        mHideTipTask.subscribe();
+                });
+        mHideTipTask.subscribe(new Action1() {
+            @Override
+            public void call(Object o) {
+
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
+            }
+        });
     }
 
     protected class ReciteException extends Exception{
