@@ -24,6 +24,7 @@ import dagger.Component;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.injection.ActivityScope;
 import name.gudong.translate.injection.modules.ActivityModule;
+import name.gudong.translate.ui.activitys.AboutActivity;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.ui.activitys.ProcessTextActivity;
 import name.gudong.translate.ui.activitys.WordsBookActivity;
@@ -36,6 +37,7 @@ import name.gudong.translate.ui.activitys.WordsBookActivity;
 @Component(modules = {ActivityModule.class},dependencies = {AppComponent.class})
 public interface ActivityComponent {
     void inject(MainActivity activity);
+    void inject(AboutActivity activity);
     void inject(WordsBookActivity activity);
     void inject(ProcessTextActivity activity);
     void inject(ListenClipboardService service);

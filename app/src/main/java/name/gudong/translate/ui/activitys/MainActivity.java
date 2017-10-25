@@ -265,7 +265,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 MobclickAgent.onEvent(this, "open_book");
                 break;
             case R.id.menu_about:
-                DialogUtil.showAbout(this, formatAboutVersion());
+//                DialogUtil.showAbout(this, formatAboutVersion());
+                NavigationManager.gotoAboutActivity(this);
                 MobclickAgent.onEvent(this, "menu_about");
                 closeKeyboard();
                 break;

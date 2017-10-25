@@ -28,7 +28,6 @@ import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
-import im.fir.sdk.FIR;
 import jonathanfinerty.once.Once;
 import me.drakeet.library.CrashWoodpecker;
 import me.drakeet.library.PatchMode;
@@ -51,7 +50,6 @@ public class GDApplication extends Application {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         mContext = this;
         setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
-        FIR.init(this);
         Once.initialise(this);
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))

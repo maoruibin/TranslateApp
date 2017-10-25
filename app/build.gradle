@@ -153,7 +153,6 @@ if (propFile.exists()) {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/Bughd_android_sdk_v1.3.7.jar')
     // Test
     testCompile "junit:junit:${test.junit}"
     // Android
@@ -197,4 +196,22 @@ dependencies {
 
     compile "com.facebook.stetho:stetho:${libs.stetho}"
     compile "com.facebook.stetho:stetho-okhttp3:${libs.stetho_okhttp3}"
+
+    compile ('me.drakeet.support:about:2.0.2', {
+        exclude module: 'recyclerview-v7'
+        exclude module: 'appcompat-v7'
+        exclude module: 'design'
+    })
+    compile('me.drakeet.multitype:multitype:3.3.3', {
+        exclude module: 'recyclerview-v7'
+        exclude module: 'appcompat-v7'
+        exclude module: 'design'
+    })
+
+    compile ('me.drakeet.support:about-extension:2.0.2', {
+        exclude module: 'recyclerview-v7'
+        exclude module: 'appcompat-v7'
+        exclude module: 'design'
+    })
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
