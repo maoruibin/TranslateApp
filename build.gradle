@@ -5,13 +5,13 @@ ext {
             compileVersion      : 26,
             minSdk              : 16,
             minSdk21            : 21,
-            targetSdk           : 25,
+            targetSdk           : 26,
             version_code        : 173,
             version_name        : "1.7.3"
     ]
 
     libraries = [
-            supportVersion      : "25.3.1",
+            supportVersion      : "26.0.0-alpha1",
             dagger              : "2.0",
             rxandroid           : "1.2.1",
             retrofit            : "2.1.0",
@@ -39,9 +39,6 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        maven {
-            url "http://maven.bughd.com/public"
-        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
@@ -52,7 +49,6 @@ buildscript {
 
         classpath 'com.google.gms:google-services:3.0.0'
 
-        classpath 'im.fir:gradle-fir-publisher:1.0.7'
     }
 }
 

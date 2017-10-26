@@ -1,17 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin:'im.fir.plugin.gradle'
-
-fir{
-    apiToken '15e5206706b555384608e449d6def6d3'
-    changeLog '添加单词本发音功能\n增加谷歌翻译的支持'
-}
-
-bughd{
-    projectId '56d30214a1de52062800000e'
-    apiToken 'e244dc781dd8455c9e6e04b62e1328a0'
-}
 
 //格式化打完完成后APK名称中的时间
 def releaseTime() {
@@ -214,4 +203,5 @@ dependencies {
         exclude module: 'design'
     })
     compile 'com.squareup.picasso:picasso:2.5.2'
+
 }

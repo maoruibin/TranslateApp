@@ -2,12 +2,15 @@ package name.gudong.translate.ui.activitys;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SeekBar;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -17,6 +20,7 @@ import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.manager.ReciteModulePreference;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
+import name.gudong.translate.widget.ThumbSelectPreference;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -56,6 +60,7 @@ public class SettingActivity extends AppCompatActivity {
         private com.jenzz.materialpreference.Preference mDurationPreference;
         private com.jenzz.materialpreference.Preference mIntervalPreference;
         private com.jenzz.materialpreference.SwitchPreference mUseReciteOrNot;
+        private com.jenzz.materialpreference.PreferenceCategory mReciteWord;
 
         ReciteModulePreference mRecitePreference;
 
@@ -73,6 +78,7 @@ public class SettingActivity extends AppCompatActivity {
             super.onViewCreated(view, savedInstanceState);
 
             mUseReciteOrNot = (com.jenzz.materialpreference.SwitchPreference) findPreference("preference_use_recite_or_not");
+            mReciteWord = (com.jenzz.materialpreference.PreferenceCategory) findPreference("category_recite_word");
 
             mDurationPreference = (com.jenzz.materialpreference.Preference) findPreference("preference_show_time");
             EDurationTipTime durationTime = mRecitePreference.getDurationTimeWay();
@@ -88,6 +94,7 @@ public class SettingActivity extends AppCompatActivity {
             mIntervalPreference.setSummary(getArrayValue(R.array.recipe_time,intervalTime.getIndex()));
 
             initUseReciteOrNotStatus();
+
         }
 
         private void initUseReciteOrNotStatus() {
@@ -119,14 +126,18 @@ public class SettingActivity extends AppCompatActivity {
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_2");
                                             break;
                                         case 1:
+                                            selectDurationTime(EDurationTipTime.THREE_SECOND.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_duration_time_3");
+                                            break;
+                                        case 2:
                                             selectDurationTime(EDurationTipTime.FOUR_SECOND.name());
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_4");
                                             break;
-                                        case 2:
+                                        case 3:
                                             selectDurationTime(EDurationTipTime.SIX_SECOND.name());
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_6");
                                             break;
-                                        case 3:
+                                        case 4:
                                             selectDurationTime(EDurationTipTime.TEN_SECOND.name());
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_10");
                                             break;

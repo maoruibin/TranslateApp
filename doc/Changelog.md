@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.7.3
+* 新增: 弹框显示时长增加 3秒选项
+* 新增: 加入独立的关于页面
+* 新增: 加入 Android 应用友链](https://github.com/android-links/AndroidLinks)
+
+
 ## Version 1.7.1
 * 新增: 输入单词自动联想提示（By [70kg](https://github.com/70kg) [添加单词完成自动提示 by 70kg · Pull Request \#53]）
 * 优化: 设置页面层级以及一个错别字 (17-08-20）
