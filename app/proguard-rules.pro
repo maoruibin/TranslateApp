@@ -120,4 +120,6 @@
 
 -keep class name.gudong.translate.mvp.model.entity.** {*;}
 
+-dontwarn com.squareup.okhttp.**
 
+-dontwarn com.bumptech.glide.**

@@ -197,11 +197,11 @@ dependencies {
         exclude module: 'design'
     })
 
-    compile ('me.drakeet.support:about-extension:2.0.2', {
-        exclude module: 'recyclerview-v7'
-        exclude module: 'appcompat-v7'
-        exclude module: 'design'
-    })
+//    compile ('me.drakeet.support:about-extension:2.0.2', {
+//        exclude module: 'recyclerview-v7'
+//        exclude module: 'appcompat-v7'
+//        exclude module: 'design'
+//    })
     compile 'com.squareup.picasso:picasso:2.5.2'
 
 }
