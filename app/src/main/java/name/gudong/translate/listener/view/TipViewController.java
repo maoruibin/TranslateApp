@@ -31,6 +31,7 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 
@@ -194,7 +195,9 @@ public class TipViewController {
 
         int flags = 0;
         int type;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.N_MR1){
+            type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             type = WindowManager.LayoutParams.TYPE_TOAST;
         } else {
             type = WindowManager.LayoutParams.TYPE_PHONE;

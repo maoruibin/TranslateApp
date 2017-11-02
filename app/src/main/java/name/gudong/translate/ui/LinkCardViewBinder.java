@@ -23,9 +23,6 @@ public class LinkCardViewBinder extends CardViewBinder {
             String s1 = "<p>查看历史日志</p><br><a href=\"https://github.com/maoruibin/TranslateApp/blob/master/doc/Changelog.md\" title=\"历史日志\">链接</a>";
             Spanned text = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // flags
-                // FROM_HTML_MODE_COMPACT：html块元素之间使用一个换行符分隔
-                // FROM_HTML_MODE_LEGACY：html块元素之间使用两个换行符分隔
                 text = Html.fromHtml(s1, Html.FROM_HTML_MODE_COMPACT);
             } else {
                 text = Html.fromHtml(s1);

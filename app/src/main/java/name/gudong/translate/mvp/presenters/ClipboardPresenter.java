@@ -177,7 +177,6 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
     private void performClipboardCheck(String queryText) {
         //处理缓存 因为粘贴板的回调操作可能触发多次
-        Logger.i("粘贴板的单词为 " + queryText);
         if (listQuery.contains(queryText)) {
             return;
         }
@@ -193,7 +192,6 @@ public class ClipboardPresenter extends TipFloatPresenter {
 
         // 检查粘贴板的内容是不是单词 以及是不是为空
         if (!checkInput(queryText)) {
-            Logger.i("粘贴板为空");
             return;
         }
         //查询数据

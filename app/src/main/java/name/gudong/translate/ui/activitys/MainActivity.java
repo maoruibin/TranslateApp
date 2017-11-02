@@ -128,7 +128,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         initConfig();
         setUpDayline(false);
         checkIntent();
-        checkOverPermission();
+        boolean needShowGuidePermissionDialog = checkOverPermission();
+        if(needShowGuidePermissionDialog){
+            showGuidePermissionDialog();
+        }else{
+            guideCheck();
+        }
+    }
+
+    private void guideCheck() {
+        if (!SpUtils.hasShowGuide(this)) {
+            showFloatTranslateExplainDialog();
+        }
     }
 
     private void setUpDayline(boolean isOpenDayLine) {
@@ -174,27 +185,41 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         }
     }
 
-    private void checkOverPermission() {
+    private boolean checkOverPermission() {
         if (Utils.isAndroidM()) {
             if (!SpUtils.hasGrantDrawOverlays(this) && !Settings.canDrawOverlays(this)) {
-                new AlertDialog.Builder(this).setMessage("检测到你的设备默禁用了浮窗权限，为了保证你可以正常使用咕咚翻译的划词翻译功能，需要你授予浮窗权限。")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                        Uri.parse("package:" + getPackageName()));
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
+                return true;
             } else {
                 SpUtils.setDrawOverlays(this, true);
+                return false;
             }
         } else {
             SpUtils.setDrawOverlays(this, true);
+            return false;
         }
+    }
+
+    /**
+     * 弹出引导用户打开悬浮权限的 dialog
+     */
+    private void showGuidePermissionDialog() {
+        new AlertDialog.Builder(this).setMessage("检测到你的设备默禁用了浮窗权限，为了保证你可以正常使用咕咚翻译的划词翻译功能，需要你授予浮窗权限。")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getPackageName()));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        guideCheck();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void showFloatTranslateExplainDialog(){
+        DialogUtil.showGuideFloatTranslate(this);
     }
 
     @Override
