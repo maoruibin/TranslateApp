@@ -81,18 +81,10 @@ public class AboutPresenter extends BasePresenter<IAboutView> {
         items.add(new License("MultiType", "drakeet", License.APACHE_2, "https://github.com/drakeet/MultiType"));
         items.add(new License("about-page", "drakeet", License.APACHE_2, "https://github.com/drakeet/about-page"));
 
-        items.add(new Category("什么是划词翻译"));
-        items.add(new LinkItem("划词翻译介绍"));
-
         mView.update();
     }
 
     private String getString(int card_content) {
         return mContext.getString(card_content);
-    }
-
-    public class LinkItem {
-        public LinkItem(String introduce) {
-        }
     }
 }
