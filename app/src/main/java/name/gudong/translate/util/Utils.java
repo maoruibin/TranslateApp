@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
@@ -92,25 +93,33 @@ public class Utils {
         }
     }
 
-    public static int[] getCurrentTime(){
+    public static void openUrl(Context context, String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(intent);
+    }
+
+    public static int[] getCurrentTime() {
         Calendar now = Calendar.getInstance();
         now.setTimeInMillis(System.currentTimeMillis());
-        int[]time = new int[3];
+        int[] time = new int[3];
         time[0] = now.get(Calendar.HOUR_OF_DAY);
         time[1] = now.get(Calendar.MINUTE);
         time[2] = now.get(Calendar.SECOND);
         return time;
     }
 
-    public static void shareText(Context context, String text){
+    public static void shareText(Context context, String text) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT,text);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
         sendIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(sendIntent, "发送"));
     }
+
     /**
      * check test string is json format or not
+     *
      * @param test content
      * @return true if it is format by json else return false
      */

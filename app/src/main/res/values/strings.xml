@@ -31,6 +31,7 @@
     <string name="interval_thirty_minute">半小时</string>
 
     <string name="duration_two_second">2秒钟</string>
+    <string name="duration_three_second">3秒钟</string>
     <string name="duration_four_second">4秒钟</string>
     <string name="duration_six_second">6秒钟</string>
     <string name="duration_ten_second">10秒钟</string>
@@ -114,5 +115,7 @@
     <string name="support_fail_because_not_install">检测到您尚未安装支付宝，所以打赏失败，再次感谢你的支持。</string>
     <string name="close">Close</string>
     <string name="ipsum">test jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjj</string>
+    <string name="card_content">咕咚翻译 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。</string>
+
 
 </resources>

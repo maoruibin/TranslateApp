@@ -2,12 +2,15 @@ package name.gudong.translate.ui.activitys;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SeekBar;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -17,6 +20,7 @@ import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.manager.ReciteModulePreference;
 import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
+import name.gudong.translate.widget.ThumbSelectPreference;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -56,6 +60,7 @@ public class SettingActivity extends AppCompatActivity {
         private com.jenzz.materialpreference.Preference mDurationPreference;
         private com.jenzz.materialpreference.Preference mIntervalPreference;
         private com.jenzz.materialpreference.SwitchPreference mUseReciteOrNot;
+        private com.jenzz.materialpreference.PreferenceCategory mReciteWord;
 
         ReciteModulePreference mRecitePreference;
 
@@ -73,6 +78,7 @@ public class SettingActivity extends AppCompatActivity {
             super.onViewCreated(view, savedInstanceState);
 
             mUseReciteOrNot = (com.jenzz.materialpreference.SwitchPreference) findPreference("preference_use_recite_or_not");
+            mReciteWord = (com.jenzz.materialpreference.PreferenceCategory) findPreference("category_recite_word");
 
             mDurationPreference = (com.jenzz.materialpreference.Preference) findPreference("preference_show_time");
             EDurationTipTime durationTime = mRecitePreference.getDurationTimeWay();
@@ -88,13 +94,14 @@ public class SettingActivity extends AppCompatActivity {
             mIntervalPreference.setSummary(getArrayValue(R.array.recipe_time,intervalTime.getIndex()));
 
             initUseReciteOrNotStatus();
+
         }
 
         private void initUseReciteOrNotStatus() {
             if (!Once.beenDone(KEY_TIP_OF_RECITE)) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("新功能提示")
-                        .setMessage("从 1.5.0 版本开始,咕咚翻译新增了定时提示生词的功能,。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，不一定那一次就记住了，当然这个功能是可以关闭的。\n\n灵感源于贝壳单词，感谢 @drakeet 同学的作品。")
+                        .setMessage("从 1.5.0 版本开始,咕咚翻译新增了定时提示生词的功能,。\n\n开启定时单词提醒后，系统会每隔五分钟(时间可以设置)，随机弹出一个提示框，用于随机展示你收藏的生词，帮助你记住这些陌生单词。\n\n我相信再陌生的单词，如果可以不停的在你眼前出现，不一定那一次就记住了，当然这个功能是可以关闭的。\n\n灵感源于贝壳单词。")
                         .setCancelable(false)
                         .setPositiveButton("知道了", ((dialog, which) -> {
                             Once.markDone(KEY_TIP_OF_RECITE);
@@ -119,14 +126,18 @@ public class SettingActivity extends AppCompatActivity {
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_2");
                                             break;
                                         case 1:
+                                            selectDurationTime(EDurationTipTime.THREE_SECOND.name());
+                                            MobclickAgent.onEvent(getActivity(),"menu_duration_time_3");
+                                            break;
+                                        case 2:
                                             selectDurationTime(EDurationTipTime.FOUR_SECOND.name());
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_4");
                                             break;
-                                        case 2:
+                                        case 3:
                                             selectDurationTime(EDurationTipTime.SIX_SECOND.name());
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_6");
                                             break;
-                                        case 3:
+                                        case 4:
                                             selectDurationTime(EDurationTipTime.TEN_SECOND.name());
                                             MobclickAgent.onEvent(getActivity(),"menu_duration_time_10");
                                             break;

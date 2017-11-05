@@ -1,5 +1,7 @@
 package name.gudong.translate.mvp.model;
 
+
+import name.gudong.translate.mvp.model.entity.RecommendedResponse;
 import name.gudong.translate.mvp.model.entity.dayline.JinshanDayLineEntity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,4 +19,7 @@ public interface SingleRequestService {
 
     @GET
     Observable<JinshanDayLineEntity> dayline(@Url String daylineUrl);
+
+    @GET
+    Observable<RecommendedResponse> app_recommend(@Url String app_recommend_url);
 }

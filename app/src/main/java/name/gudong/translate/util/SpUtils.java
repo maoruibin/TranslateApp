@@ -67,6 +67,9 @@ public class SpUtils {
     //是否授予 Android M 浮窗权限
     private static final String KEY_DRAW_OVERLAYS_PERMISSION = "DRAW_OVERLAYS_PERMISSION";
 
+    //是否已经显示过用户引导
+    private static final String KEY_HAS_SHOW_GUIDE = "HAS_SHOW_GUIDE";
+
 
     public static void setTranslateEngine(Context context, String version) {
         putStringPreference(context, KEY_TRANSLATE_FROM, version);
@@ -119,6 +122,13 @@ public class SpUtils {
         return getBooleanPreference(context, KEY_DRAW_OVERLAYS_PERMISSION,false);
     }
 
+    public static boolean hasShowGuide(Context context){
+        return getBooleanPreference(context, KEY_HAS_SHOW_GUIDE,false);
+    }
+
+    public static void setHasShowGuideFlag(Context context,boolean isShow){
+        putBooleanPreference(context,KEY_HAS_SHOW_GUIDE,isShow);
+    }
 
     public static void setWordBookReciteMode(Context context,boolean isReciteMode){
         putBooleanPreference(context,KEY_WORDBOOK_RECITE_MODE,isReciteMode);

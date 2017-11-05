@@ -87,6 +87,10 @@ public class ReciteModulePreference extends TrayPreferences{
         return EDurationTipTime.valueOf(getDurationTipTime());
     }
 
+    public int getDurationTime() {
+        return EDurationTipTime.valueOf(getDurationTipTime()).getDurationTime();
+    }
+
 
     public boolean isPlaySoundAuto(){
         return getBoolean(KEY_PREFERENCE_AUTO_PLAY_SOUND,false);

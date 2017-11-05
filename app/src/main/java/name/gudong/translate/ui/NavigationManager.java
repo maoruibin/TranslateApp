@@ -10,6 +10,7 @@ import java.util.List;
 
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.MainPresenter;
+import name.gudong.translate.ui.activitys.AboutActivity;
 import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.ui.activitys.SettingActivity;
 
@@ -37,6 +38,10 @@ public class NavigationManager {
     public static void gotoMainActivity(Context context, Result entity) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(MainPresenter.KEY_RESULT, entity);
+        context.startActivity(intent);
+    }
+    public static void gotoAboutActivity(Context context) {
+        Intent intent = new Intent(context, AboutActivity.class);
         context.startActivity(intent);
     }
 }

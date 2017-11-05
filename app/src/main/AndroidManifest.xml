@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
         <!-- begin umeng -->
         <meta-data
             android:name="UMENG_APPKEY"
@@ -38,19 +39,20 @@
 
         <!--android:theme="@android:style/Theme.NoDisplay"-->
         <!--android:theme="@android:style/Theme.Dialog"-->
-<activity
-    android:name=".ui.activitys.ProcessTextActivity"
-    android:label="@string/app_name"
+        <activity
+            android:name=".ui.activitys.ProcessTextActivity"
+            android:label="@string/app_name"
 
-    android:theme="@style/myTransparent">
-    <intent-filter>
-        <action android:name="android.intent.action.PROCESS_TEXT" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <data android:mimeType="text/plain" />
-    </intent-filter>
-</activity>
+            android:theme="@style/myTransparent">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
 
-        <activity android:name=".ui.activitys.MainActivity"
+        <activity
+            android:name=".ui.activitys.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,7 +65,7 @@
             android:name=".listener.ListenClipboardService"
             android:enabled="true"
             android:label="@string/app_process_text"
-            android:process=":process"/>
+            android:process=":process" />
 
         <receiver
             android:name=".listener.BootCompletedReceiver"
@@ -78,9 +80,13 @@
 
         <activity android:name=".ui.activitys.SettingActivity" />
 
+        <activity
+            android:name=".ui.activitys.AboutActivity"
+            android:theme="@style/AppTheme.About" />
+
         <!--<receiver android:name=".service.KeepAlarmLiveReceiver">-->
         <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
+        <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
         <!--</intent-filter>-->
         <!--</receiver>-->
 

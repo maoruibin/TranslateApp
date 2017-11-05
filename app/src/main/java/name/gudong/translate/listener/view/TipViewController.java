@@ -31,6 +31,7 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 
@@ -47,6 +48,7 @@ import name.gudong.translate.ui.activitys.MainActivity;
 import name.gudong.translate.util.Utils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 import static name.gudong.translate.mvp.presenters.MainPresenter.KEY_REQUEST_CODE_FOR_NOTI;
@@ -94,8 +96,18 @@ public class TipViewController {
                         });
                         return null;
                     }
-                }).error(new ReciteException());
-        mHideTipTask.subscribe();
+                });
+        mHideTipTask.subscribe(new Action1() {
+            @Override
+            public void call(Object o) {
+
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
+            }
+        });
     }
 
     protected class ReciteException extends Exception{
@@ -183,7 +195,9 @@ public class TipViewController {
 
         int flags = 0;
         int type;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.N_MR1){
+            type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             type = WindowManager.LayoutParams.TYPE_TOAST;
         } else {
             type = WindowManager.LayoutParams.TYPE_PHONE;

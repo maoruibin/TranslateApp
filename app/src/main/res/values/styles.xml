@@ -30,4 +30,16 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="AppTheme.About" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@android:color/black</item>
+
+        <!--optional-->
+        <!--<item name="aboutPageHeaderBackground">reference|color</item>-->
+        <!--<item name="aboutPageHeaderContentScrim">reference|color</item>-->
+        <!--<item name="aboutPageHeaderTextColor">color</item>-->
+        <!--<item name="aboutPageNavigationIcon">reference</item>-->
+    </style>
+
 </resources>

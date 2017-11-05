@@ -18,6 +18,7 @@
 
     <string-array name="tip_time">
         <item>@string/duration_two_second</item>
+        <item>@string/duration_three_second</item>
         <item>@string/duration_four_second</item>
         <item>@string/duration_six_second</item>
         <item>@string/duration_ten_second</item>
