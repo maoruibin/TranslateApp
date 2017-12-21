@@ -58,6 +58,10 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 
 `Note` 3、4都是借鉴自[廖祜秋](https://github.com/liaohuqiu/)的开源项目[android-UCToast](https://github.com/liaohuqiu/android-UCToast)，感谢~
 
+## 适配问题
+
+- [Android 8.0系统上使用WindowManager添加view的一个问题](https://juejin.im/entry/5a3a0ca75188257d391d30ac)
+
 ## 更新日志
 [日志列表](./doc/Changelog.md)
 

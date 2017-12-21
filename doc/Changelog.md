@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.7.5
+* 修复: Android O 上奔溃的问题(WindowManage addView 时的适配问题)
+
 ## Version 1.7.4
 * 修复: Android 7.1.1 上奔溃的问题
 * 新增: 划词翻译介绍 Dialog 

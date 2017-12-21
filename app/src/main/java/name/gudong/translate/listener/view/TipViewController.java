@@ -195,7 +195,9 @@ public class TipViewController {
 
         int flags = 0;
         int type;
-        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.N_MR1){
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.O){
+            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        }else if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.N_MR1){
             type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             type = WindowManager.LayoutParams.TYPE_TOAST;

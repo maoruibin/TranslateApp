@@ -6,8 +6,8 @@ ext {
             minSdk              : 16,
             minSdk21            : 21,
             targetSdk           : 26,
-            version_code        : 174,
-            version_name        : "1.7.4"
+            version_code        : 175,
+            version_name        : "1.7.5"
     ]
 
     libraries = [
