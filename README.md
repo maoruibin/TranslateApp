@@ -61,8 +61,9 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 ## 更新日志
 [日志列表](./doc/Changelog.md)
 
-## 捐赠
-[咕咚翻译捐赠](http://gudong.name/1990/03/01/list_pay.html)
+## 支持一下
+* [去捐赠打赏](http://gudong.name/vdonate/)
+* [已捐赠记录](http://gudong.name/1990/03/01/list_pay.html)
 
 ## 关于作者
 
