@@ -225,4 +225,6 @@ dependencies {
         transitive = true;
     }
 
+    compile 'com.github.anzewei:parallaxbacklayout:1.1.9'
+
 }

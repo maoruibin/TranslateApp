@@ -36,6 +36,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,6 +60,7 @@ import name.gudong.translate.widget.DividerItemDecoration;
 
 import static name.gudong.translate.util.SpUtils.isWordBookReciteMode;
 
+@ParallaxBack
 public class WordsBookActivity extends BaseActivity<BookPresenter> implements IBookView {
     private static final String KEY_HIST_LIST_FLAG = "isHistList";
     @BindView(R.id.rv_words_list)

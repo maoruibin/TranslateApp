@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
+
 import javax.inject.Inject;
 
 import me.drakeet.multitype.Items;
@@ -19,6 +21,7 @@ import name.gudong.translate.injection.modules.ActivityModule;
 import name.gudong.translate.mvp.presenters.AboutPresenter;
 import name.gudong.translate.mvp.views.IAboutView;
 
+@ParallaxBack
 public class AboutActivity extends AbsAboutActivity implements IAboutView {
     @Inject
     protected AboutPresenter mPresenter;

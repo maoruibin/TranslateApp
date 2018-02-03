@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
+import com.github.anzewei.parallaxbacklayout.ParallaxHelper;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
@@ -61,6 +62,8 @@ public class GDApplication extends Application {
         initCrashWoodpecker();
 
         Stetho.initializeWithDefaults(this);
+
+        registerActivityLifecycleCallbacks(ParallaxHelper.getInstance());
     }
 
     private void initCrashWoodpecker() {

@@ -123,3 +123,8 @@
 -dontwarn com.squareup.okhttp.**
 
 -dontwarn com.bumptech.glide.**
+
+-keep public enum com.github.anzewei.parallaxbacklayout.ParallaxBack$** {
+     **[] $VALUES;
+     public *;
+}

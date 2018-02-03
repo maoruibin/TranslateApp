@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -36,6 +37,7 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+@ParallaxBack
 public class AcknowledgementsActivity extends BaseActivity<AcknowledgementPresenter> implements AcknowledgementAdapter.AcknowledgementItemClickListener {
 
     private static final String TAG = "Acknowledgements";
