@@ -28,6 +28,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.litesuits.orm.LiteOrm;
@@ -240,6 +241,12 @@ public class BasePresenter<V extends IBaseView> {
 
 
     void recordHistoryWords(Result entity) {
+        if(entity==null){
+            return;
+        }
+        if(TextUtils.isEmpty(entity.getQuery())){
+            return;
+        }
         HistoryResult result = HistoryResult.toResult(entity);
         mLiteOrm.insert(result);
     }

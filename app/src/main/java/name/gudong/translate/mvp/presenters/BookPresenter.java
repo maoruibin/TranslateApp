@@ -142,8 +142,14 @@ public class BookPresenter extends BasePresenter<IBookView> {
     }
 
     private Callable<Integer> deleteWordReal(Result entity) {
-        return () -> mLiteOrm.delete(entity);
+        if(entity instanceof HistoryResult){
+            HistoryResult result = (HistoryResult) entity;
+            return () -> mLiteOrm.delete(result);
+        }else {
+            return () -> mLiteOrm.delete(entity);
+        }
     }
+
 
     public String getWordsJsonString(List<Result>results){
         Gson gson = new Gson();

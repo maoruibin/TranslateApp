@@ -49,6 +49,7 @@ import name.gudong.translate.R;
 import name.gudong.translate.injection.components.AppComponent;
 import name.gudong.translate.injection.components.DaggerActivityComponent;
 import name.gudong.translate.injection.modules.ActivityModule;
+import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BookPresenter;
 import name.gudong.translate.mvp.presenters.MainPresenter;
@@ -269,7 +270,11 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
                                 .setPositiveButton("删除", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        mPresenter.deleteWords(entity);
+                                        Result temp = entity;
+                                        if(mIsHistList){
+                                            temp = HistoryResult.toResult(entity);
+                                        }
+                                        mPresenter.deleteWords(temp);
                                     }
                                 })
                                 .setNegativeButton("取消", null)
