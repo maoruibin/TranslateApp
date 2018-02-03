@@ -116,6 +116,8 @@
     <string name="close">Close</string>
     <string name="ipsum">test jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjjtest jjjjjjjjjj</string>
     <string name="card_content">咕咚翻译 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。</string>
+    <string name="empty_hist">你还没有查询过任何单词</string>
+    <string name="hist_record">历史记录</string>
 
 
 </resources>

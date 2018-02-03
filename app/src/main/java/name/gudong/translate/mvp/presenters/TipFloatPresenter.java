@@ -37,6 +37,7 @@ import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
+import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.ITipFloatView;
@@ -102,9 +103,12 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
                         realResult.setCreate_time(System.currentTimeMillis());
                         realResult.setUpdate_time(System.currentTimeMillis());
                         mView.showResult(realResult, true);
+                        recordHistoryWords(realResult);
                     }
                 });
     }
+
+
 
 
     public void initFavoriteStatus(Result result) {

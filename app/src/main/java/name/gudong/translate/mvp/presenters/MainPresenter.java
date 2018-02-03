@@ -50,6 +50,7 @@ import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.dayline.JinshanDayLineEntity;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
+import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
@@ -185,6 +186,9 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (result == null) return null;
                         result.setCreate_time(System.currentTimeMillis());
                         result.setUpdate_time(System.currentTimeMillis());
+
+                        recordHistoryWords(result);
+
                         if (mView == null) return null;
                         mView.addTagForView(result);
 
@@ -207,6 +211,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                             temp.add(0, "[" + phAm + "]");
                             return temp;
                         }
+
                         return absResult.wrapTranslation();
                     }
                 })

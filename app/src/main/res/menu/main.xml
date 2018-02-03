@@ -30,6 +30,11 @@
         android:title="@string/favorite_list"/>
 
     <item
+        android:id="@+id/menu_hist"
+        app:showAsAction="never"
+        android:title="@string/hist_record"/>
+
+    <item
         android:id="@+id/menu_support"
         app:showAsAction="never"
         android:title="@string/menu_support"/>

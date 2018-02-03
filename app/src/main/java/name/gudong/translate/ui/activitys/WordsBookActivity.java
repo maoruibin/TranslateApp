@@ -59,7 +59,7 @@ import name.gudong.translate.widget.DividerItemDecoration;
 import static name.gudong.translate.util.SpUtils.isWordBookReciteMode;
 
 public class WordsBookActivity extends BaseActivity<BookPresenter> implements IBookView {
-
+    private static final String KEY_HIST_LIST_FLAG = "isHistList";
     @BindView(R.id.rv_words_list)
     RecyclerView mRvWordsList;
 
@@ -68,10 +68,18 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
 
     private List<Result> mResult = new ArrayList<>();
 
+    private boolean mIsHistList = false;
+
     WordsListAdapter mAdapter;
 
     public static void gotoWordsBook(Context context) {
         Intent intent = new Intent(context, WordsBookActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void gotoWordsHist(Context context) {
+        Intent intent = new Intent(context, WordsBookActivity.class);
+        intent.putExtra(KEY_HIST_LIST_FLAG, true);
         context.startActivity(intent);
     }
 
@@ -80,20 +88,35 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_words_book);
         ButterKnife.bind(this);
-        initActionBar(true, "单词本");
+        mIsHistList = getIntent().getBooleanExtra(KEY_HIST_LIST_FLAG, false);
+        if(mIsHistList){
+            emptyTipText.setText(R.string.empty_hist);
+        }else{
+            emptyTipText.setText(R.string.empty_tip);
+        }
+        initActionBar(true, mIsHistList ? "历史查询" : "单词本");
         initListView();
         initData();
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.book, menu);
+        getMenuInflater().inflate(mIsHistList ? R.menu.hist : R.menu.book, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        if(mIsHistList){
+            if(mAdapter.getItemCount() > 0){
+                menu.findItem(R.id.menu_clear_hist).setEnabled(true);
+            }else{
+                menu.findItem(R.id.menu_clear_hist).setEnabled(false);
+            }
+            return super.onPrepareOptionsMenu(menu);
+        }
         if (mAdapter.getItemCount() <= 0) {
             menu.findItem(R.id.menu_sort).setVisible(false);
             menu.findItem(R.id.menu_recite_mode).setVisible(false);
@@ -101,7 +124,13 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
             menu.findItem(R.id.menu_sort).setVisible(true);
             menu.findItem(R.id.menu_recite_mode).setVisible(true);
         }
+        if(mAdapter.getItemCount() > 0){
+            menu.findItem(R.id.menu_backup).setEnabled(true);
+        }else{
+            menu.findItem(R.id.menu_backup).setEnabled(false);
+        }
         menu.findItem(R.id.menu_recite_mode).setChecked(isWordBookReciteMode(this));
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -125,7 +154,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
                                 }
                             })
                             .show();
-                }else{
+                } else {
                     switchReciteMode(item);
                 }
                 break;
@@ -196,6 +225,19 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
                 });
                 mAdapter.update(mResult);
                 break;
+            case R.id.menu_clear_hist:
+                new AlertDialog.Builder(this)
+                        .setTitle("提示")
+                        .setMessage("确定要清空所有的历史查询记录吗？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mPresenter.clearHist();
+                            }
+                        })
+                        .setNegativeButton("取消",null)
+                        .show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -207,8 +249,8 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
     }
 
     private void initData() {
-        mPresenter.initStatus();
-        mPresenter.getWords();
+        mPresenter.initStatus(mIsHistList);
+        mPresenter.getWords(mIsHistList);
     }
 
     private void initListView() {
@@ -231,7 +273,7 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
                                 .show();
                         break;
                     case R.id.pop_research:
-                        MainPresenter.jumpMainActivityFromClickTipView(WordsBookActivity.this,entity);
+                        MainPresenter.jumpMainActivityFromClickTipView(WordsBookActivity.this, entity);
                         finish();
                         break;
                 }
@@ -267,8 +309,10 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
             mAdapter.update(transResultEntities, isReciteMode);
             mResult = transResultEntities;
         }
-        //提示开启背单词开关
-        mPresenter.checkPointRecite(transResultEntities.size());
+        if(!mIsHistList){
+            //提示开启背单词开关
+            mPresenter.checkPointRecite(transResultEntities.size());
+        }
     }
 
     @Override
@@ -299,6 +343,13 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
     @Override
     public void showTipDataHaveNoChange() {
         showTip("数据没有任何变化");
+    }
+
+    @Override
+    public void showEmptyList() {
+        mAdapter.clear();
+        emptyTipText.setVisibility(View.VISIBLE);
+        showTip("清除成功");
     }
 
     /***

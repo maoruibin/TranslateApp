@@ -289,6 +289,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 WordsBookActivity.gotoWordsBook(this);
                 MobclickAgent.onEvent(this, "open_book");
                 break;
+            case R.id.menu_hist:
+                WordsBookActivity.gotoWordsHist(this);
+                MobclickAgent.onEvent(this, "open_history");
+                break;
             case R.id.menu_about:
 //                DialogUtil.showAbout(this, formatAboutVersion());
                 NavigationManager.gotoAboutActivity(this);

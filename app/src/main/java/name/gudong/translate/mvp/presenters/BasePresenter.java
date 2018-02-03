@@ -42,6 +42,7 @@ import java.util.concurrent.Callable;
 import name.gudong.translate.manager.FileManager;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
+import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.views.IBaseView;
 import okhttp3.ResponseBody;
@@ -235,5 +236,11 @@ public class BasePresenter<V extends IBaseView> {
                 }
             }
         });
+    }
+
+
+    void recordHistoryWords(Result entity) {
+        HistoryResult result = HistoryResult.toResult(entity);
+        mLiteOrm.insert(result);
     }
 }
