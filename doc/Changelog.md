@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.8.0
+* 增加历史记录
+* 增加手势返回
+* 增加 Fabric  统计
+
 ## Version 1.7.5
 * 修复: Android O 上奔溃的问题(WindowManage addView 时的适配问题)
 
