@@ -20,6 +20,7 @@
 
 package name.gudong.translate.mvp.presenters;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
