@@ -135,7 +135,7 @@ android {
 
 //set release sign info synchronously
 def Properties props = new Properties()
-def propFile = file('../gradle.properties')
+def propFile = file('../local.properties')
 if (propFile.exists()) {
     props.load(new FileInputStream(propFile))
     if (props != null &&
