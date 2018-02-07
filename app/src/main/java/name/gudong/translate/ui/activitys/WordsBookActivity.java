@@ -36,6 +36,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 
 import java.util.ArrayList;
@@ -101,7 +103,14 @@ public class WordsBookActivity extends BaseActivity<BookPresenter> implements IB
         initActionBar(true, mIsHistList ? "历史查询" : "单词本");
         initListView();
         initData();
+        track();
+    }
 
+    private void track() {
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName(getTitle().toString())
+                .putContentType(getTitle().toString())
+                .putContentId(mIsHistList?"histList":"bookList"));
     }
 
 

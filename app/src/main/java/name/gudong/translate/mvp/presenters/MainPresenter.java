@@ -105,7 +105,10 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .subscribe(new Action1<List<String>>() {
                     @Override
                     public void call(List<String> strings) {
-                        mView.attachLocalDic(strings);
+                        if(mView!=null){
+                            mView.attachLocalDic(strings);
+                        }
+
                     }
                 });
     }
@@ -234,7 +237,9 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        mView.onTranslateComplete();
+                        if(mView!=null){
+                            mView.onTranslateComplete();
+                        }
                     }
 
                     @Override
