@@ -52,6 +52,7 @@ import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.ClipboardPresenter;
 import name.gudong.translate.mvp.views.ITipFloatView;
+import name.gudong.translate.util.AnswerUtil;
 
 
 public final class ListenClipboardService extends Service implements ITipFloatView, TipView.ITipViewListener {
@@ -206,6 +207,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
     @Override
     public void onClickFavorite(View view, Result result) {
         MobclickAgent.onEvent(this, "favorite_service");
+        AnswerUtil.actionFavorite("listenClipboard");
         mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -216,7 +218,7 @@ public final class ListenClipboardService extends Service implements ITipFloatVi
 
     @Override
     public void onClickPlaySound(View view, Result result) {
-        MobclickAgent.onEvent(this, "sound_service");
+        AnswerUtil.actionSound("listenClipboard");
         mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         mPresenter.startSoundAnim(view);
     }

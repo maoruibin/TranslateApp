@@ -56,6 +56,7 @@ import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.ui.activitys.MainActivity;
+import name.gudong.translate.util.AnswerUtil;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.LocalDicHelper;
 import name.gudong.translate.util.SpUtils;
@@ -160,10 +161,19 @@ public class MainPresenter extends BasePresenter<IMainView> {
             }
         }
     }
-
+    private String mLastQuery = "";
+    private ETranslateFrom  mLastFrom = ETranslateFrom.JIN_SHAN;
     public void executeSearch(String keywords) {
+        ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
+        //去掉重复
+        if(mLastQuery.equals(keywords) && mLastFrom == from){
+            return;
+        }
+        mLastQuery = keywords;
+        mLastFrom = from;
+
         mView.onPrepareTranslate();
-        Observable<AbsResult> observable = mWarpApiService.translate(SpUtils.getTranslateEngineWay(getContext()), keywords);
+        Observable<AbsResult> observable = mWarpApiService.translate(from, keywords);
         if (observable == null) {
             Logger.e("Observable<AbsResult> is null");
             return;
@@ -192,6 +202,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         result.setUpdate_time(System.currentTimeMillis());
 
                         recordHistoryWords(result);
+                        trackTranslate();
 
                         if (mView == null) return null;
                         mView.addTagForView(result);
@@ -229,6 +240,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     @Override
                     public Observable<String> call(List<String> strings) {
                         if (strings == null) {
+                            trackTranslateFail("啥也没有翻译出来");
                             return Observable.error(new Exception(("啥也没有翻译出来!")));
                         }
                         return Observable.from(strings);
@@ -250,6 +262,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (mView != null) {
                             mView.onError(e);
                         }
+                        trackTranslateFail(e.getMessage());
                     }
 
                     @Override
@@ -290,6 +303,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void prepareTranslateWay() {
         ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
         mView.initTranslateEngineSetting(from);
+        AnswerUtil.showMainView(from.getName());
     }
 
     /**

@@ -46,6 +46,7 @@ import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.views.IBaseView;
+import name.gudong.translate.util.AnswerUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -237,6 +238,14 @@ public class BasePresenter<V extends IBaseView> {
                 }
             }
         });
+    }
+
+    void trackTranslate(){
+        AnswerUtil.translateSuccess();
+    }
+
+    public void trackTranslateFail(String msg){
+        AnswerUtil.translateFail(msg);
     }
 
 

@@ -71,6 +71,7 @@ import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.MainPresenter;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.ui.NavigationManager;
+import name.gudong.translate.util.AnswerUtil;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.InputMethodUtils;
 import name.gudong.translate.util.SpUtils;
@@ -297,6 +298,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 //                DialogUtil.showAbout(this, formatAboutVersion());
                 NavigationManager.gotoAboutActivity(this);
                 MobclickAgent.onEvent(this, "menu_about");
+                AnswerUtil.actionShowAbout();
                 closeKeyboard();
                 break;
             case R.id.menu_setting:
@@ -311,6 +313,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             case R.id.menu_support:
                 DialogUtil.showSupport(this);
                 MobclickAgent.onEvent(this, "menu_support");
+                AnswerUtil.actionSupport();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -462,6 +465,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             msg = getString(R.string.tip_unknown) + (BuildConfig.DEBUG ? "  " + e.getMessage() : "");
             e.printStackTrace();
         }
+        mPresenter.trackTranslateFail(msg);
         mList.addView(ViewUtil.getWordsView(MainActivity.this, msg, android.R.color.holo_red_light, false));
         mBtTranslate.setEnabled(true);
         mBtTranslate.setText(R.string.action_translate);
@@ -520,6 +524,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @OnClick(R.id.iv_favorite)
     public void onClickFavorite(final View view) {
+        AnswerUtil.actionFavorite("main");
         mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -559,6 +564,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         }
         mPresenter.startSoundAnim(view);
         MobclickAgent.onEvent(getApplicationContext(), "sound_main_activity");
+        AnswerUtil.actionSound("main");
     }
 
     @Override
