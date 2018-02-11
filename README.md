@@ -68,6 +68,15 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 ## 捐赠
 [咕咚翻译捐赠](http://gudong.name/1990/03/01/list_pay.html)
 
+## 贡献者
+
+* [70kg \(70kg\)](https://github.com/70kg)
+* [kymjs \(张涛\)](https://github.com/kymjs)
+* [leizhiyuan \(Lei Zhiyuan\)](https://github.com/leizhiyuan)
+* [LevineLiu \(LevineLiu\)](https://github.com/LevineLiu)
+* [LostKe](https://github.com/LostKe)
+* [WonShaw \(万宵\)](https://github.com/WonShaw)
+
 ## 关于作者
 
 咕咚，爱折腾、爱新鲜，爱篮球。

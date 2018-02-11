@@ -58,15 +58,16 @@ public class AboutPresenter extends BasePresenter<IAboutView> {
         items.add(new Category("介绍与帮助"));
         items.add(new Card(getString(R.string.card_content)));
 
-        items.add(new Category("Main Developer"));
+        items.add(new Category("Developers"));
         items.add(new Contributor(R.drawable.profile_circle_for_donate, "gudong", "Developer & designer", "http://weibo.com/maoruibin"));
-//        items.add(new Contributor(R.drawable.header, "TonyLOfficial", "designer", "http://weibo.com/u/2795793021"));
-//        items.add(new Contributor(R.drawable.header, "chenyingsunny", "Developer", "https://github.com/chenyingsunny"));
-//        items.add(new Contributor(R.drawable.header, "leizhiyuan", "Developer", "https://github.com/leizhiyuan"));
-//        items.add(new Contributor(R.drawable.header, "kymjs", "Developer", "https://github.com/kymjs"));
-//        items.add(new Contributor(R.drawable.header, "WonShaw", "Developer", "https://github.com/WonShaw"));
-//        items.add(new Contributor(R.drawable.header, "LevineLiu", "Developer", "https://github.com/LevineLiu"));
-//        items.add(new Contributor(R.drawable.header, "LostKe", "Developer", "https://github.com/LostKe"));
+        items.add(new Contributor(R.drawable.header, "TonyLOfficial", "designer", "http://weibo.com/u/2795793021"));
+        items.add(new Contributor(R.drawable.header, "chenyingsunny", "Developer", "https://github.com/chenyingsunny"));
+        items.add(new Contributor(R.drawable.header, "leizhiyuan", "Developer", "https://github.com/leizhiyuan"));
+        items.add(new Contributor(R.drawable.zt, "kymjs", "Developer", "https://github.com/kymjs"));
+        items.add(new Contributor(R.drawable.header, "WonShaw", "Developer", "https://github.com/WonShaw"));
+        items.add(new Contributor(R.drawable.header, "LevineLiu", "Developer", "https://github.com/LevineLiu"));
+        items.add(new Contributor(R.drawable.header, "LostKe", "Developer", "https://github.com/LostKe"));
+        items.add(new Contributor(R.drawable.seven_kg, "70kg", "Developer", "https://github.com/70kg"));
 
         if (appList != null && !appList.isEmpty()) {
             items.add(new Category("应用推荐"));
