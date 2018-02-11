@@ -61,6 +61,8 @@ public class SpUtils {
     //is notify dayline
     private static final String KEY_PREFERENCE_AUTO_PASTE = "preference_auto_paste_words";
 
+    private static final String KEY_PREFERENCE_AUTO_COMPLETE_INPUT = "preference_open_auto_complete_input";
+
     //App 是否在前台
     private static final String KEY_FLAG_APP_FRONT = "FLAG_LISTENER_CLIPBOARD";
 
@@ -98,6 +100,9 @@ public class SpUtils {
 
     public static boolean isAutoPasteWords(Context context){
         return getBooleanPreference(context,KEY_PREFERENCE_AUTO_PASTE,false);
+    }
+    public static boolean isAutoCompleteInputWords(Context context){
+        return getBooleanPreference(context,KEY_PREFERENCE_AUTO_COMPLETE_INPUT,false);
     }
 
     public static boolean getOpenJITOrNot(Context context){

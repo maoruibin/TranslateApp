@@ -130,7 +130,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         initSpinner();
         checkTranslateWay();
         checkVersion();
-        initConfig();
         setUpDayline(false);
         checkIntent();
         boolean needShowGuidePermissionDialog = checkOverPermission();
@@ -182,6 +181,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         super.onResume();
         //检查粘贴板和 intent
         checkClipboard();
+        initConfig();
         addTranslateWaySelectListener();
         if (BuildConfig.DEBUG) {
             SpUtils.setAppFront(this, false);
@@ -238,8 +238,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void initConfig() {
-        //mPresenter.clearSoundCache();
-        mPresenter.analysisLocalDic();
+        if(SpUtils.isAutoCompleteInputWords(this)){
+            mPresenter.analysisLocalDic();
+        }
     }
 
     private void checkVersion() {
@@ -334,6 +335,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
      * 主要是切换搜索引擎时会用到
      */
     private void checkInputAndResearch() {
+
         String input = mInput.getText().toString().trim();
         if (isEmptyWord(input, false)) return;
         //if(StringUtils.isMoreThanOneWord(input))return;
@@ -619,6 +621,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 dic);
         mInput.setAdapter(wordAdapter);
         mInput.setThreshold(1);
+        mInput.setDropDownHeight(Utils.dp2px(this,200));
         mInput.setOnItemClickListener((parent, view, position, id) -> translate());
     }
 
