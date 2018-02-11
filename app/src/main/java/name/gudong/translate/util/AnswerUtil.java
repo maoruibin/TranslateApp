@@ -28,6 +28,13 @@ public class AnswerUtil {
         Answers.getInstance().logCustom(new CustomEvent("actionShowAbout"));
     }
 
+    /**
+     * 显示彩蛋
+     */
+    public static void showEggs(){
+        Answers.getInstance().logCustom(new CustomEvent("showEggs"));
+    }
+
     public static void actionFavorite(String source){
         CustomEvent event = new CustomEvent("actionFavorite");
         event.putCustomAttribute("source",source);

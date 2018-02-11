@@ -35,6 +35,11 @@ public class AboutPresenter extends BasePresenter<IAboutView> {
     }
 
     public void getLinkApps(final Items items) {
+        formatItems(null, items);
+        if(true){
+            //总是超时 先关闭
+            return;
+        }
         mSingleRequestService.app_recommend("https://recommend.wetolink.com/api/v2/app_recommend/pull?limit=50&package_name=name.gudong.translate")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -50,6 +55,7 @@ public class AboutPresenter extends BasePresenter<IAboutView> {
                         //call onError to stop crashing the app
                         //TODO error handling
                         formatItems(null, items);
+                        throwable.printStackTrace();
                     }
                 });
     }

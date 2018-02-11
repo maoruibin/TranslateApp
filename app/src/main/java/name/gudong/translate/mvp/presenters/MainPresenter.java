@@ -378,6 +378,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
         int day = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
         if(year == 2018 && month == 2){
             if(day>=16 && day<=21){
+                AnswerUtil.showEggs();
                 mView.playNewYearAnim();
             }
         }
