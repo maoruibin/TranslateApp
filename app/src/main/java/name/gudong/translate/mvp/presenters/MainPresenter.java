@@ -36,6 +36,8 @@ import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.WhereBuilder;
 import com.orhanobut.logger.Logger;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
@@ -365,6 +367,18 @@ public class MainPresenter extends BasePresenter<IMainView> {
             if (!Settings.canDrawOverlays(getContext())) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                 getContext().startActivity(intent);
+            }
+        }
+    }
+
+    public void checkAndPlayEggs() {
+        Calendar c = Calendar.getInstance();//
+        int year = c.get(Calendar.YEAR); // 获取当前年份
+        int month = c.get(Calendar.MONTH) + 1;// 获取当前月份
+        int day = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
+        if(year == 2018 && month == 2){
+            if(day>=16 && day<=21){
+                mView.playNewYearAnim();
             }
         }
     }

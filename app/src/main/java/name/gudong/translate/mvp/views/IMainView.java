@@ -63,4 +63,5 @@ public interface IMainView extends IBaseView {
 
     void attachLocalDic(List<String> dic);
 
+    void playNewYearAnim();
 }

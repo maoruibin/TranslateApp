@@ -648,7 +648,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mIvSound.setEnabled(true);
         mIvPaste.setEnabled(true);
 
-        showNewYearAnim();
+        mPresenter.checkAndPlayEggs();
     }
 
     private void startListenService() {
@@ -703,7 +703,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
     LottieAnimationView mAnimView;
 
-    private void showNewYearAnim(){
+    @Override
+    public void playNewYearAnim(){
         if(mAnimView == null){
             int size = Utils.dp2px(this,300);
             mAnimView = new LottieAnimationView(this);
