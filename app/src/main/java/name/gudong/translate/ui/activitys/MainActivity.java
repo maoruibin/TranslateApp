@@ -21,6 +21,7 @@
 package name.gudong.translate.ui.activitys;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,12 +45,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.JsonSyntaxException;
 import com.umeng.analytics.MobclickAgent;
 
@@ -640,6 +644,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mIvFavorite.setEnabled(true);
         mIvSound.setEnabled(true);
         mIvPaste.setEnabled(true);
+
+        showNewYearAnim();
     }
 
     private void startListenService() {
@@ -691,5 +697,39 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         if (!checkBottomSheetIsExpandedAndReset()) {
             super.onBackPressed();
         }
+    }
+    LottieAnimationView mAnimView;
+
+    private void showNewYearAnim(){
+        if(mAnimView == null){
+            int size = Utils.dp2px(this,300);
+            mAnimView = new LottieAnimationView(this);
+            mAnimView.setAnimation("lottie/new_year_fire.json");
+            FrameLayout root = (FrameLayout) getWindow().getDecorView();
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(size,size);
+            params.gravity = Gravity.CENTER;
+            root.addView(mAnimView,params);
+        }
+        mAnimView.setVisibility(View.VISIBLE);
+        mAnimView.addAnimatorListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                hideAnim();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                hideAnim();
+            }
+        });
+        mAnimView.playAnimation();
+    }
+
+    private void hideAnim(){
+        mAnimView.setVisibility(View.GONE);
+        mAnimView.setProgress(0);
+        mAnimView.cancelAnimation();
     }
 }

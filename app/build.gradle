@@ -226,5 +226,5 @@ dependencies {
     }
 
     compile 'com.github.anzewei:parallaxbacklayout:1.1.9'
-
+    compile 'com.airbnb.android:lottie:2.1.0'
 }
