@@ -26,6 +26,7 @@ import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.TipFloatPresenter;
 import name.gudong.translate.mvp.views.ITipFloatView;
+import name.gudong.translate.util.AnswerUtil;
 
 public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> implements ITipFloatView, TipView.ITipViewListener {
     @Inject
@@ -93,7 +94,7 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
 
     @Override
     public void onClickFavorite(View view, Result result) {
-        MobclickAgent.onEvent(this, "favorite_service");
+        AnswerUtil.actionFavorite("androidMProcessEditor");
         mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -104,7 +105,7 @@ public class ProcessTextActivity extends BaseActivity<TipFloatPresenter> impleme
 
     @Override
     public void onClickPlaySound(View view, Result result) {
-        MobclickAgent.onEvent(this, "sound_service");
+        AnswerUtil.actionSound("androidMProcessEditor");
         mPresenter.playSound(result.getMp3FileName(),result.getEnMp3());
         mPresenter.startSoundAnim(view);
     }

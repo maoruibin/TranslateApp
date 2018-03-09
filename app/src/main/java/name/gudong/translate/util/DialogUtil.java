@@ -64,6 +64,7 @@ public class DialogUtil {
                 "关闭", ((dialog1, which1) -> MobclickAgent.onEvent(activity, "menu_support_close")),
                 "打开支付宝转账页面", (dialog, which) -> {
                     MobclickAgent.onEvent(activity, "menu_support_click");
+                    AnswerUtil.actionSupportPay();
                     if (AlipayZeroSdk.hasInstalledAlipayClient(activity)) {
                         AlipayZeroSdk.startAlipayClient(activity, "aex07094cljuqa36ku7ml36");
                     } else {

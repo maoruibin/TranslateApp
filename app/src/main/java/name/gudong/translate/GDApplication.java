@@ -24,10 +24,13 @@ import android.app.Application;
 import android.content.Context;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
+import com.github.anzewei.parallaxbacklayout.ParallaxHelper;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
+import io.fabric.sdk.android.Fabric;
 import jonathanfinerty.once.Once;
 import me.drakeet.library.CrashWoodpecker;
 import me.drakeet.library.PatchMode;
@@ -47,6 +50,7 @@ public class GDApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         mContext = this;
         setUpSomethingsByDevMode(BuildConfig.IS_DEBUG);
@@ -58,6 +62,8 @@ public class GDApplication extends Application {
         initCrashWoodpecker();
 
         Stetho.initializeWithDefaults(this);
+
+        registerActivityLifecycleCallbacks(ParallaxHelper.getInstance());
     }
 
     private void initCrashWoodpecker() {

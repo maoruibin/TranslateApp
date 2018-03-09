@@ -47,4 +47,7 @@ public interface IBookView extends IBaseView {
      * 数据没有任何变化
      */
     void showTipDataHaveNoChange();
+
+    void showEmptyList();
+
 }

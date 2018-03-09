@@ -21,6 +21,7 @@
 package name.gudong.translate.ui.activitys;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,12 +45,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.JsonSyntaxException;
 import com.umeng.analytics.MobclickAgent;
 
@@ -71,6 +75,7 @@ import name.gudong.translate.mvp.presenters.BasePresenter;
 import name.gudong.translate.mvp.presenters.MainPresenter;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.ui.NavigationManager;
+import name.gudong.translate.util.AnswerUtil;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.InputMethodUtils;
 import name.gudong.translate.util.SpUtils;
@@ -125,7 +130,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         initSpinner();
         checkTranslateWay();
         checkVersion();
-        initConfig();
         setUpDayline(false);
         checkIntent();
         boolean needShowGuidePermissionDialog = checkOverPermission();
@@ -177,6 +181,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         super.onResume();
         //检查粘贴板和 intent
         checkClipboard();
+        initConfig();
         addTranslateWaySelectListener();
         if (BuildConfig.DEBUG) {
             SpUtils.setAppFront(this, false);
@@ -233,8 +238,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     private void initConfig() {
-        //mPresenter.clearSoundCache();
-        mPresenter.analysisLocalDic();
+        if(SpUtils.isAutoCompleteInputWords(this)){
+            mPresenter.analysisLocalDic();
+        }
     }
 
     private void checkVersion() {
@@ -289,10 +295,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 WordsBookActivity.gotoWordsBook(this);
                 MobclickAgent.onEvent(this, "open_book");
                 break;
+            case R.id.menu_hist:
+                WordsBookActivity.gotoWordsHist(this);
+                MobclickAgent.onEvent(this, "open_history");
+                break;
             case R.id.menu_about:
 //                DialogUtil.showAbout(this, formatAboutVersion());
                 NavigationManager.gotoAboutActivity(this);
                 MobclickAgent.onEvent(this, "menu_about");
+                AnswerUtil.actionShowAbout();
                 closeKeyboard();
                 break;
             case R.id.menu_setting:
@@ -307,6 +318,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             case R.id.menu_support:
                 DialogUtil.showSupport(this);
                 MobclickAgent.onEvent(this, "menu_support");
+                AnswerUtil.actionSupport();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -323,6 +335,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
      * 主要是切换搜索引擎时会用到
      */
     private void checkInputAndResearch() {
+
         String input = mInput.getText().toString().trim();
         if (isEmptyWord(input, false)) return;
         //if(StringUtils.isMoreThanOneWord(input))return;
@@ -458,6 +471,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             msg = getString(R.string.tip_unknown) + (BuildConfig.DEBUG ? "  " + e.getMessage() : "");
             e.printStackTrace();
         }
+        mPresenter.trackTranslateFail(msg);
         mList.addView(ViewUtil.getWordsView(MainActivity.this, msg, android.R.color.holo_red_light, false));
         mBtTranslate.setEnabled(true);
         mBtTranslate.setText(R.string.action_translate);
@@ -516,6 +530,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @OnClick(R.id.iv_favorite)
     public void onClickFavorite(final View view) {
+        AnswerUtil.actionFavorite("main");
         mPresenter.startFavoriteAnim(view, new BasePresenter.AnimationEndListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -555,6 +570,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         }
         mPresenter.startSoundAnim(view);
         MobclickAgent.onEvent(getApplicationContext(), "sound_main_activity");
+        AnswerUtil.actionSound("main");
     }
 
     @Override
@@ -605,6 +621,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
                 dic);
         mInput.setAdapter(wordAdapter);
         mInput.setThreshold(1);
+        mInput.setDropDownHeight(Utils.dp2px(this,200));
         mInput.setOnItemClickListener((parent, view, position, id) -> translate());
     }
 
@@ -630,6 +647,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mIvFavorite.setEnabled(true);
         mIvSound.setEnabled(true);
         mIvPaste.setEnabled(true);
+
+        mPresenter.checkAndPlayEggs();
     }
 
     private void startListenService() {
@@ -681,5 +700,40 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         if (!checkBottomSheetIsExpandedAndReset()) {
             super.onBackPressed();
         }
+    }
+    LottieAnimationView mAnimView;
+
+    @Override
+    public void playNewYearAnim(){
+        if(mAnimView == null){
+            int size = Utils.dp2px(this,300);
+            mAnimView = new LottieAnimationView(this);
+            mAnimView.setAnimation("lottie/new_year_fire.json");
+            FrameLayout root = (FrameLayout) getWindow().getDecorView();
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(size,size);
+            params.gravity = Gravity.CENTER;
+            root.addView(mAnimView,params);
+        }
+        mAnimView.setVisibility(View.VISIBLE);
+        mAnimView.addAnimatorListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                hideAnim();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                hideAnim();
+            }
+        });
+        mAnimView.playAnimation();
+    }
+
+    private void hideAnim(){
+        mAnimView.setVisibility(View.GONE);
+        mAnimView.setProgress(0);
+        mAnimView.cancelAnimation();
     }
 }

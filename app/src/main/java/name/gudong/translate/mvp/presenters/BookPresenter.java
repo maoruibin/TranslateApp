@@ -31,6 +31,7 @@ import com.litesuits.orm.db.assit.QueryBuilder;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ import jonathanfinerty.once.Once;
 import name.gudong.translate.listener.clipboard.ClipboardManagerCompat;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
+import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.views.IBookView;
 import name.gudong.translate.ui.NavigationManager;
@@ -66,7 +68,10 @@ public class BookPresenter extends BasePresenter<IBookView> {
     }
 
     public void getWords() {
-        getAllWordsWarpByObservable()
+        getWords(false);
+    }
+    public void getWords(boolean isHistList) {
+        getAllWordsWarpByObservable(isHistList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Result>>() {
@@ -74,10 +79,6 @@ public class BookPresenter extends BasePresenter<IBookView> {
                     public void call(List<Result> transResultEntities) {
                         boolean isReciteMode = SpUtils.isWordBookReciteMode(getContext());
                         mView.fillData(transResultEntities, isReciteMode);
-                        MobclickAgent.onEvent(getContext(),"wordsCount",transResultEntities.size()+"");
-                        Map<String,String>param = new HashMap<>();
-                        param.put("wordsCount",transResultEntities.size()+"");
-                        MobclickAgent.onEventValue(getContext(), "wordpage", param, 100);
                     }
                 });
     }
@@ -97,8 +98,12 @@ public class BookPresenter extends BasePresenter<IBookView> {
                 });
     }
 
-    private Observable<List<Result>> getAllWordsWarpByObservable() {
-        return makeObservable(getAllWordsReal());
+    private Observable<List<Result>> getAllWordsWarpByObservable(boolean isHistList) {
+        if(isHistList){
+            return makeObservable(getHistWordsReal());
+        }else{
+            return makeObservable(getAllWordsReal());
+        }
     }
 
     private Observable<Integer> deleteWordsByObservable(Result entity) {
@@ -120,9 +125,31 @@ public class BookPresenter extends BasePresenter<IBookView> {
         };
     }
 
-    private Callable<Integer> deleteWordReal(Result entity) {
-        return () -> mLiteOrm.delete(entity);
+    private Callable<List<Result>> getHistWordsReal() {
+        return new Callable<List<Result>>() {
+            @Override
+            public List<Result> call() throws Exception {
+                QueryBuilder<HistoryResult> qb = new QueryBuilder<>(HistoryResult.class)
+                        .appendOrderDescBy(Result.COL_ID);
+
+                List<HistoryResult> results = mLiteOrm.query(qb);
+                List<Result> resultsWrapList = new ArrayList<>();
+                resultsWrapList.addAll(results);
+                Logger.i(" results.size() "+results.size());
+                return resultsWrapList;
+            }
+        };
     }
+
+    private Callable<Integer> deleteWordReal(Result entity) {
+        if(entity instanceof HistoryResult){
+            HistoryResult result = (HistoryResult) entity;
+            return () -> mLiteOrm.delete(result);
+        }else {
+            return () -> mLiteOrm.delete(entity);
+        }
+    }
+
 
     public String getWordsJsonString(List<Result>results){
         Gson gson = new Gson();
@@ -170,7 +197,10 @@ public class BookPresenter extends BasePresenter<IBookView> {
         }
     }
 
-    public void initStatus() {
+    public void initStatus(boolean isHistList) {
+        if(isHistList){
+           return;
+        }
         Once.toDo(KEY_RECITE_MODE_SWITCH);
         // 第一次点击单词本开关需要给用户一个功能提示框
         Once.toDo(KEY_TIP_OF_RECITE_OPEN);
@@ -182,5 +212,12 @@ public class BookPresenter extends BasePresenter<IBookView> {
 
     public void makeReciteDone(){
         Once.markDone(KEY_RECITE_MODE_SWITCH);
+    }
+
+    public void clearHist() {
+        int res = mLiteOrm.deleteAll(HistoryResult.class);
+        if(res>0){
+            mView.showEmptyList();
+        }
     }
 }

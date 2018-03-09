@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 
+import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 import com.umeng.analytics.MobclickAgent;
 
 import jonathanfinerty.once.Once;
@@ -22,6 +23,7 @@ import name.gudong.translate.mvp.model.type.EDurationTipTime;
 import name.gudong.translate.mvp.model.type.EIntervalTipTime;
 import name.gudong.translate.widget.ThumbSelectPreference;
 
+@ParallaxBack
 public class SettingActivity extends AppCompatActivity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {

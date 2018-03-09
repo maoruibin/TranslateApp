@@ -20,6 +20,7 @@
 
 package name.gudong.translate.mvp.presenters;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -35,6 +36,8 @@ import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.WhereBuilder;
 import com.orhanobut.logger.Logger;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
@@ -50,10 +53,12 @@ import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.dayline.JinshanDayLineEntity;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
+import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
 import name.gudong.translate.ui.activitys.MainActivity;
+import name.gudong.translate.util.AnswerUtil;
 import name.gudong.translate.util.DialogUtil;
 import name.gudong.translate.util.LocalDicHelper;
 import name.gudong.translate.util.SpUtils;
@@ -103,7 +108,10 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .subscribe(new Action1<List<String>>() {
                     @Override
                     public void call(List<String> strings) {
-                        mView.attachLocalDic(strings);
+                        if(mView!=null){
+                            mView.attachLocalDic(strings);
+                        }
+
                     }
                 });
     }
@@ -155,10 +163,19 @@ public class MainPresenter extends BasePresenter<IMainView> {
             }
         }
     }
-
+    private String mLastQuery = "";
+    private ETranslateFrom  mLastFrom = ETranslateFrom.JIN_SHAN;
     public void executeSearch(String keywords) {
+        ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
+        //去掉重复
+        if(mLastQuery.equals(keywords) && mLastFrom == from){
+            return;
+        }
+        mLastQuery = keywords;
+        mLastFrom = from;
+
         mView.onPrepareTranslate();
-        Observable<AbsResult> observable = mWarpApiService.translate(SpUtils.getTranslateEngineWay(getContext()), keywords);
+        Observable<AbsResult> observable = mWarpApiService.translate(from, keywords);
         if (observable == null) {
             Logger.e("Observable<AbsResult> is null");
             return;
@@ -185,6 +202,10 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (result == null) return null;
                         result.setCreate_time(System.currentTimeMillis());
                         result.setUpdate_time(System.currentTimeMillis());
+
+                        recordHistoryWords(result);
+                        trackTranslate();
+
                         if (mView == null) return null;
                         mView.addTagForView(result);
 
@@ -207,6 +228,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                             temp.add(0, "[" + phAm + "]");
                             return temp;
                         }
+
                         return absResult.wrapTranslation();
                     }
                 })
@@ -220,6 +242,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     @Override
                     public Observable<String> call(List<String> strings) {
                         if (strings == null) {
+                            trackTranslateFail("啥也没有翻译出来");
                             return Observable.error(new Exception(("啥也没有翻译出来!")));
                         }
                         return Observable.from(strings);
@@ -228,7 +251,9 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        mView.onTranslateComplete();
+                        if(mView!=null){
+                            mView.onTranslateComplete();
+                        }
                     }
 
                     @Override
@@ -239,6 +264,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         if (mView != null) {
                             mView.onError(e);
                         }
+                        trackTranslateFail(e.getMessage());
                     }
 
                     @Override
@@ -279,6 +305,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
     public void prepareTranslateWay() {
         ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
         mView.initTranslateEngineSetting(from);
+        AnswerUtil.showMainView(from.getName());
     }
 
     /**
@@ -340,6 +367,19 @@ public class MainPresenter extends BasePresenter<IMainView> {
             if (!Settings.canDrawOverlays(getContext())) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                 getContext().startActivity(intent);
+            }
+        }
+    }
+
+    public void checkAndPlayEggs() {
+        Calendar c = Calendar.getInstance();//
+        int year = c.get(Calendar.YEAR); // 获取当前年份
+        int month = c.get(Calendar.MONTH) + 1;// 获取当前月份
+        int day = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
+        if(year == 2018 && month == 2){
+            if(day>=16 && day<=21){
+                AnswerUtil.showEggs();
+                mView.playNewYearAnim();
             }
         }
     }

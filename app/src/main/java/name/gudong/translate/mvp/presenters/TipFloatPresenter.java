@@ -37,6 +37,7 @@ import name.gudong.translate.BuildConfig;
 import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
+import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.ITipFloatView;
@@ -59,15 +60,24 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
     public TipFloatPresenter(LiteOrm liteOrm, WarpAipService apiService, SingleRequestService singleRequestService, Context context) {
         super(liteOrm, apiService, singleRequestService, context);
     }
+    private String mLastQuery = "";
+    private ETranslateFrom  mLastFrom = ETranslateFrom.JIN_SHAN;
+    public void search(final String keywords) {
+        ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
+        //去掉重复
+        if(mLastQuery.equals(keywords) && mLastFrom == from){
+            mView.onComplete();
+            return;
+        }
+        mLastQuery = keywords;
+        mLastFrom = from;
 
-    public void search(final String content) {
-        if (!checkInput(content)) {
+        if (!checkInput(keywords)) {
             mView.onComplete();
             return;
         }
 
-        ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
-        mWarpApiService.translate(from, content)
+        mWarpApiService.translate(from, keywords)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter((result) -> {
@@ -84,27 +94,36 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
                     public void onError(Throwable e) {
                         if (mView == null) return;
                         if (e instanceof SocketTimeoutException) {
-                            mView.errorPoint("网络请求超时，请稍后重试。");
+                            String msg = "网络请求超时，请稍后重试。";
+                            mView.errorPoint(msg);
+                            trackTranslateFail(msg);
                         } else {
+                            String msg = "网络请求超时，请稍后重试。";
                             if (BuildConfig.DEBUG) {
-                                mView.errorPoint("请求数据异常，您可以试试切换其他引擎。" + e.getMessage());
+                                msg = "请求数据异常，您可以试试切换其他引擎。" + e.getMessage();
                                 e.printStackTrace();
                             } else {
-                                mView.errorPoint("请求数据异常(source:"+from.getName()+")，您可以试试切换其他引擎。");
+                                msg = "请求数据异常(source:"+from.getName()+")，您可以试试切换其他引擎。";
                             }
+                            mView.errorPoint(msg);
+                            trackTranslateFail(msg);
                         }
                     }
 
                     @Override
                     public void onNext(AbsResult result) {
                         if (mView == null) return;
+                        trackTranslate();
                         Result realResult = result.getResult();
                         realResult.setCreate_time(System.currentTimeMillis());
                         realResult.setUpdate_time(System.currentTimeMillis());
                         mView.showResult(realResult, true);
+                        recordHistoryWords(realResult);
                     }
                 });
     }
+
+
 
 
     public void initFavoriteStatus(Result result) {
@@ -145,39 +164,41 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
         // empty check
         if (TextUtils.isEmpty(input)) {
             Logger.e("剪贴板为空了");
+            trackTranslateFail("剪贴板为空了");
             return false;
         }
 
         if (StringUtils.isChinese(input)) {
             Logger.e(input + " 中包含中文字符");
+            trackTranslateFail(input + " 中包含中文字符");
             return false;
         }
 
         if (StringUtils.isValidEmailAddress(input)) {
             Logger.e(input + " 是一个邮箱");
+            trackTranslateFail(input + " 是一个邮箱");
             return false;
         }
 
         if (StringUtils.isValidUrl(input)) {
             Logger.e(input + " 是一个网址");
+            trackTranslateFail(input + " 是一个网址");
             return false;
         }
 
         if (StringUtils.isValidNumeric(input)) {
             Logger.e(input + " 是一串数字");
+            trackTranslateFail(input + " 是一串数字");
             return false;
         }
 
         // length check
         if (StringUtils.isMoreThanOneWord(input)) {
             mView.errorPoint("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
+            trackTranslateFail("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
             return false;
         }
 
         return true;
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

@@ -73,7 +73,10 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
         mOnClickListener = onClickListener;
     }
 
-
+    public void clear(){
+        mList.clear();
+        notifyDataSetChanged();
+    }
 
     public void update(List<Result> list) {
         update(list, false);

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="name.gudong.translate">
+          package="name.gudong.translate">
 
     <!-- for search result -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- for listen clipboard better -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <!-- for umeng -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:name=".GDApplication"
@@ -24,40 +24,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <!-- begin umeng -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="56a45cd9e0f55add0d002d49" />
+            android:value="56a45cd9e0f55add0d002d49"/>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <!-- bug hd -->
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"
-            android:value="60641333d73c37d9db66465ab8f78cc9" />
+            android:value="60641333d73c37d9db66465ab8f78cc9"/>
 
-        <!--android:theme="@android:style/Theme.NoDisplay"-->
-        <!--android:theme="@android:style/Theme.Dialog"-->
+        <!-- android:theme="@android:style/Theme.NoDisplay" -->
+        <!-- android:theme="@android:style/Theme.Dialog" -->
         <activity
             android:name=".ui.activitys.ProcessTextActivity"
             android:label="@string/app_name"
-
             android:theme="@style/myTransparent">
             <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
+                <action android:name="android.intent.action.PROCESS_TEXT"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.activitys.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -65,30 +64,32 @@
             android:name=".listener.ListenClipboardService"
             android:enabled="true"
             android:label="@string/app_process_text"
-            android:process=":process" />
+            android:process=":process"/>
 
         <receiver
             android:name=".listener.BootCompletedReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activitys.WordsBookActivity" />
-
-        <activity android:name=".ui.activitys.SettingActivity" />
-
+        <activity android:name=".ui.activitys.WordsBookActivity"/>
+        <activity android:name=".ui.activitys.SettingActivity"/>
         <activity
             android:name=".ui.activitys.AboutActivity"
-            android:theme="@style/AppTheme.About" />
+            android:theme="@style/AppTheme.About"/>
 
-        <!--<receiver android:name=".service.KeepAlarmLiveReceiver">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.USER_PRESENT"/>-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
+        <!-- <receiver android:name=".service.KeepAlarmLiveReceiver"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.USER_PRESENT"/> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8f783db5c619f64c2e1b0f7594b3e4b58c59efd5"/>
 
     </application>
 

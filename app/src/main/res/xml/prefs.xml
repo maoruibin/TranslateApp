@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="通用">
         <com.jenzz.materialpreference.SwitchPreference
@@ -36,9 +37,9 @@
             android:summary="@string/use_recite_or_nor_summary"
             android:title="@string/use_recite_or_nor"/>
         <!--<name.gudong.translate.widget.ThumbSelectPreference-->
-            <!--android:key="preference_thp_show_time"-->
-            <!--android:summary="提示显示时的停留时长"-->
-            <!--android:title="@string/tip_time_duration"/>-->
+        <!--android:key="preference_thp_show_time"-->
+        <!--android:summary="提示显示时的停留时长"-->
+        <!--android:title="@string/tip_time_duration"/>-->
 
         <com.jenzz.materialpreference.Preference
             android:dependency="preference_use_recite_or_not"
@@ -49,6 +50,15 @@
             android:key="preference_show_time"
             android:summary="提示显示时的停留时长"
             android:title="@string/tip_time_duration"/>
+
+    </com.jenzz.materialpreference.PreferenceCategory>
+    <com.jenzz.materialpreference.PreferenceCategory android:title="高级">
+        <com.jenzz.materialpreference.SwitchPreference
+            android:defaultValue="true"
+            android:key="preference_open_auto_complete_input"
+            android:title="@string/setting_auto_complete_input"
+            app:defaultValue="false"
+            android:summary="@string/setting_auto_complete_input_summary"/>
 
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>

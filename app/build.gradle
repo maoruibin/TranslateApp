@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -120,7 +135,7 @@ android {
 
 //set release sign info synchronously
 def Properties props = new Properties()
-def propFile = file('../gradle.properties')
+def propFile = file('../local.properties')
 if (propFile.exists()) {
     props.load(new FileInputStream(propFile))
     if (props != null &&
@@ -143,6 +158,7 @@ if (propFile.exists()) {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Test
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile "junit:junit:${test.junit}"
     // Android
     compile "com.android.support:recyclerview-v7:${libs.supportVersion}"
@@ -175,7 +191,7 @@ dependencies {
     compile "com.jenzz:materialpreference:${libs.materialpreference}"
     compile "com.github.bumptech.glide:glide:${libs.glide}"
 
-    compile ("me.drakeet.library:crashwoodpecker:${libs.crashwoodpecker}"){
+    compile("me.drakeet.library:crashwoodpecker:${libs.crashwoodpecker}") {
         exclude module: 'recyclerview-v7'
     }
 
@@ -186,7 +202,7 @@ dependencies {
     compile "com.facebook.stetho:stetho:${libs.stetho}"
     compile "com.facebook.stetho:stetho-okhttp3:${libs.stetho_okhttp3}"
 
-    compile ('me.drakeet.support:about:2.0.2', {
+    compile('me.drakeet.support:about:2.0.2', {
         exclude module: 'recyclerview-v7'
         exclude module: 'appcompat-v7'
         exclude module: 'design'
@@ -203,5 +219,13 @@ dependencies {
 //        exclude module: 'design'
 //    })
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:answers:1.4.1@aar') {
+        transitive = true;
+    }
 
+    compile 'com.github.anzewei:parallaxbacklayout:1.1.9'
+    compile 'com.airbnb.android:lottie:2.1.0'
 }
