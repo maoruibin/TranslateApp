@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.22.2'
     }
 }
 apply plugin: 'com.android.application'
@@ -65,6 +65,8 @@ android {
         buildConfigField "Boolean", "IS_DEBUG", 'true'
 
         resValue "string", "tray__authority", "${cfg.package}.tray"
+
+        buildConfigField "Boolean", "IS_ADVANCE", 'false'
     }
 
     signingConfigs {
@@ -124,6 +126,11 @@ android {
         dev21 {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dev21"]
             minSdkVersion cfg.minSdk21
+        }
+        //高级用户
+        advance {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "self"]
+            buildConfigField "Boolean", "IS_ADVANCE", 'true'
         }
     }
 

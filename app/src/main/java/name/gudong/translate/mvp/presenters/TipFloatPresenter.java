@@ -168,12 +168,6 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
             return false;
         }
 
-        if (StringUtils.isChinese(input)) {
-            Logger.e(input + " 中包含中文字符");
-            trackTranslateFail(input + " 中包含中文字符");
-            return false;
-        }
-
         if (StringUtils.isValidEmailAddress(input)) {
             Logger.e(input + " 是一个邮箱");
             trackTranslateFail(input + " 是一个邮箱");
@@ -193,7 +187,17 @@ public class TipFloatPresenter extends BasePresenter<ITipFloatView> {
         }
 
         // length check
-        if (StringUtils.isMoreThanOneWord(input)) {
+        if (BuildConfig.IS_ADVANCE) {
+            return true;
+        }
+
+        if (StringUtils.isChinese(input)) {
+            Logger.e(input + " 中包含中文字符");
+            trackTranslateFail(input + " 中包含中文字符");
+            return false;
+        }
+
+        if(StringUtils.isMoreThanOneWord(input)){
             mView.errorPoint("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
             trackTranslateFail("咕咚翻译目前不支持划句或者划短语翻译\n多谢理解");
             return false;

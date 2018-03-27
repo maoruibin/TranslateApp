@@ -16,6 +16,7 @@ import com.github.anzewei.parallaxbacklayout.ParallaxBack;
 import com.umeng.analytics.MobclickAgent;
 
 import jonathanfinerty.once.Once;
+import name.gudong.translate.BuildConfig;
 import name.gudong.translate.R;
 import name.gudong.translate.listener.ListenClipboardService;
 import name.gudong.translate.manager.ReciteModulePreference;
@@ -52,6 +53,9 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("设置");
+        if(BuildConfig.IS_ADVANCE){
+            getSupportActionBar().setSubtitle("高级用户");
+        }
     }
 
 
