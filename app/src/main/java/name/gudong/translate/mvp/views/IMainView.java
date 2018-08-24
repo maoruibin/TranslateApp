@@ -40,7 +40,7 @@ public interface IMainView extends IBaseView {
 
     void addExplainItem(String explain);
 
-    void initTranslateEngineSetting(ETranslateFrom way);
+    void initTranslateSelect(int select);
 
     void onTranslateComplete();
 

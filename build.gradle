@@ -6,7 +6,7 @@ ext {
             minSdk              : 16,
             minSdk21            : 21,
             targetSdk           : 25,
-            version_code        : 183,
+            version_code        : 184,
             version_name        : "1.8.3"
     ]
 
