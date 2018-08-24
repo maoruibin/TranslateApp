@@ -7,6 +7,12 @@
         <item>谷歌</item>
     </string-array>
 
+    <string-array name="translate_way_ignore_baidu">
+        <item>有道</item>
+        <item>金山</item>
+        <item>谷歌</item>
+    </string-array>
+
     <string-array name="recipe_time">
         <item>@string/interval_thirty_second</item>
         <item>@string/interval_one_minute</item>

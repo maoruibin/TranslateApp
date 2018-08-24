@@ -380,18 +380,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        selectEngine(ETranslateFrom.BAI_DU);
-                        MobclickAgent.onEvent(getApplicationContext(), "way_baidu");
-                        break;
-                    case 1:
                         selectEngine(ETranslateFrom.YOU_DAO);
                         MobclickAgent.onEvent(getApplicationContext(), "way_youdao");
                         break;
-                    case 2:
+                    case 1:
                         selectEngine(ETranslateFrom.JIN_SHAN);
                         MobclickAgent.onEvent(getApplicationContext(), "way_jinshan");
                         break;
-                    case 3:
+                    case 2:
                         selectEngine(ETranslateFrom.GOOGLE);
                         MobclickAgent.onEvent(getApplicationContext(), "way_google");
                         break;
