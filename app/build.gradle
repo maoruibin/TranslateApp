@@ -42,8 +42,8 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         //baidu config
-        buildConfigField "String", "BAIDU_SCREAT_KEY", '"5jlBZtaMuo6Xlx5LOIVC"'
-        buildConfigField "String", "BAIDU_APP_ID", '"20151224000008231"'
+        buildConfigField "String", "BAIDU_SCREAT_KEY", '""'
+        buildConfigField "String", "BAIDU_APP_ID", '""'
 
         //iciba config
         buildConfigField "String", "ICIBA_KEY", '"8B660C51C6D4A410DE9D406667729BC4"'
