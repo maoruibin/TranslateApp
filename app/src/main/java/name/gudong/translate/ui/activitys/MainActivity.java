@@ -326,7 +326,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
 
     private void selectEngine(ETranslateFrom way) {
-        SpUtils.setTranslateEngine(this, way.name());
+        SpUtils.setTranslateEngine(this, way);
         checkInputAndResearch();
     }
 
@@ -378,20 +378,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
         mSpTranslateWay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        selectEngine(ETranslateFrom.YOU_DAO);
-                        MobclickAgent.onEvent(getApplicationContext(), "way_youdao");
-                        break;
-                    case 1:
-                        selectEngine(ETranslateFrom.JIN_SHAN);
-                        MobclickAgent.onEvent(getApplicationContext(), "way_jinshan");
-                        break;
-                    case 2:
-                        selectEngine(ETranslateFrom.GOOGLE);
-                        MobclickAgent.onEvent(getApplicationContext(), "way_google");
-                        break;
-                }
+                selectEngine((ETranslateFrom) mSpTranslateWay.getAdapter().getItem(position));
             }
 
             @Override
@@ -479,8 +466,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
     }
 
     @Override
-    public void initTranslateEngineSetting(ETranslateFrom from) {
-        mSpTranslateWay.setSelection(from.getIndex(), true);
+    public void initTranslateSelect(int select) {
+        mSpTranslateWay.setSelection(select, true);
     }
 
     @OnClick(R.id.bt_translate)
@@ -653,10 +640,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
 
     private void initSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.translate_way_ignore_baidu, R.layout.spinner_drop_list_title);
-        adapter.setDropDownViewResource(R.layout.spinner_drop_list_item);
-        mSpTranslateWay.setAdapter(adapter);
+        List<ETranslateFrom>translateWay = mPresenter.getTranslateWaysList();
+        ArrayAdapter<ETranslateFrom>arrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_drop_list_title,translateWay);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_drop_list_item);
+        mSpTranslateWay.setAdapter(arrayAdapter);
     }
 
     public void onClickBottomSheet() {

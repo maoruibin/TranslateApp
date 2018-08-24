@@ -73,8 +73,8 @@ public class SpUtils {
     private static final String KEY_HAS_SHOW_GUIDE = "HAS_SHOW_GUIDE";
 
 
-    public static void setTranslateEngine(Context context, String version) {
-        putStringPreference(context, KEY_TRANSLATE_FROM, version);
+    public static void setTranslateEngine(Context context, ETranslateFrom way) {
+        putStringPreference(context, KEY_TRANSLATE_FROM, way.name());
     }
 
     public static String getTranslateEngine(Context context) {

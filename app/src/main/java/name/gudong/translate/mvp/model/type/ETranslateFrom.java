@@ -33,10 +33,10 @@ import name.gudong.translate.mvp.model.ApiYouDao;
  */
 public enum  ETranslateFrom {
 
-    BAI_DU(0,"百度","http://api.fanyi.baidu.com/", ApiBaidu.class),
-    YOU_DAO(1,"有道","http://fanyi.youdao.com/",ApiYouDao.class),
-    JIN_SHAN(2,"金山","http://dict-co.iciba.com/",ApiJinShan.class),
-    GOOGLE(3, "谷歌", "http://translate.google.cn/",ApiGoogle.class);
+    BAI_DU("百度","http://api.fanyi.baidu.com/", ApiBaidu.class),
+    YOU_DAO("有道","http://fanyi.youdao.com/",ApiYouDao.class),
+    JIN_SHAN("金山","http://dict-co.iciba.com/",ApiJinShan.class),
+    GOOGLE("谷歌", "http://translate.google.cn/",ApiGoogle.class);
 
 
     private int index;
@@ -44,15 +44,10 @@ public enum  ETranslateFrom {
     private String url;
     private Class aqiClass;
 
-    ETranslateFrom(int index,String name,String url, Class aqiClass) {
-        this.index = index;
+    ETranslateFrom(String name,String url, Class aqiClass) {
         this.name = name;
         this.url = url;
         this.aqiClass = aqiClass;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public String getName() {
@@ -65,5 +60,10 @@ public enum  ETranslateFrom {
 
     public Class getAqiClass() {
         return aqiClass;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

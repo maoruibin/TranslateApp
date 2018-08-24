@@ -20,7 +20,6 @@
 
 package name.gudong.translate.mvp.presenters;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -36,8 +35,8 @@ import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.assit.WhereBuilder;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
@@ -53,7 +52,6 @@ import name.gudong.translate.mvp.model.SingleRequestService;
 import name.gudong.translate.mvp.model.WarpAipService;
 import name.gudong.translate.mvp.model.entity.dayline.JinshanDayLineEntity;
 import name.gudong.translate.mvp.model.entity.translate.AbsResult;
-import name.gudong.translate.mvp.model.entity.translate.HistoryResult;
 import name.gudong.translate.mvp.model.entity.translate.Result;
 import name.gudong.translate.mvp.model.type.ETranslateFrom;
 import name.gudong.translate.mvp.views.IMainView;
@@ -77,6 +75,17 @@ import rx.schedulers.Schedulers;
 public class MainPresenter extends BasePresenter<IMainView> {
     public static final String KEY_RESULT = "RESULT";
     public static final int KEY_REQUEST_CODE_FOR_NOTI = 100;
+    private static List<ETranslateFrom> staticTranslateWayList = new ArrayList<>();
+
+    static {
+        if (BuildConfig.IS_ADVANCE) {
+            staticTranslateWayList.add(ETranslateFrom.BAI_DU);
+        }
+        staticTranslateWayList.add(ETranslateFrom.YOU_DAO);
+        staticTranslateWayList.add(ETranslateFrom.JIN_SHAN);
+        staticTranslateWayList.add(ETranslateFrom.GOOGLE);
+    }
+
     @Inject
     ClipboardManagerCompat mClipboardWatcher;
 
@@ -108,13 +117,14 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .subscribe(new Action1<List<String>>() {
                     @Override
                     public void call(List<String> strings) {
-                        if(mView!=null){
+                        if (mView != null) {
                             mView.attachLocalDic(strings);
                         }
 
                     }
                 });
     }
+
     public boolean hasExtraResult(Intent intent) {
         return intent.hasExtra(KEY_RESULT);
     }
@@ -163,12 +173,14 @@ public class MainPresenter extends BasePresenter<IMainView> {
             }
         }
     }
+
     private String mLastQuery = "";
-    private ETranslateFrom  mLastFrom = ETranslateFrom.JIN_SHAN;
+    private ETranslateFrom mLastFrom = ETranslateFrom.JIN_SHAN;
+
     public void executeSearch(String keywords) {
         ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
         //去掉重复
-        if(mLastQuery.equals(keywords) && mLastFrom == from){
+        if (mLastQuery.equals(keywords) && mLastFrom == from) {
             return;
         }
         mLastQuery = keywords;
@@ -251,7 +263,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        if(mView!=null){
+                        if (mView != null) {
                             mView.onTranslateComplete();
                         }
                     }
@@ -297,14 +309,20 @@ public class MainPresenter extends BasePresenter<IMainView> {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(intent);
-        }catch (ActivityNotFoundException e){
+        } catch (ActivityNotFoundException e) {
             Toast.makeText(mContext, "没有找到合适的应用商店", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void prepareTranslateWay() {
         ETranslateFrom from = SpUtils.getTranslateEngineWay(getContext());
-        mView.initTranslateEngineSetting(from);
+        if (from == ETranslateFrom.BAI_DU) {
+            from = ETranslateFrom.YOU_DAO;
+            SpUtils.setTranslateEngine(getContext(), ETranslateFrom.YOU_DAO);
+        }
+        int index = staticTranslateWayList.indexOf(from);
+        index = index >= 0 ? index : 0;
+        mView.initTranslateSelect(index);
         AnswerUtil.showMainView(from.getName());
     }
 
@@ -376,12 +394,16 @@ public class MainPresenter extends BasePresenter<IMainView> {
         int year = c.get(Calendar.YEAR); // 获取当前年份
         int month = c.get(Calendar.MONTH) + 1;// 获取当前月份
         int day = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
-        if(year == 2018 && month == 2){
-            if(day>=16 && day<=21){
+        if (year == 2018 && month == 2) {
+            if (day >= 16 && day <= 21) {
                 AnswerUtil.showEggs();
                 mView.playNewYearAnim();
             }
         }
+    }
+
+    public List<ETranslateFrom> getTranslateWaysList() {
+        return staticTranslateWayList;
     }
 }
 
