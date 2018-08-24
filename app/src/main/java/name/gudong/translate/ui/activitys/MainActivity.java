@@ -654,7 +654,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     private void initSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.translate_way, R.layout.spinner_drop_list_title);
+                R.array.translate_way_ignore_baidu, R.layout.spinner_drop_list_title);
         adapter.setDropDownViewResource(R.layout.spinner_drop_list_item);
         mSpTranslateWay.setAdapter(adapter);
     }
