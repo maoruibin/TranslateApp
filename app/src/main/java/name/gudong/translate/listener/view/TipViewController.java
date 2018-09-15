@@ -31,7 +31,6 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 
@@ -72,6 +71,10 @@ public class TipViewController {
     }
 
     public void showErrorInfo(String error, TipView.ITipViewListener mListener) {
+        if (!Utils.checkDrawOverlaysPermissionGranted(mContext)) {
+            Logger.i("No DrawOverlays Permission, end translation operation");
+            return;
+        }
         TipView tipView = new TipView(mContext);
         tipView.setListener(mListener);
         mWindowManager.addView(tipView, getPopViewParams());
@@ -164,6 +167,10 @@ public class TipViewController {
             mNotificationManager.notify(result.getQuery().hashCode(), note);
 
         } else {
+            if (!Utils.checkDrawOverlaysPermissionGranted(mContext)) {
+                Logger.i("No DrawOverlays Permission, end translation operation");
+                return;
+            }
             TipView tipView = new TipView(mContext);
             mMapTipView.put(result, tipView);
             tipView.setListener(mListener);
