@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
 import org.json.JSONArray;
@@ -139,5 +140,14 @@ public class Utils {
     public static int dp2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * @param context to get preference
+     * @return true on granted, false on fail
+     */
+    public static boolean checkDrawOverlaysPermissionGranted(Context context) {
+        //The result of `Settings.canDrawOverlays(context)` should not be saved, because you never know when your user would modify it
+        return !Utils.isAndroidM() || Settings.canDrawOverlays(context);
     }
 }
