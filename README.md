@@ -6,7 +6,7 @@
 ## 介绍
 一个实现『划词翻译』功能的 Android 应用 ，可能是目前 Android 市场上翻译效率最高的一款应用。
 
-![shot](http://7xr9gx.com1.z0.glb.clouddn.com/gd.gif)
+![shot](https://upload-images.jianshu.io/upload_images/588640-bb21211def7c14a3.gif?imageMogr2/auto-orient/strip|imageView2/2/w/393/format/webp)
 
 ## 待完成功能
 - [ ] 单词显示框支持沉浸式，覆盖状态栏显示。
