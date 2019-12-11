@@ -8,15 +8,7 @@
 
 ![shot](https://upload-images.jianshu.io/upload_images/588640-bb21211def7c14a3.gif?imageMogr2/auto-orient/strip|imageView2/2/w/393/format/webp)
 
-## 待完成功能
-- [ ] 单词显示框支持沉浸式，覆盖状态栏显示。
-- [ ] 使用 Github 做自动更新
-- [x] 不支持谷歌翻译，如果有人有兴趣添加谷歌，必应翻译，欢迎PR。
-- [x] 单词发音
-- [x] 显示单词信息时增加音标
-- [x] 生词本为空时的提示信息
 
-`Note:`想要参与贡献代码的同学，请在 develop 分支上操作，欢迎参与，可以提前在 issue 中交流自己要修改的功能模块，同时也欢迎来[Google+社区](https://plus.google.com/u/1/communities/111919086388322816251)一起讨论 咕咚翻译。
 
 ## 下载
 
@@ -80,13 +72,12 @@ Google+ [咕咚翻译社群](https://plus.google.com/u/1/communities/11191908638
 
 ## 关于作者
 
-咕咚，爱折腾、爱新鲜，爱篮球。
+咕咚，软件工程师，[更多](http://gudong.name/about)。
 
-[个人站点](http://gudong.name/)
-
-[github](https://github.com/maoruibin)
-
-[微博](http://weibo.com/u/1874136301)
+* 公众号：咕咚同学
+* [个人站点](http://gudong.name)
+* [github](https://github.com/maoruibin)
+* [微博](http://weibo.com/u/1874136301)
 
 ## License
  
